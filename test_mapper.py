@@ -1,7 +1,7 @@
 import cv2
 import yaml
 from src.scanner.omr import detect_mark
-from src.scanner.qualtrics_mapper import build_import_file, load_survey_config
+from src.qualtrics_mapper import build_import_file, load_survey_config
 
 # ── Step 1: Load image and detect marks ───────────────────────────────────────
 print("=" * 60)

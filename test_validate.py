@@ -2,9 +2,9 @@ import cv2
 import yaml
 import time
 from src.scanner.omr import detect_mark
-from src.scanner.validate import validate_extraction
-from src.scanner.logger import log_run, get_summary
-from src.scanner.qualtrics_mapper import build_import_file, load_survey_config
+from src.validate import validate_extraction
+from src.logger import log_run, get_summary
+from src.qualtrics_mapper import build_import_file, load_survey_config
 
 start_time = time.time()
 

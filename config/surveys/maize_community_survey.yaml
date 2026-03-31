@@ -31,6 +31,7 @@ fields:
       y: 632
       w: 126
       h: 120
+  page: 1
 - paper_id: S1_Q2
   qualtrics_id: Q2.1_2
   label: ''
@@ -63,6 +64,7 @@ fields:
       y: 772
       w: 126
       h: 109
+  page: 1
 - paper_id: S1_Q3
   qualtrics_id: Q2.1_3
   label: ''
@@ -95,6 +97,7 @@ fields:
       y: 905
       w: 116
       h: 120
+  page: 1
 - paper_id: S1_Q4
   qualtrics_id: Q2.1_4
   label: ''
@@ -127,6 +130,7 @@ fields:
       y: 1064
       w: 112
       h: 90
+  page: 1
 - paper_id: S1_Q5
   qualtrics_id: Q2.2_1
   label: ''
@@ -159,6 +163,7 @@ fields:
       y: 1224
       w: 118
       h: 94
+  page: 1
 - paper_id: S1_Q6
   qualtrics_id: Q2.2_2
   label: ''
@@ -191,6 +196,7 @@ fields:
       y: 1345
       w: 132
       h: 109
+  page: 1
 - paper_id: S1_Q7
   qualtrics_id: Q2.3_1
   label: ''
@@ -223,6 +229,7 @@ fields:
       y: 1521
       w: 124
       h: 97
+  page: 1
 - paper_id: S1_Q8
   qualtrics_id: Q2.3_2
   label: ''
@@ -255,6 +262,7 @@ fields:
       y: 1641
       w: 134
       h: 110
+  page: 1
 - paper_id: S1_Q9
   qualtrics_id: Q2.3_3
   label: ''
@@ -287,6 +295,7 @@ fields:
       y: 1778
       w: 142
       h: 97
+  page: 1
 - paper_id: S1_Q10
   qualtrics_id: Q2.3_4
   label: ''
@@ -319,6 +328,7 @@ fields:
       y: 1903
       w: 126
       h: 97
+  page: 1
 - paper_id: S2_Q1
   qualtrics_id: Q3.1_1
   label: ''
@@ -351,6 +361,7 @@ fields:
       y: 842
       w: 136
       h: 102
+  page: 2
 - paper_id: S2_Q2
   qualtrics_id: Q3.1_2
   label: ''
@@ -383,6 +394,7 @@ fields:
       y: 975
       w: 147
       h: 93
+  page: 2
 - paper_id: S2_Q3
   qualtrics_id: Q3.1_3
   label: ''
@@ -415,6 +427,7 @@ fields:
       y: 1111
       w: 136
       h: 78
+  page: 2
 - paper_id: S2_Q4
   qualtrics_id: Q3.1_4
   label: ''
@@ -447,6 +460,7 @@ fields:
       y: 1209
       w: 128
       h: 117
+  page: 2
 - paper_id: S2_Q5
   qualtrics_id: Q3.1_5
   label: ''
@@ -479,6 +493,7 @@ fields:
       y: 1345
       w: 116
       h: 105
+  page: 2
 - paper_id: S2_Q6
   qualtrics_id: Q3.1_6
   label: ''
@@ -511,6 +526,7 @@ fields:
       y: 1470
       w: 122
       h: 97
+  page: 2
 - paper_id: S2_Q7
   qualtrics_id: Q3.1_7
   label: ''
@@ -543,6 +559,7 @@ fields:
       y: 1622
       w: 124
       h: 82
+  page: 2
 - paper_id: S2_Q8
   qualtrics_id: Q3.1_8
   label: ''
@@ -575,6 +592,7 @@ fields:
       y: 1735
       w: 106
       h: 86
+  page: 2
 - paper_id: S3_Q1
   qualtrics_id: Q4.1_1
   label: ''
@@ -607,6 +625,7 @@ fields:
       y: 643
       w: 132
       h: 106
+  page: 3
 - paper_id: S3_Q2
   qualtrics_id: Q4.1_2
   label: ''
@@ -639,6 +658,7 @@ fields:
       y: 795
       w: 128
       h: 71
+  page: 3
 - paper_id: S3_Q3
   qualtrics_id: Q4.1_3
   label: ''
@@ -671,6 +691,7 @@ fields:
       y: 893
       w: 145
       h: 93
+  page: 3
 - paper_id: S3_Q4
   qualtrics_id: Q4.1_4
   label: ''
@@ -703,6 +724,7 @@ fields:
       y: 998
       w: 120
       h: 90
+  page: 3
 - paper_id: S3_Q5
   qualtrics_id: Q4.1_5
   label: ''
@@ -735,6 +757,7 @@ fields:
       y: 1115
       w: 124
       h: 94
+  page: 3
 - paper_id: S4_Q1
   qualtrics_id: Q5.2_1
   label: ''
@@ -767,6 +790,7 @@ fields:
       y: 678
       w: 134
       h: 121
+  page: 4
 - paper_id: S4_Q2
   qualtrics_id: Q5.2_2
   label: ''
@@ -799,6 +823,7 @@ fields:
       y: 866
       w: 114
       h: 93
+  page: 4
 - paper_id: S4_Q3
   qualtrics_id: Q5.2_3
   label: ''
@@ -831,6 +856,7 @@ fields:
       y: 1014
       w: 116
       h: 82
+  page: 4
 - paper_id: S4_Q4
   qualtrics_id: Q5.3_1
   label: ''
@@ -863,6 +889,7 @@ fields:
       y: 1244
       w: 132
       h: 89
+  page: 4
 - paper_id: S4_Q5
   qualtrics_id: Q5.3_2
   label: ''
@@ -895,6 +922,7 @@ fields:
       y: 1349
       w: 110
       h: 94
+  page: 4
 - paper_id: S4_Q6
   qualtrics_id: Q5.3_3
   label: ''
@@ -927,6 +955,7 @@ fields:
       y: 1470
       w: 113
       h: 93
+  page: 4
 - paper_id: S4_Q7
   qualtrics_id: Q5.4_1
   label: ''
@@ -959,6 +988,7 @@ fields:
       y: 1700
       w: 126
       h: 113
+  page: 4
 - paper_id: S4_Q8
   qualtrics_id: Q5.4_2
   label: ''
@@ -991,6 +1021,7 @@ fields:
       y: 1856
       w: 102
       h: 93
+  page: 4
 - paper_id: S4_Q9
   qualtrics_id: Q5.4_3
   label: ''
@@ -1023,6 +1054,7 @@ fields:
       y: 1973
       w: 97
       h: 82
+  page: 4
 - paper_id: S4_Q10
   qualtrics_id: Q5.4_4
   label: ''
@@ -1055,6 +1087,7 @@ fields:
       y: 2074
       w: 108
       h: 94
+  page: 4
 - paper_id: S4_Q11
   qualtrics_id: Q5.4_5
   label: ''
@@ -1087,6 +1120,7 @@ fields:
       y: 2199
       w: 106
       h: 82
+  page: 4
 - paper_id: S5_Q1
   qualtrics_id: Q6.2_1
   label: ''
@@ -1119,6 +1153,7 @@ fields:
       y: 827
       w: 140
       h: 97
+  page: 5
 - paper_id: S5_Q2
   qualtrics_id: Q6.2_2
   label: ''
@@ -1151,6 +1186,7 @@ fields:
       y: 979
       w: 97
       h: 97
+  page: 5
 - paper_id: S5_Q3
   qualtrics_id: Q6.2_3
   label: ''
@@ -1183,6 +1219,7 @@ fields:
       y: 1119
       w: 117
       h: 90
+  page: 5
 - paper_id: S5_Q4
   qualtrics_id: Q6.3_1
   label: ''
@@ -1215,6 +1252,7 @@ fields:
       y: 1306
       w: 143
       h: 86
+  page: 5
 - paper_id: S5_Q5
   qualtrics_id: Q6.3_2
   label: ''
@@ -1247,6 +1285,7 @@ fields:
       y: 1415
       w: 112
       h: 78
+  page: 5
 - paper_id: S5_Q6
   qualtrics_id: Q6.3_3
   label: ''
@@ -1279,6 +1318,7 @@ fields:
       y: 1544
       w: 102
       h: 86
+  page: 5
 - paper_id: S5_Q7
   qualtrics_id: Q6.4_1
   label: ''
@@ -1311,6 +1351,7 @@ fields:
       y: 1754
       w: 114
       h: 117
+  page: 5
 - paper_id: S5_Q8
   qualtrics_id: Q6.4_2
   label: ''
@@ -1343,6 +1384,7 @@ fields:
       y: 1903
       w: 93
       h: 93
+  page: 5
 - paper_id: S5_Q9
   qualtrics_id: Q6.4_3
   label: ''
@@ -1375,6 +1417,7 @@ fields:
       y: 2027
       w: 107
       h: 67
+  page: 5
 - paper_id: S5_Q10
   qualtrics_id: Q6.4_4
   label: ''
@@ -1407,6 +1450,7 @@ fields:
       y: 2121
       w: 113
       h: 94
+  page: 5
 - paper_id: S5_Q11
   qualtrics_id: Q6.4_5
   label: ''
@@ -1439,6 +1483,7 @@ fields:
       y: 2226
       w: 105
       h: 86
+  page: 5
 - paper_id: S6_Q1
   qualtrics_id: Q7.1_1
   label: ''
@@ -1471,6 +1516,7 @@ fields:
       y: 1298
       w: 112
       h: 98
+  page: 6
 - paper_id: S6_Q2
   qualtrics_id: Q7.1_2
   label: ''
@@ -1503,6 +1549,7 @@ fields:
       y: 1431
       w: 111
       h: 78
+  page: 6
 - paper_id: S6_Q3
   qualtrics_id: Q7.1_3
   label: ''
@@ -1535,6 +1582,7 @@ fields:
       y: 1528
       w: 111
       h: 82
+  page: 6
 - paper_id: S7_tenure_Q1
   qualtrics_id: Q8.3
   label: ''
@@ -1579,6 +1627,7 @@ fields:
       y: 2519
       w: 97
       h: 66
+  page: 7
 - paper_id: S7_area_Q1
   qualtrics_id: Q8.2
   label: ''
@@ -1617,6 +1666,7 @@ fields:
       y: 2519
       w: 122
       h: 74
+  page: 7
 - paper_id: S8_age_Q1
   qualtrics_id: Q8.4
   label: ''
@@ -1673,3 +1723,226 @@ fields:
       y: 351
       w: 118
       h: 54
+  page: 8
+- paper_id: S8_gender_Q1
+  qualtrics_id: Q8.5
+  label: ''
+  type: categorical
+  mark_type: circled_bubble
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  required: true
+  regions:
+    '1':
+      x: 1056
+      y: 183
+      w: 118
+      h: 63
+    '2':
+      x: 1048
+      y: 242
+      w: 134
+      h: 43
+    '3':
+      x: 1052
+      y: 285
+      w: 138
+      h: 50
+    '4':
+      x: 1052
+      y: 343
+      w: 132
+      h: 47
+    '5':
+      x: 1056
+      y: 409
+      w: 122
+      h: 86
+  page: 8
+- paper_id: S8_edu_Q1
+  qualtrics_id: Q8.6
+  label: ''
+  type: categorical
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  required: true
+  regions:
+    '1':
+      x: 318
+      y: 620
+      w: 106
+      h: 74
+    '2':
+      x: 318
+      y: 698
+      w: 102
+      h: 35
+    '3':
+      x: 318
+      y: 737
+      w: 110
+      h: 51
+    '4':
+      x: 320
+      y: 795
+      w: 110
+      h: 39
+    '5':
+      x: 324
+      y: 834
+      w: 96
+      h: 43
+    '6':
+      x: 320
+      y: 893
+      w: 87
+      h: 62
+  page: 8
+- paper_id: S8_hispanic_Q1
+  qualtrics_id: Q8.7
+  label: ''
+  type: categorical
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  required: true
+  regions:
+    '1':
+      x: 312
+      y: 1084
+      w: 87
+      h: 66
+    '2':
+      x: 312
+      y: 1158
+      w: 91
+      h: 86
+  page: 8
+- paper_id: S8_housing_Q1
+  qualtrics_id: Q8.9
+  label: ''
+  type: categorical
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  - 3
+  required: true
+  regions:
+    '1':
+      x: 314
+      y: 1548
+      w: 75
+      h: 58
+    '2':
+      x: 316
+      y: 1599
+      w: 73
+      h: 54
+    '3':
+      x: 320
+      y: 1653
+      w: 73
+      h: 66
+  page: 8
+- paper_id: S8_income_Q1
+  qualtrics_id: Q8.10
+  label: ''
+  type: categorical
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  required: true
+  regions:
+    '1':
+      x: 314
+      y: 1930
+      w: 83
+      h: 74
+    '2':
+      x: 316
+      y: 2012
+      w: 87
+      h: 54
+    '3':
+      x: 322
+      y: 2059
+      w: 75
+      h: 50
+    '4':
+      x: 318
+      y: 2125
+      w: 83
+      h: 23
+    '5':
+      x: 312
+      y: 2148
+      w: 72
+      h: 47
+    '6':
+      x: 296
+      y: 2199
+      w: 93
+      h: 58
+  page: 8
+- paper_id: S8_race_Q1
+  qualtrics_id: Q8.8
+  label: ''
+  type: multi_select
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  required: true
+  regions:
+    '1':
+      x: 1056
+      y: 1064
+      w: 66
+      h: 59
+    '2':
+      x: 1062
+      y: 1127
+      w: 71
+      h: 50
+    '3':
+      x: 1066
+      y: 1189
+      w: 71
+      h: 51
+    '4':
+      x: 1066
+      y: 1244
+      w: 71
+      h: 39
+    '5':
+      x: 1064
+      y: 1294
+      w: 73
+      h: 47
+    '6':
+      x: 1062
+      y: 1345
+      w: 73
+      h: 43
+  page: 8

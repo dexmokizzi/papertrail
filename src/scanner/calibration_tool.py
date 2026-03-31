@@ -1,646 +1,791 @@
 """
-Survey calibration tool for PaperTrail.
+Optical Mark Recognition (OMR) for PaperTrail.
 
-Opens a processed survey image in an interactive window.
-You click and drag to draw a box around each answer region.
-The tool records the coordinates AND all field metadata,
-then writes a complete survey YAML automatically.
+Detects marked answer options in survey scan images.
+Supports six mark types: circled numbers, filled bubbles,
+X marks, circled bubbles, shaded boxes, and checkmarks.
 
-No manual YAML editing required after calibration.
+Every detection tries multiple algorithms and takes the
+strongest signal. This makes detection robust to mark style
+variation — respondents who circle instead of marking X,
+use checkmarks instead of filling bubbles, or make other
+non-standard marks are all handled correctly.
 
-Features:
-- Auto-saves when all regions are recorded
-- Auto-saves when window is closed
-- Detects duplicate pages and asks before overwriting
-- Cleans incomplete fields from previous runs
-- Writes complete field definitions including qualtrics_id,
-  type, mark_type, scale, and regions
+Any mark type not explicitly supported will produce low
+confidence scores and be routed to human review — the
+system never silently accepts an unknown mark type.
 
-Usage:
-    python -m src.scanner.calibration_tool
-        --image data/processed/your_scan.jpg
-        --survey your_survey_name
-
-Controls:
-    Click + drag  ->  Draw a region box
-    R             ->  Undo last region
-    S or Enter    ->  Save and exit
-    Q             ->  Quit without saving
-    Z             ->  Zoom in
-    X             ->  Zoom out
+Input:  Preprocessed image + field region coordinates from YAML
+Output: Detected value + confidence score per field
 """
 
-import os
 import cv2
-import yaml
-import argparse
 import numpy as np
+from typing import Optional
 
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-ZOOM_STEP    = 0.2
-MIN_ZOOM     = 0.3
-MAX_ZOOM     = 3.0
-BOX_COLOR    = (0, 180, 80)
-ACTIVE_COLOR = (0, 120, 255)
-WINDOW_NAME  = "PaperTrail Calibration  |  S=Save  R=Undo  Z=ZoomIn  X=ZoomOut  Q=Quit"
+HIGH_CONFIDENCE      = 0.90
+MEDIUM_CONFIDENCE    = 0.75
+LOW_CONFIDENCE       = 0.50
+FILL_THRESHOLD       = 0.25
+AMBIGUITY_GAP        = 0.08
+AMBIGUITY_MIN_SCORE  = 0.85
 
-MARK_TYPES = [
-    "circled_number",
-    "filled_bubble",
-    "x_mark",
-    "circled_bubble",
-    "shaded_box",
-    "checkmark",
-]
+# Padding added around calibrated boxes when extracting ROIs.
+# Less horizontal padding avoids bleeding into adjacent columns.
+# More vertical padding captures marks that extend above/below.
+ROI_PADDING_X = 0.15
+ROI_PADDING_Y = 0.30
 
-FIELD_TYPES = [
-    "likert",
-    "categorical",
-    "multi_select",
-    "open_text",
-]
+# Penalty applied when a fallback algorithm detects a mark.
+# Primary algorithm always gets full score.
+# Fallback algorithms get score * FALLBACK_PENALTY.
+# This ensures the declared mark type is preferred when
+# both primary and fallback produce similar scores.
+FALLBACK_PENALTY = 0.85
 
 
-# ── Global state ──────────────────────────────────────────────────────────────
+# ── Public API ────────────────────────────────────────────────────────────────
 
-state = {
-    "drawing":     False,
-    "start":       (0, 0),
-    "end":         (0, 0),
-    "regions":     [],
-    "field_index": 0,
-    "fields":      [],
-    "zoom":        1.0,
-    "image":       None,
-}
+def detect_mark(image: np.ndarray,
+                field_config: dict) -> dict:
+    """Detect which answer option is marked in a field.
 
+    Reads mark_type from field_config to choose the primary
+    detection algorithm. Also runs fallback algorithms to
+    handle respondents who use non-standard mark styles.
+    Returns the detected value and a confidence score.
 
-# ── Mouse callback ────────────────────────────────────────────────────────────
+    Supported mark types:
+        circled_number  — circle drawn around a printed number
+        filled_bubble   — bubble filled or darkened
+        x_mark          — X, checkmark, or circle drawn in region
+        circled_bubble  — circle drawn around a small bubble
+        shaded_box      — rectangular box shaded or darkened
+        checkmark       — tick or checkmark drawn in a box
 
-def _mouse_callback(event, x, y, flags, param):
-    """Handle mouse click-and-drag to define answer regions."""
-    ox = int(x / state["zoom"])
-    oy = int(y / state["zoom"])
-
-    if event == cv2.EVENT_LBUTTONDOWN:
-        state["drawing"] = True
-        state["start"]   = (ox, oy)
-        state["end"]     = (ox, oy)
-
-    elif event == cv2.EVENT_MOUSEMOVE and state["drawing"]:
-        state["end"] = (ox, oy)
-        _show()
-
-    elif event == cv2.EVENT_LBUTTONUP and state["drawing"]:
-        state["drawing"] = False
-        state["end"]     = (ox, oy)
-
-        x1 = min(state["start"][0], state["end"][0])
-        y1 = min(state["start"][1], state["end"][1])
-        x2 = max(state["start"][0], state["end"][0])
-        y2 = max(state["start"][1], state["end"][1])
-
-        if (x2 - x1) > 10 and (y2 - y1) > 10:
-            _record(x1, y1, x2 - x1, y2 - y1)
-
-        _show()
-
-
-# ── Record a region ───────────────────────────────────────────────────────────
-
-def _record(x, y, w, h):
-    """Save a completed region and advance to the next field."""
-    idx = state["field_index"]
-    if idx >= len(state["fields"]):
-        print("  All regions recorded.")
-        return
-
-    field = state["fields"][idx]
-    state["regions"].append({
-        "field_id": field["field_id"],
-        "value":    field["value"],
-        "x": x, "y": y, "w": w, "h": h,
-    })
-
-    print(f"  +  {field['field_id']} = {field['value']}"
-          f"   x:{x} y:{y} w:{w} h:{h}")
-
-    state["field_index"] += 1
-    remaining = len(state["fields"]) - state["field_index"]
-
-    if state["field_index"] < len(state["fields"]):
-        nxt = state["fields"][state["field_index"]]
-        print(f"  -> Draw box around:  "
-              f"{nxt['field_id']} = {nxt['value']}"
-              f"  ({remaining} left)")
-    else:
-        print("\n  All regions recorded — saving automatically...")
-
-
-# ── Display ───────────────────────────────────────────────────────────────────
-
-def _show():
-    """Redraw the window with all region overlays."""
-    img = state["image"].copy()
-
-    for region in state["regions"]:
-        rx, ry, rw, rh = (region["x"], region["y"],
-                          region["w"], region["h"])
-        cv2.rectangle(img, (rx, ry), (rx + rw, ry + rh),
-                      BOX_COLOR, 2)
-        cv2.putText(img,
-                    f"{region['field_id']}={region['value']}",
-                    (rx, ry - 6),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.45,
-                    BOX_COLOR, 1)
-
-    if state["drawing"]:
-        x1 = min(state["start"][0], state["end"][0])
-        y1 = min(state["start"][1], state["end"][1])
-        x2 = max(state["start"][0], state["end"][0])
-        y2 = max(state["start"][1], state["end"][1])
-        cv2.rectangle(img, (x1, y1), (x2, y2), ACTIVE_COLOR, 2)
-
-    idx = state["field_index"]
-    if idx < len(state["fields"]):
-        f   = state["fields"][idx]
-        rem = len(state["fields"]) - idx
-        msg = (f"Draw box around:  {f['field_id']} = {f['value']}"
-               f"   ({rem} remaining)")
-    else:
-        msg = "All done! Saving automatically..."
-
-    overlay = img.copy()
-    cv2.rectangle(overlay, (0, 0), (img.shape[1], 48),
-                  (230, 230, 230), -1)
-    cv2.addWeighted(overlay, 0.7, img, 0.3, 0, img)
-    cv2.putText(img, msg, (10, 30),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 80, 0), 2)
-
-    if state["zoom"] != 1.0:
-        nw = int(img.shape[1] * state["zoom"])
-        nh = int(img.shape[0] * state["zoom"])
-        img = cv2.resize(img, (nw, nh),
-                         interpolation=cv2.INTER_LINEAR)
-
-    cv2.imshow(WINDOW_NAME, img)
-
-
-# ── YAML helpers ──────────────────────────────────────────────────────────────
-
-def _load_yaml(yaml_path: str) -> dict:
-    """Load existing YAML or return empty dict.
+    Any unrecognised mark type returns NO_DETECTION with zero
+    confidence, routing the field to human review.
 
     Args:
-        yaml_path: Path to the YAML file.
+        image:        Preprocessed grayscale image array.
+        field_config: Field definition from the survey YAML.
+                      Must contain 'regions' and 'mark_type'.
 
     Returns:
-        Parsed YAML as dict, or empty dict if not found.
+        Dict with keys: value, confidence, mark_type,
+        all_scores, and optionally flag and note.
     """
-    if not os.path.exists(yaml_path):
-        return {}
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+    mark_type = field_config.get("mark_type", "circled_number")
+    regions   = field_config.get("regions", {})
+
+    if not regions:
+        return _no_detection("No regions defined in YAML")
+
+    if mark_type == "circled_number":
+        return _detect_circled_number(image, regions)
+    elif mark_type == "filled_bubble":
+        return _detect_filled_bubble(image, regions)
+    elif mark_type == "x_mark":
+        return _detect_x_mark(image, regions)
+    elif mark_type == "circled_bubble":
+        return _detect_circled_bubble(image, regions)
+    elif mark_type == "shaded_box":
+        return _detect_shaded_box(image, regions)
+    elif mark_type == "checkmark":
+        return _detect_checkmark(image, regions)
+    else:
+        return _no_detection(
+            f"Unknown mark type '{mark_type}'. "
+            f"Field routed to human review."
+        )
 
 
-def _save_yaml(yaml_path: str, data: dict) -> None:
-    """Save data to YAML file.
+def detect_multi_select(image: np.ndarray,
+                        field_config: dict) -> dict:
+    """Detect all marked options in a multi-select field.
+
+    Unlike detect_mark which returns one value, this returns
+    every option that appears to be marked. Used for fields
+    where respondents are asked to select all that apply.
+
+    Runs multiple detection algorithms per region to handle
+    varied mark styles.
 
     Args:
-        yaml_path: Path to write.
-        data:      Dict to serialize.
-    """
-    os.makedirs(os.path.dirname(yaml_path), exist_ok=True)
-    with open(yaml_path, "w", encoding="utf-8") as f:
-        yaml.dump(data, f,
-                  default_flow_style=False,
-                  sort_keys=False,
-                  allow_unicode=True)
-
-
-def _clean_incomplete_fields(existing: dict) -> dict:
-    """Remove fields that have no qualtrics_id.
-
-    These are leftover from previous incomplete calibration
-    runs that did not use the full tool. Safe to remove
-    because they cannot be used by the pipeline.
-
-    Args:
-        existing: Parsed YAML dict.
+        image:        Preprocessed grayscale image array.
+        field_config: Field definition with regions and mark_type.
 
     Returns:
-        Cleaned dict with incomplete fields removed.
+        Dict with keys: values (list), confidence, all_scores.
     """
-    if "fields" not in existing:
-        return existing
+    mark_type = field_config.get("mark_type", "x_mark")
+    regions   = field_config.get("regions", {})
 
-    before = len(existing["fields"])
-    existing["fields"] = [
-        f for f in existing["fields"]
-        if f.get("qualtrics_id", "").strip()
+    if not regions:
+        return {"values": [], "confidence": 0.0, "all_scores": {}}
+
+    all_scores = {}
+
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            all_scores[value] = 0.0
+            continue
+
+        # Try multiple algorithms — respondents vary in mark style
+        x_score        = _score_x_mark(roi)
+        checkmark_score = _score_checkmark(roi)
+        filled_score   = _score_filled_bubble(roi)
+        circle_score   = _score_circled_number(roi)
+
+        if mark_type == "x_mark":
+            all_scores[value] = max(
+                x_score,
+                checkmark_score,
+                circle_score   * FALLBACK_PENALTY,
+                filled_score   * FALLBACK_PENALTY,
+            )
+        elif mark_type == "filled_bubble":
+            all_scores[value] = max(
+                filled_score,
+                circle_score   * FALLBACK_PENALTY,
+                x_score        * FALLBACK_PENALTY,
+                checkmark_score * FALLBACK_PENALTY,
+            )
+        else:
+            all_scores[value] = max(
+                x_score,
+                checkmark_score,
+                filled_score   * FALLBACK_PENALTY,
+                circle_score   * FALLBACK_PENALTY,
+            )
+
+    selected = [
+        v for v, score in all_scores.items()
+        if score >= LOW_CONFIDENCE
     ]
-    after = len(existing["fields"])
 
-    if before != after:
-        print(f"  Removed {before - after} incomplete "
-              f"field(s) from previous calibration.\n")
-
-    return existing
-
-
-def _check_duplicate_prefix(
-    existing: dict,
-    prefix:   str,
-) -> bool:
-    """Check if fields with this prefix already exist in YAML.
-
-    Args:
-        existing: Parsed YAML dict.
-        prefix:   Field ID prefix to check (e.g. S1_Q).
-
-    Returns:
-        True if matching fields already exist.
-    """
-    fields = existing.get("fields", [])
-    return any(
-        f.get("paper_id", "").startswith(prefix)
-        for f in fields
+    min_confidence = (
+        min(all_scores[v] for v in selected)
+        if selected else 0.0
     )
 
+    return {
+        "values":     selected,
+        "confidence": round(min_confidence, 3),
+        "all_scores": {k: round(v, 3)
+                       for k, v in all_scores.items()},
+    }
 
-def _ask_duplicate_action(prefix: str) -> str:
-    """Ask user what to do when duplicate fields are detected.
+
+# ── Detection algorithms ──────────────────────────────────────────────────────
+
+def _detect_circled_number(image: np.ndarray,
+                           regions: dict) -> dict:
+    """Detect a hand-drawn circle around a printed number.
+
+    Primary: Hough circle + arc contour detection.
+    Fallback: filled bubble detection for respondents who
+    fill the number instead of circling it.
 
     Args:
-        prefix: The duplicate field prefix found.
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
 
     Returns:
-        'replace' or 'skip'.
+        Standard detection result dict.
     """
-    print(f"\n  Fields with prefix '{prefix}' already exist "
-          f"in the YAML.")
-    print(f"  What would you like to do?")
-    print(f"    1. Replace them (re-calibrate this page)")
-    print(f"    2. Skip (keep existing, exit tool)")
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
 
-    while True:
-        choice = input("  Enter 1 or 2: ").strip()
-        if choice == "1":
-            return "replace"
-        elif choice == "2":
-            return "skip"
-        print("  Please enter 1 or 2.")
+        circle_score = _score_circled_number(roi)
+        filled_score = _score_filled_bubble(roi)
+
+        scores[value] = max(
+            circle_score,
+            filled_score * FALLBACK_PENALTY,
+        )
+
+    return _pick_best(scores, "circled_number")
 
 
-# ── Save to YAML ──────────────────────────────────────────────────────────────
+def _detect_filled_bubble(image: np.ndarray,
+                          regions: dict) -> dict:
+    """Detect a filled or darkened bubble.
 
-def _save(survey_name: str, field_meta: dict):
-    """Write all recorded regions and metadata to the survey YAML.
-
-    Merges new fields into existing YAML. Handles duplicates
-    by replacing existing fields with the same paper_id.
+    Primary: dark pixel density measurement.
+    Fallback: circle detection for respondents who circle
+    the bubble instead of filling it.
 
     Args:
-        survey_name: Survey ID for the YAML filename.
-        field_meta:  Dict mapping field_id -> metadata dict.
-    """
-    yaml_path = os.path.join("config", "surveys",
-                             f"{survey_name}.yaml")
-
-    existing = _load_yaml(yaml_path)
-
-    if "fields" not in existing:
-        existing["fields"] = []
-
-    # Group regions by field_id
-    by_field = {}
-    for r in state["regions"]:
-        fid = r["field_id"]
-        if fid not in by_field:
-            by_field[fid] = {}
-        by_field[fid][str(r["value"])] = {
-            "x": int(r["x"]),
-            "y": int(r["y"]),
-            "w": int(r["w"]),
-            "h": int(r["h"]),
-        }
-
-    for fid, regions in by_field.items():
-        meta = field_meta.get(fid, {})
-
-        complete = {
-            "paper_id":     fid,
-            "qualtrics_id": meta.get("qualtrics_id", ""),
-            "label":        meta.get("label", ""),
-            "type":         meta.get("field_type", "likert"),
-            "mark_type":    meta.get("mark_type",
-                                     "circled_number"),
-            "scale":        meta.get("scale", [1, 2, 3, 4]),
-            "required":     True,
-            "regions":      regions,
-        }
-
-        # Replace existing entry or append new one
-        replaced = False
-        for i, entry in enumerate(existing["fields"]):
-            if entry.get("paper_id") == fid:
-                existing["fields"][i] = complete
-                replaced = True
-                break
-
-        if not replaced:
-            existing["fields"].append(complete)
-
-    _save_yaml(yaml_path, existing)
-
-    print(f"\n  Saved  ->  {yaml_path}")
-    print(f"  {len(state['regions'])} region(s) written")
-    print(f"  {len(by_field)} field(s) added/updated")
-
-
-# ── Interactive setup ─────────────────────────────────────────────────────────
-
-def _ask_mark_type() -> str:
-    """Ask which mark type this section uses."""
-    print("\n  What mark type does this section use?")
-    for i, mt in enumerate(MARK_TYPES, 1):
-        print(f"    {i}. {mt}")
-
-    while True:
-        try:
-            choice = int(input("  Enter number: ").strip())
-            if 1 <= choice <= len(MARK_TYPES):
-                selected = MARK_TYPES[choice - 1]
-                print(f"  Mark type: {selected}")
-                return selected
-        except ValueError:
-            pass
-        print(f"  Please enter 1 to {len(MARK_TYPES)}")
-
-
-def _ask_field_type() -> str:
-    """Ask which field type this section uses."""
-    print("\n  What field type is this section?")
-    for i, ft in enumerate(FIELD_TYPES, 1):
-        print(f"    {i}. {ft}")
-
-    while True:
-        try:
-            choice = int(input("  Enter number: ").strip())
-            if 1 <= choice <= len(FIELD_TYPES):
-                selected = FIELD_TYPES[choice - 1]
-                print(f"  Field type: {selected}")
-                return selected
-        except ValueError:
-            pass
-        print(f"  Please enter 1 to {len(FIELD_TYPES)}")
-
-
-def _ask_qualtrics_ids(field_ids: list) -> dict:
-    """Ask for the Qualtrics column ID for each field."""
-    print("\n  Enter the Qualtrics column ID for each field.")
-    print("  Open your Qualtrics template and look at Row 1.")
-    print("  Example: Q2.1_1, Q3.1_1, Q8.2 etc.\n")
-
-    mapping = {}
-    for fid in field_ids:
-        qid = input(f"  {fid} -> Qualtrics ID: ").strip()
-        mapping[fid] = qid
-
-    return mapping
-
-
-def _build_fields(
-    survey_name: str,
-    yaml_path:   str,
-    existing:    dict,
-) -> tuple:
-    """Build field list and collect all metadata interactively.
-
-    Handles duplicate detection and asks user what to do.
-    Returns None if user chose to skip.
-
-    Args:
-        survey_name: Survey ID.
-        yaml_path:   Path to the YAML file.
-        existing:    Current parsed YAML dict.
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
 
     Returns:
-        Tuple of (fields list, field_meta dict).
-        Returns (None, None) if user chose to skip.
+        Standard detection result dict.
     """
-    # Ask how many questions
-    n = int(input("\n  How many questions does this page have? "))
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
 
-    # Ask answer values
-    raw = input(
-        "  What are the answer values? "
-        "(e.g. 1,2,3,4 or 1,2,3,4,5): "
-    ).strip()
-    scale = [s.strip() for s in raw.split(",")]
+        filled_score = _score_filled_bubble(roi)
+        circle_score = _score_circled_number(roi)
 
-    # Ask mark type
-    mark_type = _ask_mark_type()
+        scores[value] = max(
+            filled_score,
+            circle_score * FALLBACK_PENALTY,
+        )
 
-    # Ask field type
-    field_type = _ask_field_type()
+    return _pick_best(scores, "filled_bubble")
 
-    # Ask prefix
-    print(f"\n  What prefix should field IDs use?")
-    print(f"  Examples: S1_Q (gives S1_Q1, S1_Q2...)")
-    print(f"            S2_Q (gives S2_Q1, S2_Q2...)")
-    prefix = input("  Prefix: ").strip() or "Q"
 
-    # Ask starting number
-    try:
-        start_num = int(input(
-            "  Start numbering from? (default 1): "
-        ).strip() or "1")
-    except ValueError:
-        start_num = 1
+def _detect_x_mark(image: np.ndarray,
+                   regions: dict) -> dict:
+    """Detect an X mark, checkmark, or circle in a region.
 
-    # Check for duplicates
-    if _check_duplicate_prefix(existing, prefix):
-        action = _ask_duplicate_action(prefix)
-        if action == "skip":
-            print(f"\n  Keeping existing '{prefix}' fields.")
-            return None, None
-        elif action == "replace":
-            # Remove existing fields with this prefix
-            existing["fields"] = [
-                f for f in existing.get("fields", [])
-                if not f.get("paper_id", "").startswith(prefix)
-            ]
-            print(f"  Existing '{prefix}' fields removed.")
-            print(f"  Proceeding with fresh calibration.\n")
+    Respondents don't always follow instructions. Some will
+    circle instead of marking X. Some will use checkmarks.
+    We try all relevant algorithms and take the strongest
+    signal — making detection robust to mark style variation.
 
-    # Build field list
-    field_ids = []
-    for i in range(start_num, start_num + n):
-        fid = f"{prefix}{i}"
-        field_ids.append(fid)
-        for v in scale:
-            state["fields"].append({
-                "field_id": fid,
-                "value":    v
-            })
+    Primary: X mark diagonal line detection.
+    Fallbacks: checkmark, circle, filled bubble.
 
-    # Ask Qualtrics column IDs
-    qualtrics_ids = _ask_qualtrics_ids(field_ids)
+    Args:
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
 
-    # Build metadata per field
-    field_meta = {}
-    for fid in field_ids:
-        field_meta[fid] = {
-            "qualtrics_id": qualtrics_ids.get(fid, ""),
-            "field_type":   field_type,
-            "mark_type":    mark_type,
-            "scale":        [
-                int(v) if v.isdigit() else v
-                for v in scale
-            ],
+    Returns:
+        Standard detection result dict.
+    """
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
+
+        x_score         = _score_x_mark(roi)
+        checkmark_score  = _score_checkmark(roi)
+        circle_score    = _score_circled_number(roi)
+        filled_score    = _score_filled_bubble(roi)
+
+        scores[value] = max(
+            x_score,
+            checkmark_score,
+            circle_score  * FALLBACK_PENALTY,
+            filled_score  * FALLBACK_PENALTY,
+        )
+
+    return _pick_best(scores, "x_mark")
+
+
+def _detect_circled_bubble(image: np.ndarray,
+                           regions: dict) -> dict:
+    """Detect a circle drawn around a small printed bubble.
+
+    Primary: circle detection tuned for small targets.
+    Fallback: filled bubble and X mark for respondents who
+    fill or mark the bubble instead of circling it.
+
+    Args:
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
+
+    Returns:
+        Standard detection result dict.
+    """
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
+
+        circle_score = _score_circled_number(roi, small=True)
+        filled_score = _score_filled_bubble(roi)
+        x_score      = _score_x_mark(roi)
+
+        scores[value] = max(
+            circle_score,
+            filled_score * FALLBACK_PENALTY,
+            x_score      * FALLBACK_PENALTY,
+        )
+
+    return _pick_best(scores, "circled_bubble")
+
+
+def _detect_shaded_box(image: np.ndarray,
+                       regions: dict) -> dict:
+    """Detect a shaded or filled rectangular box.
+
+    Primary: dark pixel density.
+    Fallback: X mark and checkmark for respondents who
+    mark the box instead of shading it.
+
+    Args:
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
+
+    Returns:
+        Standard detection result dict.
+    """
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
+
+        filled_score    = _score_filled_bubble(roi)
+        x_score         = _score_x_mark(roi)
+        checkmark_score  = _score_checkmark(roi)
+
+        scores[value] = max(
+            filled_score,
+            x_score         * FALLBACK_PENALTY,
+            checkmark_score  * FALLBACK_PENALTY,
+        )
+
+    return _pick_best(scores, "shaded_box")
+
+
+def _detect_checkmark(image: np.ndarray,
+                      regions: dict) -> dict:
+    """Detect a checkmark or tick drawn in a box.
+
+    Primary: diagonal line detection tuned for checkmarks.
+    Fallback: X mark and filled bubble.
+
+    Args:
+        image:   Preprocessed grayscale image.
+        regions: Dict mapping value -> region coordinates.
+
+    Returns:
+        Standard detection result dict.
+    """
+    scores = {}
+    for value, region in regions.items():
+        roi = _extract_roi(image, region)
+        if roi is None:
+            scores[value] = 0.0
+            continue
+
+        checkmark_score = _score_checkmark(roi)
+        x_score         = _score_x_mark(roi)
+        filled_score    = _score_filled_bubble(roi)
+
+        scores[value] = max(
+            checkmark_score,
+            x_score      * FALLBACK_PENALTY,
+            filled_score * FALLBACK_PENALTY,
+        )
+
+    return _pick_best(scores, "checkmark")
+
+
+# ── Scoring functions ─────────────────────────────────────────────────────────
+
+def _score_circled_number(roi: np.ndarray,
+                          small: bool = False) -> float:
+    """Score how likely a region contains a hand-drawn circle.
+
+    Uses two complementary approaches:
+    1. Hough circle detection on the padded region
+    2. Contour arc detection for partial circles
+
+    The ROI includes padding so circles that extend beyond
+    the calibrated box are still detected correctly.
+
+    Args:
+        roi:   Region of interest as grayscale array.
+        small: True for smaller circled bubble targets.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    h, w = roi.shape[:2]
+
+    min_r = max(int(min(h, w) * 0.20), 8)
+    max_r = max(int(min(h, w) * 0.70), min_r + 5)
+
+    if small:
+        min_r = max(int(min(h, w) * 0.15), 6)
+        max_r = max(int(min(h, w) * 0.55), min_r + 5)
+
+    inverted = cv2.bitwise_not(roi)
+    blurred  = cv2.GaussianBlur(inverted, (9, 9), 2)
+
+    circles = cv2.HoughCircles(
+        blurred,
+        cv2.HOUGH_GRADIENT,
+        dp=1,
+        minDist=min_r,
+        param1=50,
+        param2=20,
+        minRadius=min_r,
+        maxRadius=max_r,
+    )
+
+    if circles is not None:
+        circles   = np.round(circles[0, :]).astype("int")
+        cx, cy, r = circles[0]
+
+        center_dist  = np.sqrt(
+            (cx - w / 2) ** 2 + (cy - h / 2) ** 2
+        )
+        max_dist     = np.sqrt((w / 2) ** 2 + (h / 2) ** 2)
+        center_score = 1.0 - min(1.0, center_dist / max_dist)
+
+        fill_ratio = (r * 2) / min(h, w)
+        fill_score = min(1.0, fill_ratio)
+
+        score = 0.5 * center_score + 0.5 * fill_score
+        return round(min(1.0, score + 0.30), 3)
+
+    return _score_arc_presence(roi)
+
+
+def _score_arc_presence(roi: np.ndarray) -> float:
+    """Detect curved arc pixels indicating a hand-drawn circle.
+
+    Works on partial circles where Hough detection fails.
+    Looks for curved contours spanning a significant portion
+    of the region.
+
+    Args:
+        roi: Region of interest as grayscale array.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    h, w = roi.shape[:2]
+
+    edges = cv2.Canny(roi, 30, 100)
+    contours, _ = cv2.findContours(
+        edges,
+        cv2.RETR_EXTERNAL,
+        cv2.CHAIN_APPROX_SIMPLE
+    )
+
+    if not contours:
+        return 0.0
+
+    best_score     = 0.0
+    min_arc_length = min(h, w) * 0.5
+
+    for contour in contours:
+        arc_len = cv2.arcLength(contour, closed=False)
+
+        if arc_len < min_arc_length:
+            continue
+
+        expected_perimeter = np.pi * min(h, w) * 0.6
+        circularity        = min(1.0, arc_len / expected_perimeter)
+
+        bx, by, bw, bh = cv2.boundingRect(contour)
+        coverage        = (bw * bh) / (w * h)
+        coverage_score  = min(1.0, coverage * 2)
+
+        score      = 0.6 * circularity + 0.4 * coverage_score
+        best_score = max(best_score, score)
+
+    return round(min(0.95, best_score), 3)
+
+
+def _score_filled_bubble(roi: np.ndarray) -> float:
+    """Score how likely a region contains a filled mark.
+
+    Measures the proportion of dark pixels in the region.
+    Used for filled bubbles, shaded boxes, and any mark
+    type where the respondent darkens a region.
+
+    Args:
+        roi: Region of interest as grayscale array.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    _, binary  = cv2.threshold(
+        roi, 0, 255,
+        cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
+    )
+    dark_ratio = np.sum(binary > 0) / binary.size
+
+    if dark_ratio < FILL_THRESHOLD:
+        return 0.0
+
+    score = (dark_ratio - FILL_THRESHOLD) / (1.0 - FILL_THRESHOLD)
+    return round(min(1.0, score), 3)
+
+
+def _score_x_mark(roi: np.ndarray) -> float:
+    """Score how likely a region contains an X mark.
+
+    Detects diagonal line patterns using Hough line transform.
+    An X mark produces two crossing diagonal lines at
+    approximately 45 degree angles.
+
+    Args:
+        roi: Region of interest as grayscale array.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    edges = cv2.Canny(roi, 50, 150)
+    lines = cv2.HoughLinesP(
+        edges,
+        rho=1,
+        theta=np.pi / 180,
+        threshold=20,
+        minLineLength=int(min(roi.shape) * 0.3),
+        maxLineGap=10,
+    )
+
+    if lines is None:
+        return 0.0
+
+    diagonal_count = 0
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        if (x2 - x1) == 0:
+            continue
+        angle = abs(np.degrees(
+            np.arctan2(y2 - y1, x2 - x1)
+        ))
+        if 30 < angle < 60 or 120 < angle < 150:
+            diagonal_count += 1
+
+    if diagonal_count == 0:
+        return 0.0
+    elif diagonal_count == 1:
+        return 0.55
+    elif diagonal_count >= 2:
+        return 0.90
+
+    return 0.0
+
+
+def _score_checkmark(roi: np.ndarray) -> float:
+    """Score how likely a region contains a checkmark or tick.
+
+    A checkmark has a short diagonal going down-left then
+    a longer diagonal going up-right. Uses diagonal line
+    analysis tuned for checkmark geometry with wider angle
+    range than X mark detection.
+
+    Args:
+        roi: Region of interest as grayscale array.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    edges = cv2.Canny(roi, 50, 150)
+    lines = cv2.HoughLinesP(
+        edges,
+        rho=1,
+        theta=np.pi / 180,
+        threshold=15,
+        minLineLength=int(min(roi.shape) * 0.25),
+        maxLineGap=10,
+    )
+
+    if lines is None:
+        return 0.0
+
+    diagonal_count = 0
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        if (x2 - x1) == 0:
+            continue
+        angle = abs(np.degrees(
+            np.arctan2(y2 - y1, x2 - x1)
+        ))
+        if 25 < angle < 75:
+            diagonal_count += 1
+
+    if diagonal_count == 0:
+        return 0.0
+    elif diagonal_count == 1:
+        return 0.75
+    elif diagonal_count >= 2:
+        return 0.92
+
+    return 0.0
+
+
+def _edge_density_score(roi: np.ndarray) -> float:
+    """Score a region based on edge pixel density.
+
+    Used as fallback when all primary detection fails.
+    Any mark creates more edge pixels than a blank region.
+
+    Args:
+        roi: Region of interest as grayscale array.
+
+    Returns:
+        Score between 0.0 and 0.7 — capped as weak signal.
+    """
+    if roi.size == 0:
+        return 0.0
+
+    edges   = cv2.Canny(roi, 50, 150)
+    density = np.sum(edges > 0) / edges.size
+    return round(min(0.7, density * 10), 3)
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _extract_roi(image: np.ndarray,
+                 region: dict) -> Optional[np.ndarray]:
+    """Extract a region of interest from the image safely.
+
+    Adds asymmetric padding around the calibrated region:
+    - Less horizontal padding avoids bleeding into adjacent
+      answer columns
+    - More vertical padding captures marks that extend
+      above or below the calibrated box boundaries
+
+    Args:
+        image:  Full preprocessed image array.
+        region: Dict with x, y, w, h keys.
+
+    Returns:
+        Cropped region as numpy array, or None if invalid.
+    """
+    x = int(region.get("x", 0))
+    y = int(region.get("y", 0))
+    w = int(region.get("w", 0))
+    h = int(region.get("h", 0))
+
+    if w <= 0 or h <= 0:
+        return None
+
+    pad_x = int(w * ROI_PADDING_X)
+    pad_y = int(h * ROI_PADDING_Y)
+
+    img_h, img_w = image.shape[:2]
+
+    x1 = max(0, x - pad_x)
+    y1 = max(0, y - pad_y)
+    x2 = min(img_w, x + w + pad_x)
+    y2 = min(img_h, y + h + pad_y)
+
+    if x2 <= x1 or y2 <= y1:
+        return None
+
+    roi = image[y1:y2, x1:x2]
+
+    if len(roi.shape) == 3:
+        roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+
+    return roi
+
+
+def _pick_best(scores: dict, mark_type: str) -> dict:
+    """Select the highest scoring option and build result dict.
+
+    Flags as ambiguous only if two options score extremely
+    close — indicating genuine uncertainty about the answer.
+    In all other cases picks the highest scoring option.
+
+    Args:
+        scores:    Dict mapping value -> confidence score.
+        mark_type: Detection algorithm that produced the scores.
+
+    Returns:
+        Standard detection result dict.
+    """
+    if not scores:
+        return _no_detection("No regions scored")
+
+    sorted_scores = sorted(
+        scores.items(), key=lambda x: x[1], reverse=True
+    )
+    best_value, best_score = sorted_scores[0]
+
+    if len(sorted_scores) > 1:
+        second_value, second_score = sorted_scores[1]
+        if (best_score >= LOW_CONFIDENCE
+                and second_score >= AMBIGUITY_MIN_SCORE
+                and (best_score - second_score) < AMBIGUITY_GAP):
+            return {
+                "value":      None,
+                "confidence": best_score,
+                "mark_type":  mark_type,
+                "all_scores": {k: round(v, 3)
+                               for k, v in scores.items()},
+                "flag":       "AMBIGUOUS",
+                "note":       (
+                    f"Two options scored similarly: "
+                    f"{best_value}={best_score:.2f}, "
+                    f"{second_value}={second_score:.2f}"
+                ),
+            }
+
+    if best_score < LOW_CONFIDENCE:
+        return {
+            "value":      None,
+            "confidence": best_score,
+            "mark_type":  mark_type,
+            "all_scores": {k: round(v, 3)
+                           for k, v in scores.items()},
+            "flag":       "NO_MARK",
+            "note":       "No mark detected above threshold",
         }
 
-    return state["fields"], field_meta
+    return {
+        "value":      best_value,
+        "confidence": round(best_score, 3),
+        "mark_type":  mark_type,
+        "all_scores": {k: round(v, 3)
+                       for k, v in scores.items()},
+    }
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+def _no_detection(reason: str) -> dict:
+    """Return a standard empty detection result.
 
-def run_calibration(image_path: str, survey_name: str):
-    """Open the calibration window and record answer regions."""
-    if not os.path.exists(image_path):
-        raise FileNotFoundError(f"Image not found: {image_path}")
+    Used when no regions are defined, mark type is unknown,
+    or detection cannot proceed for any reason. Always routed
+    to human review — never silently accepted.
 
-    print("\n" + "=" * 60)
-    print("  PaperTrail — Survey Calibration Tool")
-    print("=" * 60)
-    print(f"  Survey : {survey_name}")
-    print(f"  Image  : {image_path}")
+    Args:
+        reason: Human-readable explanation of why nothing detected.
 
-    img = cv2.imread(image_path)
-    if img is None:
-        raise ValueError(f"Could not load: {image_path}")
-
-    h, w = img.shape[:2]
-    print(f"  Size   : {w} x {h} px")
-
-    # Load and clean existing YAML
-    yaml_path = os.path.join("config", "surveys",
-                             f"{survey_name}.yaml")
-    existing  = _load_yaml(yaml_path)
-    existing  = _clean_incomplete_fields(existing)
-
-    # Show existing field count
-    existing_count = len(existing.get("fields", []))
-    if existing_count > 0:
-        print(f"  Existing fields in YAML: {existing_count}")
-
-    # Reset state fields
-    state["fields"] = []
-
-    # Interactive setup
-    fields, field_meta = _build_fields(
-        survey_name, yaml_path, existing
-    )
-
-    if fields is None:
-        print("\n  Nothing to calibrate. Exiting.")
-        return
-
-    if not fields:
-        print("  No fields defined. Exiting.")
-        return
-
-    # Save cleaned YAML before starting
-    _save_yaml(yaml_path, existing)
-
-    state["image"]       = img
-    state["field_index"] = 0
-    state["regions"]     = []
-    state["zoom"]        = 1.0
-
-    print(f"\n  {len(fields)} region(s) to calibrate")
-    print(f"  Starting with: "
-          f"{fields[0]['field_id']} = {fields[0]['value']}")
-    print(f"  Draw a box around that answer option.\n")
-
-    cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
-    cv2.resizeWindow(WINDOW_NAME, min(w, 1200), min(h, 900))
-    cv2.setMouseCallback(WINDOW_NAME, _mouse_callback)
-    _show()
-
-    while True:
-        key = cv2.waitKey(20) & 0xFF
-
-        # Auto-save when all regions are recorded
-        if (state["field_index"] >= len(state["fields"])
-                and state["regions"]):
-            _save(survey_name, field_meta)
-            cv2.destroyAllWindows()
-            break
-
-        # Window closed — auto-save
-        try:
-            visible = cv2.getWindowProperty(
-                WINDOW_NAME, cv2.WND_PROP_VISIBLE)
-            if visible < 1:
-                if state["regions"]:
-                    print("\n  Window closed — saving...")
-                    _save(survey_name, field_meta)
-                else:
-                    print("\n  Window closed — nothing saved.")
-                break
-        except cv2.error:
-            break
-
-        if key == ord("q"):
-            print("\n  Quit — nothing saved.")
-            break
-
-        elif key == ord("s") or key == 13:
-            if state["regions"]:
-                _save(survey_name, field_meta)
-            else:
-                print("  Nothing to save yet.")
-            break
-
-        elif key == ord("r"):
-            if state["regions"]:
-                removed = state["regions"].pop()
-                state["field_index"] = max(
-                    0, state["field_index"] - 1)
-                print(f"  Undid: "
-                      f"{removed['field_id']} = "
-                      f"{removed['value']}")
-                _show()
-
-        elif key == ord("z"):
-            state["zoom"] = min(MAX_ZOOM,
-                                state["zoom"] + ZOOM_STEP)
-            print(f"  Zoom: {state['zoom']:.1f}x")
-            _show()
-
-        elif key == ord("x"):
-            state["zoom"] = max(MIN_ZOOM,
-                                state["zoom"] - ZOOM_STEP)
-            print(f"  Zoom: {state['zoom']:.1f}x")
-            _show()
-
-    cv2.destroyAllWindows()
-
-
-# ── CLI ───────────────────────────────────────────────────────────────────────
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="PaperTrail calibration — click regions "
-                    "on a survey image to record coordinates."
-    )
-    parser.add_argument("--image",  required=True,
-                        help="Path to processed survey image")
-    parser.add_argument("--survey", required=True,
-                        help="Survey name for the YAML config")
-    args = parser.parse_args()
-    run_calibration(args.image, args.survey)
+    Returns:
+        Detection result with null value and zero confidence.
+    """
+    return {
+        "value":      None,
+        "confidence": 0.0,
+        "mark_type":  "none",
+        "all_scores": {},
+        "flag":       "NO_DETECTION",
+        "note":       reason,
+    }
