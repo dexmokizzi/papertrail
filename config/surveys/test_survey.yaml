@@ -1,0 +1,141 @@
+# Test survey — Section 2 Investment Strategies
+# Registered for Sprint 1D Qualtrics mapper testing
+
+survey_id: test_survey
+version: 1
+description: Test survey — 8 question Likert scale section
+
+# Qualtrics connection
+qualtrics:
+  survey_id: SV_51FsjcdudIcjklU
+  template: qualtrics_templates/maize_community_survey_template.xlsx
+
+# Default settings
+default_mark_type: circled_number
+default_scale: [1, 2, 3, 4]
+
+# Computed columns — Qualtrics calculates these on import
+# PaperTrail leaves them blank
+qualtrics_computed:
+  - decision-2-first-3-items
+  - overall-decision-1-infastructure-acceptable
+  - decision-2-additional-amenities-acceptable
+  - demonstrated trust score
+  - overall-decision-2-parks-and-rec-support-tax
+  - overall-decision-2-parks-and-rec-acceptable
+  - overall-decision-1-infastructure-support-tax
+  - public interest score
+  - Q9.1 - Parent Topics
+  - Q9.1 - Topics
+  - Q9.1 - Topic Hierarchy Level 1
+  - Q9.1 - Topic Hierarchy Level 2
+  - Q9.1 - Topic Hierarchy Level 3
+
+# Field definitions
+# paper_id     = internal field name
+# qualtrics_id = exact column header from Qualtrics Row 1
+# regions      = calibrated pixel coordinates from calibration tool
+fields:
+  - paper_id: Q1
+    qualtrics_id: Q3.1_1
+    label: Focus on infrastructure improvements
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1343, y: 713,  w: 141, h: 117}
+      '2': {x: 1598, y: 713,  w: 124, h: 125}
+      '3': {x: 1808, y: 733,  w: 108, h: 97}
+      '4': {x: 1976, y: 729,  w: 128, h: 105}
+
+  - paper_id: Q2
+    qualtrics_id: Q3.1_2
+    label: Add new recreation options
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1347, y: 834,  w: 149, h: 117}
+      '2': {x: 1593, y: 842,  w: 137, h: 109}
+      '3': {x: 1821, y: 869,  w: 93,  h: 78}
+      '4': {x: 1992, y: 858,  w: 110, h: 74}
+
+  - paper_id: Q3
+    qualtrics_id: Q3.1_3
+    label: Improve the visual appearance of the community
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1374, y: 959,  w: 110, h: 109}
+      '2': {x: 1618, y: 963,  w: 106, h: 117}
+      '3': {x: 1829, y: 963,  w: 87,  h: 101}
+      '4': {x: 1996, y: 979,  w: 118, h: 89}
+
+  - paper_id: Q4
+    qualtrics_id: Q3.1_4
+    label: Attract more shopping dining and entertainment
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1374, y: 1076, w: 112, h: 98}
+      '2': {x: 1622, y: 1092, w: 106, h: 89}
+      '3': {x: 1839, y: 1088, w: 79,  h: 82}
+      '4': {x: 1996, y: 1088, w: 98,  h: 74}
+
+  - paper_id: Q5
+    qualtrics_id: Q3.1_5
+    label: Maintain high level of public safety
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1381, y: 1197, w: 107, h: 109}
+      '2': {x: 1626, y: 1201, w: 81,  h: 70}
+      '3': {x: 1823, y: 1205, w: 101, h: 78}
+      '4': {x: 2005, y: 1197, w: 84,  h: 94}
+
+  - paper_id: Q6
+    qualtrics_id: Q3.1_6
+    label: Maintain high quality park and public facilities
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1387, y: 1310, w: 84,  h: 97}
+      '2': {x: 1637, y: 1314, w: 87,  h: 90}
+      '3': {x: 1829, y: 1322, w: 81,  h: 85}
+      '4': {x: 2001, y: 1318, w: 88,  h: 78}
+
+  - paper_id: Q7
+    qualtrics_id: Q3.1_7
+    label: Develop public transportation options
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1383, y: 1435, w: 105, h: 82}
+      '2': {x: 1616, y: 1423, w: 97,  h: 82}
+      '3': {x: 1821, y: 1427, w: 93,  h: 86}
+      '4': {x: 2009, y: 1427, w: 97,  h: 86}
+
+  - paper_id: Q8
+    qualtrics_id: Q3.1_8
+    label: Support adequate childcare options
+    type: likert
+    mark_type: circled_number
+    scale: [1, 2, 3, 4]
+    required: true
+    regions:
+      '1': {x: 1383, y: 1524, w: 95,  h: 121}
+      '2': {x: 1606, y: 1536, w: 118, h: 102}
+      '3': {x: 1833, y: 1528, w: 77,  h: 102}
+      '4': {x: 1996, y: 1540, w: 112, h: 86}

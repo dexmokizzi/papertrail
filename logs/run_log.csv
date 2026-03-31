@@ -1,0 +1,6 @@
+run_timestamp,survey_id,forms_processed,fields_extracted,fields_flagged,flag_rate_pct,qualtrics_validation_passed,pipeline_runtime_sec,operator,notes
+2026-03-25T00:56:17.805477,test_survey,1,8,0,0.0,True,0.3,developer,
+2026-03-25T01:00:56.844629,test_survey,3,24,16,66.67,True,3.15,developer,
+2026-03-25T01:05:21.882924,test_survey,2,16,8,50.0,True,1.73,developer,
+2026-03-25T01:05:40.518085,test_survey,2,16,8,50.0,True,1.74,developer,
+2026-03-25T01:06:34.061087,test_survey,1,8,0,0.0,True,1.73,developer,
