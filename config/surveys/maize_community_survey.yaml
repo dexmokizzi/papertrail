@@ -1,3 +1,8 @@
+survey_id: maize_community_survey
+version: 1
+
+qualtrics:
+  template: qualtrics_templates/maize_community_survey_template.xlsx
 fields:
 - paper_id: S1_Q1
   qualtrics_id: Q2.1_1

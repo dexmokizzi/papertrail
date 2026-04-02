@@ -4,3 +4,4 @@ run_timestamp,survey_id,forms_processed,fields_extracted,fields_flagged,flag_rat
 2026-03-25T01:05:21.882924,test_survey,2,16,8,50.0,True,1.73,developer,
 2026-03-25T01:05:40.518085,test_survey,2,16,8,50.0,True,1.74,developer,
 2026-03-25T01:06:34.061087,test_survey,1,8,0,0.0,True,1.73,developer,
+2026-04-01T19:37:47.852936,maize_community_survey,1,57,5,8.77,True,11.97,developer,

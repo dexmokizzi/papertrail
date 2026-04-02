@@ -1,47 +1,359 @@
 [
   {
-    "form_id": "CamScanner 3-21-26 14.29",
+    "form_id": "CamScanner 3-25-26 18.46",
     "fields": {
-      "Q1": {
+      "S1_Q1": {
+        "value": "2",
+        "confidence": 0.988,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q2": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q3": {
         "value": "3",
         "confidence": 1.0,
-        "flag": ""
+        "flag": "",
+        "note": ""
       },
-      "Q2": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": ""
-      },
-      "Q3": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": ""
-      },
-      "Q4": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": ""
-      },
-      "Q5": {
+      "S1_Q4": {
         "value": "3",
         "confidence": 1.0,
-        "flag": ""
+        "flag": "",
+        "note": ""
       },
-      "Q6": {
+      "S1_Q5": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q6": {
+        "value": null,
+        "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=1.00, 3=0.94"
+      },
+      "S1_Q7": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q8": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q9": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S1_Q10": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q1": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q2": {
+        "value": null,
+        "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=1.00, 3=0.92"
+      },
+      "S2_Q3": {
         "value": "4",
         "confidence": 1.0,
-        "flag": ""
+        "flag": "",
+        "note": ""
       },
-      "Q7": {
+      "S2_Q4": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q5": {
+        "value": null,
+        "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=0.97"
+      },
+      "S2_Q6": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q7": {
+        "value": null,
+        "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=1.00, 3=0.95"
+      },
+      "S2_Q8": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S3_Q1": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S3_Q2": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S3_Q3": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S3_Q4": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S3_Q5": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q1": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q2": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q3": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q4": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q5": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q6": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q7": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q8": {
         "value": "2",
         "confidence": 1.0,
-        "flag": ""
+        "flag": "",
+        "note": ""
       },
-      "Q8": {
+      "S4_Q9": {
         "value": "4",
         "confidence": 1.0,
-        "flag": ""
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q10": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S4_Q11": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q1": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q2": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q3": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q4": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q5": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q6": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q7": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q8": {
+        "value": "2",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q9": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q10": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S5_Q11": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S6_Q1": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S6_Q2": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S6_Q3": {
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S7_tenure_Q1": {
+        "value": "6",
+        "confidence": 0.923,
+        "flag": "",
+        "note": ""
+      },
+      "S7_area_Q1": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S8_age_Q1": {
+        "value": "3",
+        "confidence": 0.851,
+        "flag": "",
+        "note": ""
+      },
+      "S8_gender_Q1": {
+        "value": "1",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S8_edu_Q1": {
+        "value": "6",
+        "confidence": 0.9,
+        "flag": "",
+        "note": ""
+      },
+      "S8_hispanic_Q1": {
+        "value": "2",
+        "confidence": 0.9,
+        "flag": "",
+        "note": ""
+      },
+      "S8_housing_Q1": {
+        "value": "1",
+        "confidence": 0.9,
+        "flag": "",
+        "note": ""
+      },
+      "S8_income_Q1": {
+        "value": "6",
+        "confidence": 0.9,
+        "flag": "",
+        "note": ""
+      },
+      "S8_race_Q1": {
+        "value": null,
+        "confidence": 0.9,
+        "flag": "",
+        "note": ""
       }
-    }
+    },
+    "pages_found": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
   }
 ]

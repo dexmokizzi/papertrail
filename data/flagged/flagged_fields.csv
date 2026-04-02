@@ -1,0 +1,6 @@
+form_id,field_id,raw_value,confidence,reason,timestamp,corrected_value
+CamScanner 3-25-26 18.46,S1_Q6,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742177,
+CamScanner 3-25-26 18.46,S2_Q2,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742191,
+CamScanner 3-25-26 18.46,S2_Q5,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742196,
+CamScanner 3-25-26 18.46,S2_Q7,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742199,
+CamScanner 3-25-26 18.46,S8_race_Q1,,0.9,MISSING — required field has no detected value,2026-04-01T19:37:45.742233,
