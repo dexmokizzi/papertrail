@@ -1,251 +1,278 @@
-# PaperTrail — Project Roadmap
+# PaperTrail — CHANGELOG
 
-Public Policy & Management Center (PPMC)
-Graduate Research Assistant — Internal Systems Project
-Last updated: March 2026
-
----
-
-## What PaperTrail Is
-
-PaperTrail scans completed paper surveys and produces a
-Qualtrics-ready Excel import file automatically. It eliminates
-manual data entry for paper respondents — making paper
-participation as operationally efficient as digital participation.
-
-Staff scan a paper survey. PaperTrail reads every response.
-Staff upload one file to Qualtrics. Done.
+All notable changes to this project are documented here.
+One entry per sprint close. Each entry records what was built,
+what changed from the original plan, and one key technical lesson.
 
 ---
 
-## Current Status
+## Phase 2 Complete — April 2026
 
-Sprint 1C complete. OMR detection working on real phone scans.
-Currently building Sprint 1D — Qualtrics output.
+### What Was Built
 
----
+#### Multi-page survey support
+PaperTrail now handles any multi-page survey booklet. One PDF per
+respondent (all pages scanned in one CamScanner session) = one row
+in Qualtrics. The pipeline splits pages automatically, reads each
+page against the fields assigned to that page in the survey YAML,
+and combines all pages into one extraction result per respondent.
 
-## Completed
+This works for any survey — single page or multi-page. The number
+of pages, sections, and fields are all declared in the YAML.
 
-### Sprint 1A — Environment Setup ✅
-- Python 3.14.2 virtual environment configured on Windows 11
-- All pip dependencies installed and verified
-- Tesseract 5.5.0 installed at Windows OS level
-- Poppler installed at Windows OS level for PDF support
-- OpenCV 4.13.0 confirmed working
-- CLI entry point (run_pipeline.py) working with click
-- Project folder structure created
-- .gitignore configured
+#### src/scanner/extractor.py — built from stub
+Groups processed page images by source PDF using filename pattern
+matching (`filename_pageNN.jpg`). Detects which YAML fields belong to
+which page number. Combines detections from all pages into one
+extraction result per respondent. Handles missing pages gracefully —
+flags all fields on a missing page rather than crashing.
 
-### Sprint 1B — Preprocessing ✅
-- preprocess.py handles any input format:
-    PDF (CamScanner, Adobe Scan, flatbed scanner)
-    JPG, PNG, TIFF
-    Phone camera photos
-    Multi-page PDFs (split into per-page images)
-- Converts PDF pages to images at 300 DPI
-- Removes gray background and scanner noise
-- Corrects rotational skew up to ±15 degrees
-- Enhances contrast using CLAHE
-- Adaptive thresholding for uneven lighting
-- Batch processing — handles entire folder in one run
-- Tested on real CamScanner phone scans
+#### calibration_tool.py — major upgrade
+The calibration tool now handles any survey completely. No manual
+YAML editing required after calibration — ever. For any new survey:
 
-### Sprint 1C — Calibration Tool + OMR ✅
+- Asks for mark type (6 options), field type (4 options), prefix,
+  start number, and Qualtrics column ID for each field
+- Writes a complete, pipeline-ready field definition automatically
+- Auto-saves when all regions are recorded (no S key required)
+- Auto-saves when window is closed with X button
+- Detects duplicate field prefixes before starting — asks replace
+  or skip so re-calibrating a single page is safe
+- Cleans incomplete fields from previous calibration runs
 
-#### Calibration Tool (calibration_tool.py)
-- Opens any processed survey image in an interactive window
-- Staff click and drag to draw boxes around answer regions
-- Zoom in/out for precision (Z/X keys)
-- Undo last region (R key)
-- Save coordinates to YAML automatically (S key)
-- Works for any survey layout:
-    Table grid, inline bubbles, vertical list,
-    checkboxes, scattered options — any format
-- Tested and saving YAML correctly
+Result: registering any new survey requires zero developer
+involvement after the one-time calibration session.
 
-#### Mark Detection (omr.py)
-- Detects circled numbers using Hough circle detection
-  with arc contour fallback for partial circles
-- Detects filled bubbles using dark pixel density
-- Detects X marks using diagonal Hough line detection
-- Detects circled bubbles (smaller variant of circled number)
-- Confidence scoring 0.0–1.0 per field
-- Ambiguity detection for double marks
-- Asymmetric ROI padding:
-    15% horizontal (avoids adjacent column bleed)
-    30% vertical (captures circles above/below box)
-- Results on real phone scan: 8/8 correct, all confidence 1.00
+#### omr.py — multi-algorithm fallback detection
+Every mark type now tries multiple detection algorithms and takes
+the strongest signal. This handles real-world respondent behaviour
+across any survey — people who circle instead of marking X, use
+checkmarks instead of bubbles, or make other non-standard marks.
 
----
+```
+x_mark:          tries x_mark, checkmark, circle, filled_bubble
+filled_bubble:   tries filled_bubble, circle
+circled_number:  tries circle, filled_bubble
+circled_bubble:  tries circle (small), filled_bubble, x_mark
+shaded_box:      tries filled_bubble, x_mark, checkmark
+checkmark:       tries checkmark, x_mark, filled_bubble
+```
 
-## In Progress
+FALLBACK_PENALTY = 0.85 applied to non-primary algorithms.
 
-### Sprint 1D — Qualtrics Mapper (current)
-Build qualtrics_mapper.py:
-- Read the Qualtrics export template (.xlsx)
-- Read the survey YAML for field-to-column mapping
-- Map detected values to exact Qualtrics column IDs
-- Generate the three-row Qualtrics header structure:
-    Row 1: Column ImportIds (QID_1, QID_2, etc.)
-    Row 2: Human-readable question labels
-    Row 3+: One row per paper respondent
-- Auto-populate metadata columns:
-    IPAddress       → 0.0.0.0
-    ResponseId      → R_papertrail_001
-    StartDate       → scan batch date
-    EndDate         → scan batch date
-    Status          → 0
-    Finished        → 1
-    DistributionChannel → paper
-    UserLanguage    → EN
-- Leave computed Qualtrics columns blank
-- Validate output against Qualtrics template before saving
-- Save output as: survey_id_YYYY-MM-DD_batch.xlsx
+#### preprocess.py — multi-page PDF support
+The preprocess_batch function now splits multi-page PDFs into
+per-page images named `filename_page01.jpg` through `_pageNN.jpg`.
+Each page passes through the full preprocessing pipeline independently.
+Previously only the first page of a PDF was extracted.
 
-Definition of done: Output file imports into Qualtrics
-on the first attempt without errors.
+#### run_pipeline.py — full rewrite
+Single CLI entry point supporting any registered survey.
 
----
+```
+python run_pipeline.py --survey <any_survey_name>
+python run_pipeline.py --survey <any_survey_name> --dry-run
+python run_pipeline.py --survey <any_survey_name> --stage output
+```
 
-## Upcoming
+Stages: all | preprocess | extract | validate | output
 
-### Sprint 1E — Validation + Logging
-Build validate.py:
-- Validate extracted values against YAML rules
-- Flag fields below confidence threshold (default 0.75)
-- Flag ambiguous marks, missing required fields,
-  out-of-range values
-- Produce flagged_fields.csv:
-    form_id, field_id, raw_value, confidence, reason
-- Never block whole form for one flagged field
-- Never overwrite raw extracted values
+The pipeline is survey-agnostic. It reads the survey name from
+--survey, loads the matching YAML from config/surveys/, and
+processes whatever fields are defined there. No code changes are
+needed to support a new survey — only a new YAML.
 
-Build logger.py:
-- Append one row to run_log.csv after every pipeline run
-- Log: timestamp, survey_id, forms_processed,
-  fields_extracted, fields_flagged, flag_rate_pct,
-  qualtrics_validation_passed, pipeline_runtime_sec,
-  operator
+#### First survey registered: Maize Community Survey
+The Maize Community Survey was calibrated as the first real
+instrument to validate the full pipeline end to end. All 57 fields
+across 8 pages registered in `config/surveys/maize_community_survey.yaml`.
+This serves as the reference example for registering future surveys.
 
-### Sprint 1F — Full Pipeline Wiring
-Wire all modules into run_pipeline.py:
-- Single command runs everything end to end
-- --input flag for scan folder
-- --survey flag for survey name
-- --stage flag to run one stage only
-- --dry-run flag to simulate without writing files
-- Baseline measurement before go-live:
-  Time one staff member processing 20 forms manually
+### Scanning Standard Established
+One PDF per respondent. All pages scanned in a single CamScanner
+session before saving. Staff drop PDFs into data/scans/ and run
+one command. PaperTrail handles everything else.
 
----
+This standard applies to any survey PaperTrail processes.
 
-## Phase 2 — Additional Mark Types + Full Instrument Coverage
+### Registering a New Survey — The Process
+Any new survey with a Qualtrics counterpart can be registered:
 
-### Sprint 2A — Remaining Mark Types
-- Test and tune X mark detection on real X mark surveys
-- Test and tune filled bubble detection on real bubble surveys
-- Test and tune circled bubble detection on real surveys
-- Multi-select field handling (select all that apply)
+```
+1. Export Qualtrics template
+   Data & Analysis → Export & Import → Export Data → Excel
+   Save to: qualtrics_templates/
 
-### Sprint 2B — Second Survey Instrument
-- Register a second PPMC survey instrument end to end
-- Confirm registration process works without code changes
-- Verify Qualtrics import succeeds for second instrument
+2. Scan one completed copy of the paper form
+   Drop into data/scans/
 
-### Sprint 2C — Streamlit Review UI
-Build app.py:
-- File uploader for scan batches
-- Display extracted fields in a table
-- Flagged fields highlighted in amber
-- Scan image visible in side panel
-- Accepted fields read-only
-- Corrections typed directly in UI
-- One-click Qualtrics export download
-- No command line needed
-- Staff confirm usable after one-page guide
+3. Run preprocessing
+   python run_pipeline.py --survey new_survey --stage preprocess
 
-### Sprint 2D — Form Registry
-Build form_registry.py:
-- Auto-identify which YAML applies to an incoming scan
-- Staff do not need to specify survey name manually
+4. Run calibration on each page
+   python -m src.scanner.calibration_tool \
+     --image data/processed/scan_page01.jpg \
+     --survey new_survey
 
----
+   Answer prompts: questions, values, mark type, field type,
+   Qualtrics column IDs. Draw boxes. Tool saves automatically.
+   Repeat for each page.
 
-## Deferred — Needs Testing Before Production
+5. Add survey metadata to the YAML
+   survey_id: new_survey
+   qualtrics:
+     template: qualtrics_templates/new_survey_template.xlsx
 
-These items were flagged during Sprint 1C and must be
-addressed before PaperTrail is used on real research data:
+6. Test
+   python run_pipeline.py --survey new_survey
+```
 
-- Raw phone photos with poor lighting or heavy shadows
-- Faint pencil marks
-- Heavy ink bleed
-- Sloppy or off-centre hand-drawn circles
-- Very large circles extending far outside calibration box
-- Partially erased marks
-- All mark types tested on real forms (not just circled numbers)
-- Multi-select fields on real demographic sections
-- Multi-page survey booklets
-- Different image resolutions
-- Wrinkled or folded paper
+Done — that survey processes automatically forever with no further
+developer involvement.
 
-Action: Collect diverse scan samples before go-live.
-Test each case. Tune OMR thresholds as needed.
+### Phase 2 End-to-End Test Results (Maize Community Survey)
+
+```
+PDF pages:    8
+Respondents:  1
+Fields:       57
+Clean:        52
+Flagged:      5  (4 AMBIGUOUS on Section 2, 1 multi_select mapping bug)
+Flag rate:    8.8%
+Qualtrics file: 91 columns, correct format
+Runtime:      11.97 seconds
+```
+
+### Known Issues Remaining
+- multi_select output shows "-" in Qualtrics mapper — mapping bug,
+  not yet fixed. Queued for next sprint.
+- 4 AMBIGUOUS flags on Section 2 fields need investigation.
+- x_mark and circled_bubble detection not yet verified against
+  known answers on real demographic scans. Lab testing only.
+
+### What Changed From Original Plan
+- The calibration tool originally required manual YAML editing after
+  each session. Redesigned to write complete field definitions
+  interactively. No manual editing ever required.
+- The multi-select mapping bug was not caught until the first full
+  end-to-end test. Production use should wait until it is fixed.
+
+### Key Technical Lessons
+- Multi-page grouping by filename prefix is simpler and more robust
+  than detecting page numbers from image content. The naming
+  convention (`basename_pageNN.jpg`) is the right contract.
+- The calibration tool's auto-save on window close is essential on
+  Windows — the OpenCV window does not consistently register
+  keyboard events when focus is on the terminal.
+- Duplicate prefix detection prevents silent data loss when
+  re-calibrating one page of an already-registered survey.
 
 ---
 
-## Deferred — Future Ideas
+## Phase 1 Complete — March 2026
 
-Everything here is out of scope for Phase 1 and Phase 2.
-Nothing gets built until explicitly moved into a sprint.
+### What Was Built
 
-- Cloud OCR for handwritten comment transcription
-  (Google Vision API or Azure — free tier available)
-- Automated blank reference scan generation
-  (instead of manual scanning of blank forms)
-- Confidence threshold configuration per survey in YAML
-  (currently global default of 0.75)
-- Batch progress dashboard with estimated time remaining
-- Export to CSV in addition to Excel
-- Support for surveys with skip logic
-- Support for rating scales beyond numeric
-  (e.g. emoji scales, slider scales)
-- Auto-detection of answer grid without calibration
-  (would require cloud APIs or ML model)
-- Integration with other survey platforms beyond Qualtrics
-- Mobile app for scanning (instead of using camera + transfer)
-- Historical trend reports from run_log.csv
+PaperTrail's core pipeline: scan any paper survey → read marks →
+validate → map to Qualtrics columns → produce import-ready Excel.
+
+The pipeline is instrument-agnostic from day one. The survey YAML
+defines everything. No field definitions, column mappings, or mark
+types are hardcoded in Python.
+
+#### Sprint 1A — Environment & Project Setup
+Python 3.14.2 virtual environment on Windows 11. All pip dependencies
+installed and verified. Project folder structure created per TRD.
+.gitignore configured. run_pipeline.py CLI stub with click. README
+scaffolded.
+
+#### Sprint 1B — Preprocessing (preprocess.py)
+Quality check via Laplacian blur detection. Grayscale conversion.
+Adaptive background noise removal. Deskew via Hough line transform.
+CLAHE contrast enhancement. Accepts JPG, PNG, TIFF, PDF. Original
+files never modified.
+
+#### Sprint 1C — OMR Engine (omr.py)
+Optical mark recognition for circled numbers. Hough circle detection
+as primary. Arc contour detection as fallback for partial circles.
+Confidence scoring 0.0–1.0 per field. Ambiguity detection flags
+when two options score within 0.08 of each other at high confidence.
+Initial accuracy: 8/8 on real phone scan.
+
+#### Sprint 1D — Qualtrics Mapper (qualtrics_mapper.py)
+Reads any survey's Qualtrics export template. Generates the three-row
+header structure required for Qualtrics response import. Auto-populates
+all metadata columns with compliant defaults. Leaves computed columns
+blank. Validates output before saving. Verified by actual Qualtrics
+import — succeeded on first attempt.
+
+#### Sprint 1E — Validation & Logging (validate.py, logger.py)
+Field validation against YAML schema: type, scale range, allowed
+values, required fields, confidence threshold. flagged_fields.csv
+with form_id, field_id, raw_value, confidence, reason. logger.py
+appends one row to run_log.csv per run regardless of errors.
+
+#### Sprint 1F — Full Pipeline Integration (run_pipeline.py)
+All stages connected in one command. Intermediate JSON between stages
+for independent re-running. Human corrections applied from
+flagged_fields.csv before export.
+
+### Phase 1 Acceptance Criteria — All Met
+
+```
+✅ Full pipeline runs on real scan in one command
+✅ 8/8 marks detected correctly
+✅ All confidence scores at 1.00 on clean scan
+✅ 0 fields flagged on clean scan
+✅ Qualtrics file: 91 columns, correct format
+✅ Qualtrics import succeeded on first attempt
+✅ Every run logged to run_log.csv automatically
+✅ Runtime: 1.73 seconds
+```
+
+### What Changed From Original Plan
+- TRD v1.0 described a general IDP pipeline with PDF reports and
+  email distribution. TRD v2.0 narrowed the output target to a
+  Qualtrics response import file. This is the right scope — it
+  solves the actual problem without overbuilding.
+- The calibration tool was not in TRD v1.0. Manual YAML coordinate
+  entry proved impractical on real scans. Added and significantly
+  extended through Phase 2.
+
+### Key Technical Lessons
+- The Qualtrics three-row header structure is strict. Row 1 must
+  contain exact ImportIds from the exported template. Getting this
+  wrong causes silent import failures with unhelpful Qualtrics errors.
+- The processed/ folder must be clean between test runs or old images
+  get picked up as extra respondents. Document this in the README.
 
 ---
 
-## Known Limitations
+## Project Inception — March 2026
 
-These are not bugs — they are intentional design boundaries:
+### The Problem
+PPMC conducts surveys simultaneously online (Qualtrics) and on paper.
+Online responses enter Qualtrics automatically. Paper responses require
+staff to manually transcribe every answer and import a correctly
+formatted Excel file. One batch of 50 surveys: 3–5 hours of staff
+time, frequent import failures, silent data entry errors at 2–5% per
+field.
 
-- Every new survey type requires one-time calibration
-  (5-10 minutes of clicking regions per instrument)
-- Handwritten open-text comments are saved as image crops
-  and must be transcribed manually if needed
-- Very poor quality scans will flag fields for human review
-  rather than guess — this is correct behaviour
-- PaperTrail requires a matching Qualtrics survey to exist
-  before it can process paper responses for that instrument
+### What PaperTrail Is
+A local-first, zero-cost pipeline that accepts scanned paper surveys
+and produces Qualtrics-ready Excel files automatically. Works for any
+survey that has a Qualtrics counterpart. Staff scan → drop files →
+run one command → upload to Qualtrics.
 
----
-
-## Completed Milestones
-
-| Milestone                          | Status  | Date       |
-|------------------------------------|---------|------------|
-| Environment setup                  | Done    | March 2026 |
-| Preprocessing pipeline             | Done    | March 2026 |
-| Calibration tool                   | Done    | March 2026 |
-| OMR — circled number detection     | Done    | March 2026 |
-| 8/8 accuracy on real phone scan    | Done    | March 2026 |
-| Qualtrics mapper                   | Pending | —          |
-| Validation + flagging              | Pending | —          |
-| Full pipeline end-to-end           | Pending | —          |
-| First successful Qualtrics import  | Pending | —          |
-| Second survey instrument           | Pending | —          |
-| Streamlit review UI                | Pending | —          |
-| Staff sign-off on usability        | Pending | —          |
+### Core Design Decisions Made at Inception
+- **Any survey, not one survey**: YAML registry makes any instrument
+  fully automated after one-time calibration. No code changes for
+  new surveys.
+- **Local and free**: No cloud APIs, no servers, no paid services
+  for core operation. Runs on any Windows laptop.
+- **One PDF per respondent**: Scanning standard established from day
+  one. CamScanner saves all pages in one session.
+- **Confidence over silence**: Every extraction produces a score.
+  Uncertain fields go to human review — never silently accepted.
+- **Qualtrics import file as the output**: Narrower than the original
+  TRD v1.0 IDP vision, but exactly right for the actual problem.
