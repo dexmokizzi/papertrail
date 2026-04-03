@@ -1,4 +1,4 @@
-# PaperTrail — CHANGELOG
+# PaperTrail: CHANGELOG
 
 All notable changes to this project are documented here.
 One entry per sprint close. Each entry records what was built,
@@ -6,7 +6,7 @@ what changed from the original plan, and one key technical lesson.
 
 ---
 
-## Phase 2 Complete — April 2026
+## Phase 2 Complete, April 2026
 
 ### What Was Built
 
