@@ -1,4 +1,4 @@
-# PaperTrail — CHANGELOG
+# PaperTrail: CHANGELOG
 
 All notable changes to this project are documented here.
 One entry per sprint close. Each entry records what was built,
@@ -6,7 +6,7 @@ what changed from the original plan, and one key technical lesson.
 
 ---
 
-## Phase 2 Complete — April 2026
+## Phase 2 Complete, April 2026
 
 ### What Was Built
 
@@ -169,7 +169,7 @@ Runtime:      11.97 seconds
 
 ---
 
-## Phase 1 Complete — March 2026
+## Phase 1 Complete, March 2026
 
 ### What Was Built
 
@@ -180,44 +180,44 @@ The pipeline is instrument-agnostic from day one. The survey YAML
 defines everything. No field definitions, column mappings, or mark
 types are hardcoded in Python.
 
-#### Sprint 1A — Environment & Project Setup
+#### Sprint 1A: Environment & Project Setup
 Python 3.14.2 virtual environment on Windows 11. All pip dependencies
 installed and verified. Project folder structure created per TRD.
 .gitignore configured. run_pipeline.py CLI stub with click. README
 scaffolded.
 
-#### Sprint 1B — Preprocessing (preprocess.py)
+#### Sprint 1B: Preprocessing (preprocess.py)
 Quality check via Laplacian blur detection. Grayscale conversion.
 Adaptive background noise removal. Deskew via Hough line transform.
 CLAHE contrast enhancement. Accepts JPG, PNG, TIFF, PDF. Original
 files never modified.
 
-#### Sprint 1C — OMR Engine (omr.py)
+#### Sprint 1C: OMR Engine (omr.py)
 Optical mark recognition for circled numbers. Hough circle detection
 as primary. Arc contour detection as fallback for partial circles.
 Confidence scoring 0.0–1.0 per field. Ambiguity detection flags
 when two options score within 0.08 of each other at high confidence.
 Initial accuracy: 8/8 on real phone scan.
 
-#### Sprint 1D — Qualtrics Mapper (qualtrics_mapper.py)
+#### Sprint 1D: Qualtrics Mapper (qualtrics_mapper.py)
 Reads any survey's Qualtrics export template. Generates the three-row
 header structure required for Qualtrics response import. Auto-populates
 all metadata columns with compliant defaults. Leaves computed columns
 blank. Validates output before saving. Verified by actual Qualtrics
 import — succeeded on first attempt.
 
-#### Sprint 1E — Validation & Logging (validate.py, logger.py)
+#### Sprint 1E: Validation & Logging (validate.py, logger.py)
 Field validation against YAML schema: type, scale range, allowed
 values, required fields, confidence threshold. flagged_fields.csv
 with form_id, field_id, raw_value, confidence, reason. logger.py
 appends one row to run_log.csv per run regardless of errors.
 
-#### Sprint 1F — Full Pipeline Integration (run_pipeline.py)
+#### Sprint 1F: Full Pipeline Integration (run_pipeline.py)
 All stages connected in one command. Intermediate JSON between stages
 for independent re-running. Human corrections applied from
 flagged_fields.csv before export.
 
-### Phase 1 Acceptance Criteria — All Met
+### Phase 1 Acceptance Criteria, All Met
 
 ```
 ✅ Full pipeline runs on real scan in one command
@@ -248,7 +248,7 @@ flagged_fields.csv before export.
 
 ---
 
-## Project Inception — March 2026
+## Project Inception, March 2026
 
 ### The Problem
 PPMC conducts surveys simultaneously online (Qualtrics) and on paper.
