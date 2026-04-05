@@ -107,8 +107,20 @@ def build_import_file(
         )
         rows.append(row)
 
+    # Load existing data rows if the output file already exists.
+    # This allows multiple batch runs to accumulate into one file
+    # so staff can import all respondents in a single Qualtrics upload.
+    existing_rows = _load_existing_rows(output_path, headers)
+    if existing_rows:
+        print(
+            f"  Appending to existing file: "
+            f"{len(existing_rows)} existing respondent(s) found."
+        )
+
+    all_rows = existing_rows + rows
+
     # Assemble: Row 1 (headers) + Row 2 (labels) + Row 3+ (data)
-    output_df = _assemble_dataframe(headers, labels, rows)
+    output_df = _assemble_dataframe(headers, labels, all_rows)
 
     # Validate before saving
     if not _validate(output_df, headers):
@@ -119,7 +131,8 @@ def build_import_file(
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     output_df.to_excel(output_path, index=False, header=False)
     print(f"  Saved:              {output_path}")
-    print(f"  Rows:               {len(rows)} respondent(s)")
+    print(f"  Rows:               {len(all_rows)} respondent(s) total")
+    print(f"  New this run:       {len(rows)} respondent(s)")
     print(f"  Columns:            {len(headers)}")
     print(f"  Ready to import into Qualtrics.")
     return True
@@ -318,6 +331,62 @@ def _build_row(
         row[header] = ""
 
     return row
+
+
+# ── Existing file loader ─────────────────────────────────────────────────────
+
+def _load_existing_rows(output_path: str, headers: list) -> list:
+    """Load existing data rows from a previous run output file.
+
+    If an output file already exists for this survey, reads the
+    data rows (skipping the two header rows) and returns them
+    so they can be combined with the new batch rows. This allows
+    multiple batch runs to accumulate into one file for a single
+    Qualtrics import.
+
+    If the file does not exist, or the headers do not match the
+    current template, returns an empty list and starts fresh.
+    A header mismatch means the template changed — mixing old
+    and new format rows in one file would corrupt the import.
+
+    Args:
+        output_path: Path to the existing output file.
+        headers:     Expected column headers from current template.
+
+    Returns:
+        List of row dicts from previous runs, or empty list.
+    """
+    if not os.path.exists(output_path):
+        return []
+
+    try:
+        df = pd.read_excel(output_path, header=None)
+    except Exception:
+        return []
+
+    if len(df) < 3:
+        return []
+
+    # Verify headers match — if template changed, start fresh
+    existing_headers = [str(v) for v in df.iloc[0].tolist()]
+    if existing_headers != headers:
+        print(
+            "  Warning: existing file headers do not match "
+            "current template. Starting fresh."
+        )
+        return []
+
+    # Rows 3+ are data rows (index 2 onward)
+    data_rows = []
+    for _, row in df.iloc[2:].iterrows():
+        row_dict = {
+            str(headers[i]): str(v) if str(v) != "nan" else ""
+            for i, v in enumerate(row.tolist())
+            if i < len(headers)
+        }
+        data_rows.append(row_dict)
+
+    return data_rows
 
 
 # ── Dataframe assembler ───────────────────────────────────────────────────────

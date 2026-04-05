@@ -20,6 +20,7 @@ Stages:
 import os
 import time
 import json
+import shutil
 import click
 import yaml
 
@@ -72,6 +73,14 @@ def main(input_dir, survey, stage, dry_run, operator):
     start_time = time.time()
 
     _print_header(survey, input_dir, stage, dry_run)
+
+    # Clear intermediate folders at the start of a full run so
+    # images and data from previous batches are never picked up.
+    # Stage-specific runs (--stage output etc.) are not cleared —
+    # they intentionally operate on existing intermediate data.
+    if stage == "all" and not dry_run:
+        _clean_working_dirs()
+        click.echo("  Working directories cleared for new batch.")
 
     # ── Load survey config ────────────────────────────────────────────────────
     yaml_path = os.path.join(
@@ -255,7 +264,8 @@ def main(input_dir, survey, stage, dry_run, operator):
         # field dict. The mapper reads corrected_value first,
         # falling back to value if no correction was entered.
         corrections = load_corrections(
-            "data/flagged/flagged_fields.csv"
+            "data/flagged/flagged_fields.csv",
+            survey_config=survey_config,
         )
         if corrections:
             click.echo(
@@ -286,7 +296,10 @@ def main(input_dir, survey, stage, dry_run, operator):
 
         from datetime import datetime
         date_str    = datetime.now().strftime("%Y-%m-%d")
-        output_name = f"{survey}_{date_str}_import.xlsx"
+        # Fixed filename per survey so multiple batch runs
+        # append into one file for a single Qualtrics import.
+        # The date is recorded per-row inside the file itself.
+        output_name = f"{survey}_import.xlsx"
         output_path = os.path.join(
             "data", "output", output_name
         )
@@ -375,6 +388,32 @@ def main(input_dir, survey, stage, dry_run, operator):
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _clean_working_dirs() -> None:
+    """Clear all intermediate pipeline folders before a new batch run.
+
+    Removes all files from processed/, extracted/, and validated/
+    so that images and data from previous runs are never picked up
+    as part of the current batch. The scans/ folder is never touched
+    — only intermediate working directories are cleared.
+
+    Called automatically at the start of every full pipeline run
+    so staff never need to manually clean up between batches.
+    """
+    dirs = [
+        "data/processed",
+        "data/extracted",
+        "data/validated",
+    ]
+    for d in dirs:
+        if os.path.exists(d):
+            for f in os.listdir(d):
+                fpath = os.path.join(d, f)
+                if f == ".gitkeep":
+                    continue
+                if os.path.isfile(fpath):
+                    os.remove(fpath)
+
 
 def _print_header(
     survey:    str,
