@@ -22,7 +22,6 @@ import time
 import json
 import click
 import yaml
-import cv2
 
 from src.scanner.preprocess   import preprocess_batch
 from src.validate             import validate_batch, load_corrections
@@ -227,9 +226,12 @@ def main(input_dir, survey, stage, dry_run, operator):
                     "\n  All fields passed validation ✓"
                 )
 
-            _save_validated(
-                validation["clean_extractions"]
-            )
+            # Save the full raw extractions — not just clean fields.
+            # Flagged fields must be present in validated.json so
+            # that human corrections from flagged_fields.csv can be
+            # applied to them in the output stage. If only clean
+            # fields are saved here, corrections have nowhere to land.
+            _save_validated(extractions)
 
     # ── Stage 4: Output ───────────────────────────────────────────────────────
     if stage in ["all", "output"]:
@@ -248,7 +250,10 @@ def main(input_dir, survey, stage, dry_run, operator):
             )
             return
 
-        # Apply any human corrections from flagged_fields.csv
+        # Apply any human corrections from flagged_fields.csv.
+        # Corrections are written into corrected_value on each
+        # field dict. The mapper reads corrected_value first,
+        # falling back to value if no correction was entered.
         corrections = load_corrections(
             "data/flagged/flagged_fields.csv"
         )
@@ -293,6 +298,10 @@ def main(input_dir, survey, stage, dry_run, operator):
             )
             success = True
         else:
+            # Pass field dicts directly — corrected_value is
+            # already embedded in each field dict by
+            # _apply_corrections above. The mapper reads
+            # corrected_value first, then falls back to value.
             clean_extractions = [
                 item["fields"] for item in validated
             ]
@@ -368,10 +377,10 @@ def main(input_dir, survey, stage, dry_run, operator):
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _print_header(
-    survey:   str,
+    survey:    str,
     input_dir: str,
-    stage:    str,
-    dry_run:  bool,
+    stage:     str,
+    dry_run:   bool,
 ) -> None:
     """Print the pipeline startup banner.
 
@@ -412,10 +421,15 @@ def _load_extractions() -> list:
 
 
 def _save_validated(validated: list) -> None:
-    """Save validated extractions to data/validated/.
+    """Save extractions to data/validated/ for the output stage.
+
+    Saves the full extraction including flagged fields so that
+    human corrections from flagged_fields.csv can be applied
+    to them in the output stage. If only clean fields were saved,
+    corrected values would have nowhere to land.
 
     Args:
-        validated: List of validated extraction dicts.
+        validated: List of extraction dicts (all fields).
     """
     os.makedirs("data/validated", exist_ok=True)
     path = os.path.join(
@@ -448,31 +462,35 @@ def _apply_corrections(
 
     Corrections are keyed by (form_id, field_id) tuples.
     Raw extracted values are never overwritten — corrections
-    are applied to a separate corrected_value key.
+    are written to a corrected_value key inside each field dict.
+    The qualtrics_mapper reads corrected_value first, falling
+    back to value when no correction exists.
 
     Args:
-        validated:   List of validated extraction dicts.
+        validated:   List of extraction dicts (all fields).
         corrections: Dict mapping (form_id, field_id)
-                     -> corrected_value.
+                     -> corrected_value string.
 
     Returns:
-        Updated list with corrections applied.
+        Updated list with corrections embedded in field dicts.
     """
     for item in validated:
         form_id = item.get("form_id", "")
+        fields  = item.get("fields", {})
+
         for key, corrected in corrections.items():
             if isinstance(key, tuple):
                 fid_form, fid_field = key
-                if fid_form == form_id:
-                    if fid_field in item["fields"]:
-                        item["fields"][fid_field][
-                            "corrected_value"
-                        ] = corrected
+                if fid_form != form_id:
+                    continue
+                if fid_field not in fields:
+                    # Field was flagged but not in validated —
+                    # create a placeholder so correction lands
+                    fields[fid_field] = {}
+                fields[fid_field]["corrected_value"] = corrected
             else:
-                if key in item["fields"]:
-                    item["fields"][key][
-                        "corrected_value"
-                    ] = corrected
+                if key in fields:
+                    fields[key]["corrected_value"] = corrected
 
     return validated
 

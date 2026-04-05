@@ -1,6 +1,8 @@
 form_id,field_id,raw_value,confidence,reason,timestamp,corrected_value
-CamScanner 3-25-26 18.46,S1_Q6,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742177,
-CamScanner 3-25-26 18.46,S2_Q2,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742191,
-CamScanner 3-25-26 18.46,S2_Q5,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742196,
-CamScanner 3-25-26 18.46,S2_Q7,,1.0,AMBIGUOUS — two options scored similarly,2026-04-01T19:37:45.742199,
-CamScanner 3-25-26 18.46,S8_race_Q1,,0.9,MISSING — required field has no detected value,2026-04-01T19:37:45.742233,
+CamScanner 3-25-26 18.46,S1_Q2,,1.0,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543519,4
+CamScanner 3-25-26 18.46,S2_Q3,,1.0,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543542,4
+CamScanner 3-25-26 18.46,S2_Q4,,1.0,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543545,4
+CamScanner 3-25-26 18.46,S2_Q5,,1.0,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543547,3
+CamScanner 3-25-26 18.46,S2_Q6,,1.0,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543550,4
+CamScanner 3-25-26 18.46,S2_Q7,,0.972,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543552,2
+CamScanner 3-25-26 18.46,S2_Q8,,0.966,AMBIGUOUS — two options scored similarly,2026-04-04T22:03:55.543554,4

@@ -142,6 +142,10 @@ def validate_batch(
     the results. Clean forms proceed to Qualtrics mapping.
     Flagged fields across all forms are written to one CSV.
 
+    Any corrections already entered in flagged_fields.csv
+    are preserved — re-running validate never wipes work
+    that staff have already done.
+
     Args:
         extractions:   List of dicts, each with keys:
                        form_id and fields (extraction dict).
@@ -159,8 +163,16 @@ def validate_batch(
     total_fields      = 0
     total_flagged     = 0
 
-    # Clear flagged file at start of batch
-    _clear_flagged(flagged_path)
+    # Load any corrections staff have already entered.
+    # These are preserved when the file is regenerated —
+    # re-running validate never loses correction work.
+    existing_corrections = _load_existing_corrections(
+        flagged_path
+    )
+
+    # Regenerate the flagged file with fresh flag rows
+    # but with existing corrections written back in.
+    _reset_flagged(flagged_path, existing_corrections)
 
     for item in extractions:
         form_id    = item.get("form_id", f"form_{len(clean_extractions)+1:04d}")
@@ -181,6 +193,10 @@ def validate_batch(
         all_flagged   += result["flagged"]
         total_fields  += result["summary"]["total"]
         total_flagged += result["summary"]["flagged"]
+
+    # Write corrections back into the regenerated file
+    if existing_corrections:
+        _restore_corrections(flagged_path, existing_corrections)
 
     return {
         "clean_extractions": clean_extractions,
@@ -319,6 +335,99 @@ def _check_field(
 
 # ── File helpers ──────────────────────────────────────────────────────────────
 
+def _load_existing_corrections(path: str) -> dict:
+    """Load any corrections already entered in the CSV.
+
+    Called before regenerating the flagged file so that
+    staff corrections are never lost on re-run.
+
+    Args:
+        path: Path to flagged_fields.csv.
+
+    Returns:
+        Dict mapping (form_id, field_id) -> corrected_value.
+        Empty dict if file does not exist or has no corrections.
+    """
+    corrections = {}
+
+    if not os.path.exists(path):
+        return corrections
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                corrected = row.get(
+                    "corrected_value", ""
+                ).strip()
+                if corrected:
+                    key = (row["form_id"], row["field_id"])
+                    corrections[key] = corrected
+    except Exception:
+        pass
+
+    return corrections
+
+
+def _reset_flagged(path: str, existing: dict) -> None:
+    """Delete the flagged file so it can be regenerated.
+
+    Existing corrections are passed in separately and will
+    be written back after the new flag rows are appended.
+    This is safe — corrections are never lost.
+
+    Args:
+        path:     Path to flagged_fields.csv.
+        existing: Corrections already entered by staff.
+                  Informational only — used for log message.
+    """
+    if os.path.exists(path):
+        os.remove(path)
+
+    if existing:
+        n = len(existing)
+        print(
+            f"  Preserving {n} existing correction(s) "
+            f"through re-validation."
+        )
+
+
+def _restore_corrections(path: str, corrections: dict) -> None:
+    """Write existing corrections back into the regenerated CSV.
+
+    After validate_batch regenerates the flag rows, this
+    function reads the fresh file and writes the corrections
+    back into the corrected_value column for any matching
+    (form_id, field_id) pairs.
+
+    Fields that were previously flagged but are no longer
+    flagged after re-validation simply do not appear in
+    the file — their corrections are no longer needed.
+
+    Args:
+        path:        Path to flagged_fields.csv.
+        corrections: Dict mapping (form_id, field_id)
+                     -> corrected_value string.
+    """
+    if not os.path.exists(path):
+        return
+
+    rows = []
+    with open(path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames or []
+        for row in reader:
+            key = (row["form_id"], row["field_id"])
+            if key in corrections:
+                row["corrected_value"] = corrections[key]
+            rows.append(row)
+
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def _write_flagged(flagged: list, path: str) -> None:
     """Append flagged fields to the CSV review file.
 
@@ -332,11 +441,9 @@ def _write_flagged(flagged: list, path: str) -> None:
     """
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
-    file_exists = os.path.exists(path)
     write_headers = _needs_headers(path)
 
     with open(path, "a", newline="", encoding="utf-8") as f:
-        # Add corrected_value column for staff to fill in
         all_headers = FLAGGED_HEADERS + ["corrected_value"]
         writer = csv.DictWriter(f, fieldnames=all_headers)
 
@@ -348,19 +455,6 @@ def _write_flagged(flagged: list, path: str) -> None:
                 **row,
                 "corrected_value": "",
             })
-
-
-def _clear_flagged(path: str) -> None:
-    """Delete the flagged fields file at the start of a batch.
-
-    Each batch starts fresh — flags from previous runs
-    are not carried over.
-
-    Args:
-        path: Path to the flagged_fields.csv file.
-    """
-    if os.path.exists(path):
-        os.remove(path)
 
 
 def _needs_headers(path: str) -> bool:
