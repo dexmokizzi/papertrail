@@ -6,6 +6,139 @@ what changed from the original plan, and one key technical lesson.
 
 ---
 
+## Bug Fixes & Corrections Workflow, April 2026
+
+### What Was Fixed
+
+This sprint closed six bugs identified during the first real
+end-to-end verification run on a live multi-page scan. All fixes
+are survey-agnostic — they apply to any instrument registered
+in PaperTrail, not just the one used for validation.
+
+#### omr.py — multi_select silent data loss (critical)
+`detect_multi_select` returned `{"values": [...]}` (plural key)
+but `extractor.py` read `detection.get("value")` (singular key).
+Multi-select detections were correct internally but silently
+dropped before reaching the output file. Fixed by making
+`detect_multi_select` return `"value"` consistently with all
+other detection functions. A list value (e.g. `["5", "6"]`)
+is formatted as a comma-separated string by the mapper
+(`"5,6"`) which is the correct Qualtrics import format.
+
+#### omr.py — false AMBIGUOUS flags on circled_bubble fields
+The global `AMBIGUITY_MIN_SCORE = 0.85` was too loose for
+circled bubble fields where options are physically separated on
+the page. A large hand-drawn circle extending into an adjacent
+region would cause the second option to score ~0.92, triggering
+a false ambiguity flag even when the correct answer was clear.
+Fixed by adding `CIRCLED_BUBBLE_AMBIGUITY_MIN = 0.96` and
+passing it as a parameter to `_pick_best`. The tighter threshold
+reflects the physical reality: genuine double-circling on
+separated bubbles is rare; high second-option scores almost
+always mean circle bleed, not genuine ambiguity.
+
+#### calibration_tool.py — page number never saved (critical)
+The calibration tool asked for mark type, field type, prefix,
+and Qualtrics IDs — but never asked which page number the image
+represented. All calibrated fields were saved with `page: None`.
+`extractor.py` defaulted missing page numbers to page 1, so
+all fields on pages 2–8 were run against the page 1 image.
+Detection appeared to work (no errors) but produced wrong
+values silently. Fixed by adding `_ask_page_number(image_path)`
+which infers the default from the filename
+(`_page08.jpg → 8`) so operators just press Enter in most cases.
+Page number is now always written to every field in the YAML.
+
+#### run_pipeline.py — flagged fields excluded from validated.json
+`_save_validated` was called with `validation["clean_extractions"]`
+which only contained fields that passed validation. Flagged fields
+were excluded entirely. When corrections were applied in the output
+stage, those fields did not exist in `validated.json` to receive
+them — corrections were silently ignored. Fixed by saving the full
+raw extractions (all fields including flagged) to `validated.json`.
+The mapper reads `corrected_value` first, falling back to `value`
+when no correction exists.
+
+#### validate.py — _clear_flagged wiped staff corrections on re-run
+`_clear_flagged` deleted `flagged_fields.csv` at the start of
+every validation run. If staff entered corrections and then
+re-ran `--stage validate` for any reason, all their work was
+silently lost. Fixed by replacing `_clear_flagged` with a
+load/reset/restore pattern:
+1. `_load_existing_corrections` reads corrections before the
+   file is touched
+2. `_reset_flagged` deletes the file (corrections safely in memory)
+3. Fresh flag rows are written during validation
+4. `_restore_corrections` writes corrections back into the
+   regenerated file for any matching (form_id, field_id) pair
+Corrections now survive any number of re-validation runs.
+
+#### qualtrics_mapper.py — corrected_value never read
+`_build_row` always read `detected.get("value")` and never
+checked for `corrected_value`. Human corrections were present
+in the validated data but the mapper ignored them, producing
+blank cells in the output file for every corrected field.
+Fixed with one line: `corrected_value` is now read first,
+falling back to `value` when no correction exists.
+
+### End-to-End Verification Results
+
+Full pipeline verified against a real 8-page multi-section
+survey scan (57 fields, 4 mark types, multi-select demographics).
+
+```
+Fields auto-detected correctly:  50/57  (88%)
+Fields flagged for human review:   7/57  (12%)
+All 7 corrections applied:        yes
+Final Qualtrics file:             57/57 fields correct
+Multi-select field:               yes (comma-separated format)
+Runtime:                          ~12 seconds
+```
+
+All 7 flagged fields had clear answers on the paper. Root cause:
+hand-drawn circles on tightly spaced grids produce high scores
+on adjacent columns. These are correct flags — the system is
+uncertain, not wrong. Staff review time for 7 fields is a
+fraction of manual transcription for the full form.
+
+### Known Issues Remaining
+- Flag rate on circled-number surveys with tight column spacing
+  will typically be 10-15% on phone scans. Calibration quality
+  and scan quality are the primary levers. Threshold tuning
+  deferred until more real scan data is available.
+- Corrections entry currently requires editing flagged_fields.csv
+  directly. Non-technical staff workflow blocked on Phase 3
+  Streamlit UI. Foundation is verified correct — UI can now
+  be built on top of it reliably.
+- Multi-respondent batch testing not yet completed. Single-
+  respondent pipeline verified. Batch of 10+ recommended before
+  broader staff deployment.
+
+### What Changed From Original Plan
+- Phase 2 CHANGELOG noted multi_select as a known bug queued
+  for next sprint. Fixed this sprint along with five other
+  silent failure bugs discovered during real-scan verification.
+- The corrections workflow required more foundational work than
+  anticipated. The bugs were not visible in unit testing —
+  they only surfaced during full end-to-end verification on
+  a real scan with known answers. This validates the TRD
+  requirement that each phase closes on real data, not
+  synthetic test data.
+
+### Key Technical Lesson
+Silent failures dominated this sprint. Every bug followed the
+same pattern: the pipeline ran without errors, produced output,
+and reported success — but the output was wrong. Key examples:
+the wrong key name (`values` vs `value`) dropped multi-select
+data silently; missing page numbers caused fields to be
+detected against the wrong image with no error; corrections
+sat in memory but never reached the output file. The lesson:
+for data pipelines, a clean run is not the same as a correct
+run. End-to-end verification against known answers on real
+inputs is the only reliable acceptance test.
+
+---
+
 ## Phase 2 Complete, April 2026
 
 ### What Was Built
@@ -82,11 +215,11 @@ The pipeline is survey-agnostic. It reads the survey name from
 processes whatever fields are defined there. No code changes are
 needed to support a new survey — only a new YAML.
 
-#### First survey registered: Maize Community Survey
-The Maize Community Survey was calibrated as the first real
-instrument to validate the full pipeline end to end. All 57 fields
-across 8 pages registered in `config/surveys/maize_community_survey.yaml`.
-This serves as the reference example for registering future surveys.
+#### First survey registered
+The first real multi-page instrument was calibrated to validate
+the full pipeline end to end. All fields across 8 pages registered
+in the survey YAML. This serves as the reference example for
+registering future surveys.
 
 ### Scanning Standard Established
 One PDF per respondent. All pages scanned in a single CamScanner
@@ -100,7 +233,7 @@ Any new survey with a Qualtrics counterpart can be registered:
 
 ```
 1. Export Qualtrics template
-   Data & Analysis → Export & Import → Export Data → Excel
+   Data & Analysis -> Export & Import -> Export Data -> Excel
    Save to: qualtrics_templates/
 
 2. Scan one completed copy of the paper form
@@ -130,14 +263,14 @@ Any new survey with a Qualtrics counterpart can be registered:
 Done — that survey processes automatically forever with no further
 developer involvement.
 
-### Phase 2 End-to-End Test Results (Maize Community Survey)
+### Phase 2 End-to-End Test Results
 
 ```
 PDF pages:    8
 Respondents:  1
 Fields:       57
 Clean:        52
-Flagged:      5  (4 AMBIGUOUS on Section 2, 1 multi_select mapping bug)
+Flagged:      5  (4 AMBIGUOUS on circled-number grid, 1 multi_select bug)
 Flag rate:    8.8%
 Qualtrics file: 91 columns, correct format
 Runtime:      11.97 seconds
@@ -146,7 +279,8 @@ Runtime:      11.97 seconds
 ### Known Issues Remaining
 - multi_select output shows "-" in Qualtrics mapper — mapping bug,
   not yet fixed. Queued for next sprint.
-- 4 AMBIGUOUS flags on Section 2 fields need investigation.
+- AMBIGUOUS flags on tightly spaced circled-number grids need
+  investigation.
 - x_mark and circled_bubble detection not yet verified against
   known answers on real demographic scans. Lab testing only.
 
@@ -173,8 +307,8 @@ Runtime:      11.97 seconds
 
 ### What Was Built
 
-PaperTrail's core pipeline: scan any paper survey → read marks →
-validate → map to Qualtrics columns → produce import-ready Excel.
+PaperTrail's core pipeline: scan any paper survey -> read marks ->
+validate -> map to Qualtrics columns -> produce import-ready Excel.
 
 The pipeline is instrument-agnostic from day one. The survey YAML
 defines everything. No field definitions, column mappings, or mark
@@ -195,7 +329,7 @@ files never modified.
 #### Sprint 1C: OMR Engine (omr.py)
 Optical mark recognition for circled numbers. Hough circle detection
 as primary. Arc contour detection as fallback for partial circles.
-Confidence scoring 0.0–1.0 per field. Ambiguity detection flags
+Confidence scoring 0.0-1.0 per field. Ambiguity detection flags
 when two options score within 0.08 of each other at high confidence.
 Initial accuracy: 8/8 on real phone scan.
 
@@ -220,14 +354,14 @@ flagged_fields.csv before export.
 ### Phase 1 Acceptance Criteria, All Met
 
 ```
-✅ Full pipeline runs on real scan in one command
-✅ 8/8 marks detected correctly
-✅ All confidence scores at 1.00 on clean scan
-✅ 0 fields flagged on clean scan
-✅ Qualtrics file: 91 columns, correct format
-✅ Qualtrics import succeeded on first attempt
-✅ Every run logged to run_log.csv automatically
-✅ Runtime: 1.73 seconds
+Full pipeline runs on real scan in one command     yes
+8/8 marks detected correctly                       yes
+All confidence scores at 1.00 on clean scan        yes
+0 fields flagged on clean scan                     yes
+Qualtrics file: 91 columns, correct format         yes
+Qualtrics import succeeded on first attempt        yes
+Every run logged to run_log.csv automatically      yes
+Runtime: 1.73 seconds                              yes
 ```
 
 ### What Changed From Original Plan
@@ -254,25 +388,25 @@ flagged_fields.csv before export.
 PPMC conducts surveys simultaneously online (Qualtrics) and on paper.
 Online responses enter Qualtrics automatically. Paper responses require
 staff to manually transcribe every answer and import a correctly
-formatted Excel file. One batch of 50 surveys: 3–5 hours of staff
-time, frequent import failures, silent data entry errors at 2–5% per
+formatted Excel file. One batch of 50 surveys: 3-5 hours of staff
+time, frequent import failures, silent data entry errors at 2-5% per
 field.
 
 ### What PaperTrail Is
 A local-first, zero-cost pipeline that accepts scanned paper surveys
 and produces Qualtrics-ready Excel files automatically. Works for any
-survey that has a Qualtrics counterpart. Staff scan → drop files →
-run one command → upload to Qualtrics.
+survey that has a Qualtrics counterpart. Staff scan -> drop files ->
+run one command -> upload to Qualtrics.
 
 ### Core Design Decisions Made at Inception
-- **Any survey, not one survey**: YAML registry makes any instrument
+- Any survey, not one survey: YAML registry makes any instrument
   fully automated after one-time calibration. No code changes for
   new surveys.
-- **Local and free**: No cloud APIs, no servers, no paid services
+- Local and free: No cloud APIs, no servers, no paid services
   for core operation. Runs on any Windows laptop.
-- **One PDF per respondent**: Scanning standard established from day
+- One PDF per respondent: Scanning standard established from day
   one. CamScanner saves all pages in one session.
-- **Confidence over silence**: Every extraction produces a score.
+- Confidence over silence: Every extraction produces a score.
   Uncertain fields go to human review — never silently accepted.
-- **Qualtrics import file as the output**: Narrower than the original
+- Qualtrics import file as the output: Narrower than the original
   TRD v1.0 IDP vision, but exactly right for the actual problem.
