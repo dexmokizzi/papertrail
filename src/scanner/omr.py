@@ -31,6 +31,18 @@ FILL_THRESHOLD       = 0.25
 AMBIGUITY_GAP        = 0.08
 AMBIGUITY_MIN_SCORE  = 0.85
 
+# Circled bubble fields are physically separated options.
+# A high-scoring second option almost always means the
+# respondent circle extended into an adjacent region —
+# not a genuine double mark. Use a tighter threshold.
+CIRCLED_BUBBLE_AMBIGUITY_MIN = 0.96
+
+# Circled bubble fields are physically separated options
+# so a second option scoring high almost always means
+# the circle extended into an adjacent region — not a
+# genuine double mark. Use a tighter threshold.
+CIRCLED_BUBBLE_AMBIGUITY_MIN = 0.96
+
 # Padding added around calibrated boxes when extracting ROIs.
 # Less horizontal padding avoids bleeding into adjacent columns.
 # More vertical padding captures circles that extend above/below.
@@ -98,21 +110,34 @@ def detect_multi_select(image: np.ndarray,
     """Detect all marked options in a multi-select field.
 
     Unlike detect_mark which returns one value, this returns
-    every option that appears to be marked. Used for fields
-    where respondents are asked to select all that apply.
+    a list of every option that appears to be marked. Used
+    for fields where respondents select all that apply.
+
+    Returns value as a list (possibly empty) to match the
+    same structure as detect_mark. An empty list is stored
+    as None so the field appears as blank in the output
+    rather than as an empty selection. The qualtrics_mapper
+    formats a list as a comma-separated string, e.g. [1, 3]
+    becomes "1,3" which is the correct Qualtrics import format.
 
     Args:
         image:        Preprocessed grayscale image array.
         field_config: Field definition with regions and mark_type.
 
     Returns:
-        Dict with keys: values (list), confidence, all_scores.
+        Dict with keys: value (list or None), confidence,
+        mark_type, all_scores.
     """
-    mark_type  = field_config.get("mark_type", "x_mark")
-    regions    = field_config.get("regions", {})
+    mark_type = field_config.get("mark_type", "x_mark")
+    regions   = field_config.get("regions", {})
 
     if not regions:
-        return {"values": [], "confidence": 0.0, "all_scores": {}}
+        return {
+            "value":      None,
+            "confidence": 0.0,
+            "mark_type":  mark_type,
+            "all_scores": {},
+        }
 
     all_scores = {}
 
@@ -144,8 +169,9 @@ def detect_multi_select(image: np.ndarray,
     )
 
     return {
-        "values":     selected,
+        "value":      selected if selected else None,
         "confidence": round(min_confidence, 3),
+        "mark_type":  mark_type,
         "all_scores": {k: round(v, 3)
                        for k, v in all_scores.items()},
     }
@@ -238,7 +264,7 @@ def _detect_circled_bubble(image: np.ndarray,
             continue
         scores[value] = _score_circled_number(roi, small=True)
 
-    return _pick_best(scores, "circled_bubble")
+    return _pick_best(scores, "circled_bubble", ambiguity_min=CIRCLED_BUBBLE_AMBIGUITY_MIN)
 
 
 def _detect_shaded_box(image: np.ndarray,
@@ -612,7 +638,7 @@ def _extract_roi(image: np.ndarray,
     return roi
 
 
-def _pick_best(scores: dict, mark_type: str) -> dict:
+def _pick_best(scores: dict, mark_type: str, ambiguity_min: float = AMBIGUITY_MIN_SCORE) -> dict:
     """Select the highest scoring option and build result dict.
 
     Flags as ambiguous only if two options score extremely
@@ -637,7 +663,7 @@ def _pick_best(scores: dict, mark_type: str) -> dict:
     if len(sorted_scores) > 1:
         second_value, second_score = sorted_scores[1]
         if (best_score >= LOW_CONFIDENCE
-                and second_score >= AMBIGUITY_MIN_SCORE
+                and second_score >= ambiguity_min
                 and (best_score - second_score) < AMBIGUITY_GAP):
             return {
                 "value":      None,

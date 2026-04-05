@@ -14,7 +14,6 @@ Output: Qualtrics-ready .xlsx file in data/output/
 """
 
 import os
-import uuid
 import pandas as pd
 from datetime import datetime
 from typing import Optional
@@ -87,21 +86,20 @@ def build_import_file(
     if template is None:
         return False
 
-    headers    = template["headers"]     # Row 1 — ImportIds
-    labels     = template["labels"]      # Row 2 — Human labels
-    computed   = template["computed"]    # Columns to leave blank
+    headers  = template["headers"]   # Row 1 — ImportIds
+    labels   = template["labels"]    # Row 2 — Human labels
+    computed = template["computed"]  # Columns to leave blank
 
-    date_str   = batch_date or datetime.now().strftime("%Y-%m-%d")
+    date_str = batch_date or datetime.now().strftime("%Y-%m-%d")
 
     print(f"  Mapping {len(extractions)} form(s) "
           f"to {len(headers)} column(s)...")
 
-    # Build the field mapping from YAML
-    # paper_id -> qualtrics_id
-    field_map  = _build_field_map(survey_config)
+    # Build the field mapping from YAML: paper_id -> qualtrics_id
+    field_map = _build_field_map(survey_config)
 
     # Build one output row per respondent
-    rows       = []
+    rows = []
     for i, extraction in enumerate(extractions):
         row = _build_row(
             extraction, headers, field_map,
@@ -109,13 +107,11 @@ def build_import_file(
         )
         rows.append(row)
 
-    # Assemble the final dataframe
-    # Row 1: headers, Row 2: labels, Row 3+: data
-    output_df  = _assemble_dataframe(headers, labels, rows)
+    # Assemble: Row 1 (headers) + Row 2 (labels) + Row 3+ (data)
+    output_df = _assemble_dataframe(headers, labels, rows)
 
     # Validate before saving
-    valid      = _validate(output_df, headers)
-    if not valid:
+    if not _validate(output_df, headers):
         print("  Validation failed — file not saved.")
         return False
 
@@ -135,7 +131,6 @@ def _read_template(template_path: str) -> Optional[dict]:
     """Read a Qualtrics export template and extract its structure.
 
     Reads Row 1 (ImportIds) and Row 2 (labels) from the template.
-    Identifies computed columns that should be left blank on import.
 
     Args:
         template_path: Path to the Qualtrics export .xlsx file.
@@ -158,12 +153,9 @@ def _read_template(template_path: str) -> Optional[dict]:
     headers = [str(v) for v in df.iloc[0].tolist()]
     labels  = [str(v) for v in df.iloc[1].tolist()]
 
-    # Identify computed columns by checking which columns
-    # in Row 3 (first real response) contain derived values.
-    # These are typically score aggregates and topic labels
-    # that Qualtrics calculates automatically on import.
-    # We identify them from the survey YAML config instead
-    # of guessing — more reliable across survey types.
+    # Computed columns are declared in the survey YAML under
+    # qualtrics_computed — we leave that resolution to the
+    # caller via survey_config. Nothing to detect here.
     computed = set()
 
     return {
@@ -178,8 +170,8 @@ def _read_template(template_path: str) -> Optional[dict]:
 def _build_field_map(survey_config: dict) -> dict:
     """Build a mapping from paper field IDs to Qualtrics column IDs.
 
-    Reads the fields section of the survey YAML and returns
-    a dict mapping paper_id -> qualtrics_id for every field.
+    Reads the fields and sections of the survey YAML and returns
+    a flat dict mapping paper_id -> qualtrics_id for every field.
 
     Args:
         survey_config: Parsed survey YAML configuration dict.
@@ -188,24 +180,55 @@ def _build_field_map(survey_config: dict) -> dict:
         Dict mapping paper_id (str) -> qualtrics_id (str).
     """
     field_map = {}
-    fields    = survey_config.get("fields", [])
 
-    for field in fields:
-        paper_id      = field.get("paper_id")
-        qualtrics_id  = field.get("qualtrics_id")
+    # Top-level fields list (flat surveys)
+    for field in survey_config.get("fields", []):
+        paper_id     = field.get("paper_id")
+        qualtrics_id = field.get("qualtrics_id")
         if paper_id and qualtrics_id:
             field_map[paper_id] = qualtrics_id
 
-    # Also check sections if survey uses section structure
-    sections = survey_config.get("sections", [])
-    for section in sections:
+    # Sectioned surveys
+    for section in survey_config.get("sections", []):
         for field in section.get("fields", []):
-            paper_id      = field.get("paper_id")
-            qualtrics_id  = field.get("qualtrics_id")
+            paper_id     = field.get("paper_id")
+            qualtrics_id = field.get("qualtrics_id")
             if paper_id and qualtrics_id:
                 field_map[paper_id] = qualtrics_id
 
     return field_map
+
+
+# ── Value formatter ───────────────────────────────────────────────────────────
+
+def _format_value(value) -> str:
+    """Format a detected field value for Qualtrics output.
+
+    Handles four cases:
+      - None          -> empty string (blank/skipped response)
+      - list          -> comma-separated string (multi_select)
+      - "-"           -> empty string (legacy extractor artifact)
+      - anything else -> str(value)
+
+    Qualtrics multi-select format is a comma-separated string
+    in a single column, e.g. [1, 3] becomes "1,3".
+    This matches the format used in real Qualtrics exports.
+
+    Args:
+        value: The raw detected value from the extractor.
+
+    Returns:
+        A string suitable for writing into the Qualtrics import file.
+    """
+    if value is None:
+        return ""
+    if isinstance(value, list):
+        # multi_select: [1, 3] -> "1,3"
+        return ",".join(str(v) for v in value if v is not None)
+    if isinstance(value, str) and value == "-":
+        # Extractor bug artifact — treat as no response
+        return ""
+    return str(value)
 
 
 # ── Row builder ───────────────────────────────────────────────────────────────
@@ -225,7 +248,8 @@ def _build_row(
     Leaves computed columns blank.
 
     Args:
-        extraction: Dict mapping paper_id -> detected value.
+        extraction: Dict mapping paper_id -> {value, confidence, ...}
+                    OR paper_id -> raw value directly.
         headers:    List of Qualtrics column ImportIds (Row 1).
         field_map:  Dict mapping paper_id -> qualtrics_id.
         computed:   Set of column names to leave blank.
@@ -237,32 +261,45 @@ def _build_row(
     """
     row = {}
 
-    # Build a reverse lookup: qualtrics_id -> detected value
+    # Build reverse lookup: qualtrics_id -> formatted value.
+    # Extraction dicts may contain either:
+    #   {"value": ..., "confidence": ..., "flag": ...}  (full format)
+    #   or raw values directly
     value_lookup = {}
     for paper_id, detected in extraction.items():
-        if paper_id in field_map:
-            qualtrics_id = field_map[paper_id]
-            value_lookup[qualtrics_id] = detected
+        if paper_id not in field_map:
+            continue
+        qualtrics_id = field_map[paper_id]
+
+        # Handle both full extraction dicts and raw values.
+        # corrected_value takes priority over value when present —
+        # this is how human corrections from flagged_fields.csv
+        # make it into the Qualtrics output file.
+        if isinstance(detected, dict):
+            raw = detected.get("corrected_value") or detected.get("value")
+        else:
+            raw = detected
+
+        value_lookup[qualtrics_id] = _format_value(raw)
 
     for header in headers:
-        # Skip computed columns — Qualtrics fills these
+
+        # Computed columns — Qualtrics calculates these on import
         if header in computed:
             row[header] = ""
             continue
 
-        # Metadata columns
-        if header == "StartDate":
+        # Date columns
+        if header in ("StartDate", "EndDate", "RecordedDate"):
             row[header] = date_str
             continue
-        if header == "EndDate":
-            row[header] = date_str
-            continue
-        if header == "RecordedDate":
-            row[header] = date_str
-            continue
+
+        # ResponseId — unique per paper respondent
         if header == "ResponseId":
             row[header] = f"R_papertrail_{index:04d}"
             continue
+
+        # Duration — not applicable for paper imports
         if header == "Duration (in seconds)":
             row[header] = ""
             continue
@@ -274,12 +311,10 @@ def _build_row(
 
         # Survey response columns
         if header in value_lookup:
-            value = value_lookup[header]
-            # Use empty string for null values
-            row[header] = "" if value is None else str(value)
+            row[header] = value_lookup[header]
             continue
 
-        # Column exists in template but not mapped — leave blank
+        # Column in template but not mapped — leave blank
         row[header] = ""
 
     return row
@@ -305,21 +340,15 @@ def _assemble_dataframe(
         rows:    List of dicts, one per respondent.
 
     Returns:
-        DataFrame with Row 1 as headers, Row 2 as labels,
-        and subsequent rows as respondent data.
+        DataFrame with headers as Row 1, labels as Row 2,
+        and respondent data from Row 3 onward.
     """
-    # Convert rows list of dicts to list of lists
-    # preserving exact column order from template
-    data_rows = []
-    for row_dict in rows:
-        data_rows.append([
-            row_dict.get(h, "") for h in headers
-        ])
+    data_rows = [
+        [row_dict.get(h, "") for h in headers]
+        for row_dict in rows
+    ]
 
-    # Stack: Row 1 (headers) + Row 2 (labels) + data rows
-    all_rows = [headers, labels] + data_rows
-
-    return pd.DataFrame(all_rows)
+    return pd.DataFrame([headers, labels] + data_rows)
 
 
 # ── Validator ─────────────────────────────────────────────────────────────────
@@ -339,22 +368,18 @@ def _validate(df: pd.DataFrame, headers: list) -> bool:
     """
     issues = []
 
-    # Must have at least 3 rows (Row 1 + Row 2 + one respondent)
     if len(df) < 3:
         issues.append(
             f"File has only {len(df)} row(s). "
             f"Need at least 3 (headers + labels + 1 respondent)."
         )
 
-    # Row 1 must match expected headers
-    actual_headers = df.iloc[0].tolist()
-    if actual_headers != headers:
+    if df.iloc[0].tolist() != headers:
         issues.append(
             "Row 1 headers do not match template. "
             "Import will fail."
         )
 
-    # Must have at least one non-empty response column
     if len(df.columns) < 5:
         issues.append(
             f"Only {len(df.columns)} column(s). "

@@ -1,1598 +1,1031 @@
-survey_id: maize_community_survey
-version: 1
-
-qualtrics:
-  template: qualtrics_templates/maize_community_survey_template.xlsx
 fields:
-- paper_id: S1_Q1
-  qualtrics_id: Q2.1_1
-  label: ''
-  type: likert
+- label: ''
   mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1362
-      y: 636
-      w: 136
-      h: 116
-    '2':
-      x: 1606
-      y: 636
-      w: 134
-      h: 116
-    '3':
-      x: 1825
-      y: 636
-      w: 118
-      h: 113
-    '4':
-      x: 2013
-      y: 632
-      w: 126
-      h: 120
-  page: 1
-- paper_id: S1_Q2
-  qualtrics_id: Q2.1_2
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1370
-      y: 764
-      w: 145
-      h: 102
-    '2':
-      x: 1608
-      y: 752
-      w: 140
-      h: 114
-    '3':
-      x: 1827
-      y: 764
-      w: 118
-      h: 102
-    '4':
-      x: 2013
-      y: 772
-      w: 126
-      h: 109
-  page: 1
-- paper_id: S1_Q3
-  qualtrics_id: Q2.1_3
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1370
-      y: 897
-      w: 145
-      h: 113
-    '2':
-      x: 1610
-      y: 889
-      w: 145
-      h: 133
-    '3':
-      x: 1815
-      y: 897
-      w: 138
-      h: 117
-    '4':
-      x: 2025
-      y: 905
-      w: 116
-      h: 120
-  page: 1
-- paper_id: S1_Q4
-  qualtrics_id: Q2.1_4
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1374
-      y: 1049
-      w: 135
-      h: 97
-    '2':
-      x: 1618
-      y: 1049
-      w: 135
-      h: 101
-    '3':
-      x: 1841
-      y: 1053
-      w: 116
-      h: 93
-    '4':
-      x: 2017
-      y: 1064
-      w: 112
-      h: 90
-  page: 1
-- paper_id: S1_Q5
-  qualtrics_id: Q2.2_1
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1381
-      y: 1224
-      w: 132
-      h: 102
-    '2':
-      x: 1608
-      y: 1224
-      w: 147
-      h: 106
-    '3':
-      x: 1812
-      y: 1220
-      w: 135
-      h: 98
-    '4':
-      x: 2013
-      y: 1224
-      w: 118
-      h: 94
-  page: 1
-- paper_id: S1_Q6
-  qualtrics_id: Q2.2_2
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1378
-      y: 1349
-      w: 135
-      h: 105
-    '2':
-      x: 1608
-      y: 1341
-      w: 140
-      h: 98
-    '3':
-      x: 1829
-      y: 1345
-      w: 118
-      h: 101
-    '4':
-      x: 2015
-      y: 1345
-      w: 132
-      h: 109
-  page: 1
-- paper_id: S1_Q7
-  qualtrics_id: Q2.3_1
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1368
-      y: 1517
-      w: 126
-      h: 109
-    '2':
-      x: 1616
-      y: 1509
-      w: 122
-      h: 117
-    '3':
-      x: 1833
-      y: 1517
-      w: 112
-      h: 113
-    '4':
-      x: 2013
-      y: 1521
-      w: 124
-      h: 97
-  page: 1
-- paper_id: S1_Q8
-  qualtrics_id: Q2.3_2
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1378
-      y: 1657
-      w: 145
-      h: 94
-    '2':
-      x: 1616
-      y: 1653
-      w: 118
-      h: 94
-    '3':
-      x: 1833
-      y: 1638
-      w: 120
-      h: 109
-    '4':
-      x: 2009
-      y: 1641
-      w: 134
-      h: 110
-  page: 1
-- paper_id: S1_Q9
-  qualtrics_id: Q2.3_3
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1370
-      y: 1778
-      w: 151
-      h: 101
-    '2':
-      x: 1612
-      y: 1766
-      w: 132
-      h: 102
-    '3':
-      x: 1808
-      y: 1762
-      w: 153
-      h: 113
-    '4':
-      x: 2001
-      y: 1778
-      w: 142
-      h: 97
-  page: 1
-- paper_id: S1_Q10
-  qualtrics_id: Q2.3_4
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1372
-      y: 1907
-      w: 143
-      h: 89
-    '2':
-      x: 1610
-      y: 1899
-      w: 134
-      h: 86
-    '3':
-      x: 1817
-      y: 1895
-      w: 132
-      h: 97
-    '4':
-      x: 2013
-      y: 1903
-      w: 126
-      h: 97
-  page: 1
-- paper_id: S2_Q1
-  qualtrics_id: Q3.1_1
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1354
-      y: 823
-      w: 146
-      h: 113
-    '2':
-      x: 1595
-      y: 830
-      w: 153
-      h: 114
-    '3':
-      x: 1821
-      y: 827
-      w: 130
-      h: 109
-    '4':
-      x: 2015
-      y: 842
-      w: 136
-      h: 102
-  page: 2
-- paper_id: S2_Q2
-  qualtrics_id: Q3.1_2
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1356
-      y: 963
-      w: 159
-      h: 101
-    '2':
-      x: 1600
-      y: 971
-      w: 163
-      h: 97
-    '3':
-      x: 1823
-      y: 971
-      w: 126
-      h: 97
-    '4':
-      x: 2013
-      y: 975
-      w: 147
-      h: 93
-  page: 2
-- paper_id: S2_Q3
-  qualtrics_id: Q3.1_3
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1352
-      y: 1088
-      w: 157
-      h: 109
-    '2':
-      x: 1604
-      y: 1099
-      w: 153
-      h: 98
-    '3':
-      x: 1833
-      y: 1092
-      w: 116
-      h: 101
-    '4':
-      x: 2015
-      y: 1111
-      w: 136
-      h: 78
-  page: 2
-- paper_id: S2_Q4
-  qualtrics_id: Q3.1_4
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1360
-      y: 1220
-      w: 138
-      h: 106
-    '2':
-      x: 1608
-      y: 1213
-      w: 132
-      h: 105
-    '3':
-      x: 1837
-      y: 1220
-      w: 116
-      h: 102
-    '4':
-      x: 2025
-      y: 1209
-      w: 128
-      h: 117
-  page: 2
-- paper_id: S2_Q5
-  qualtrics_id: Q3.1_5
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1366
-      y: 1345
-      w: 139
-      h: 105
-    '2':
-      x: 1600
-      y: 1345
-      w: 142
-      h: 105
-    '3':
-      x: 1831
-      y: 1337
-      w: 122
-      h: 109
-    '4':
-      x: 2027
-      y: 1345
-      w: 116
-      h: 105
-  page: 2
-- paper_id: S2_Q6
-  qualtrics_id: Q3.1_6
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1366
-      y: 1482
-      w: 124
-      h: 101
-    '2':
-      x: 1622
-      y: 1478
-      w: 128
-      h: 97
-    '3':
-      x: 1837
-      y: 1482
-      w: 106
-      h: 97
-    '4':
-      x: 2023
-      y: 1470
-      w: 122
-      h: 97
-  page: 2
-- paper_id: S2_Q7
-  qualtrics_id: Q3.1_7
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1368
-      y: 1610
-      w: 130
-      h: 86
-    '2':
-      x: 1624
-      y: 1599
-      w: 129
-      h: 97
-    '3':
-      x: 1835
-      y: 1602
-      w: 124
-      h: 106
-    '4':
-      x: 2032
-      y: 1622
-      w: 124
-      h: 82
-  page: 2
-- paper_id: S2_Q8
-  qualtrics_id: Q3.1_8
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
-  regions:
-    '1':
-      x: 1364
-      y: 1727
-      w: 143
-      h: 113
-    '2':
-      x: 1626
-      y: 1731
-      w: 122
-      h: 105
-    '3':
-      x: 1846
-      y: 1739
-      w: 103
-      h: 105
-    '4':
-      x: 2027
-      y: 1735
-      w: 106
-      h: 86
-  page: 2
-- paper_id: S3_Q1
+  page: 3
+  paper_id: S3_Q1
   qualtrics_id: Q4.1_1
-  label: ''
-  type: likert
-  mark_type: circled_number
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  required: true
   regions:
     '1':
+      h: 136
+      w: 192
       x: 1234
       y: 620
-      w: 192
-      h: 136
     '2':
+      h: 101
+      w: 128
       x: 1523
       y: 628
-      w: 128
-      h: 101
     '3':
+      h: 105
+      w: 139
       x: 1750
       y: 632
-      w: 139
-      h: 105
     '4':
+      h: 106
+      w: 132
       x: 1955
       y: 643
-      w: 132
-      h: 106
-  page: 3
-- paper_id: S3_Q2
-  qualtrics_id: Q4.1_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 3
+  paper_id: S3_Q2
+  qualtrics_id: Q4.1_2
   regions:
     '1':
+      h: 82
+      w: 151
       x: 1238
       y: 795
-      w: 151
-      h: 82
     '2':
+      h: 74
+      w: 130
       x: 1521
       y: 788
-      w: 130
-      h: 74
     '3':
+      h: 71
+      w: 114
       x: 1767
       y: 795
-      w: 114
-      h: 71
     '4':
+      h: 71
+      w: 128
       x: 1963
       y: 795
-      w: 128
-      h: 71
-  page: 3
-- paper_id: S3_Q3
-  qualtrics_id: Q4.1_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 3
+  paper_id: S3_Q3
+  qualtrics_id: Q4.1_3
   regions:
     '1':
+      h: 74
+      w: 147
       x: 1248
       y: 893
-      w: 147
-      h: 74
     '2':
+      h: 86
+      w: 136
       x: 1519
       y: 893
-      w: 136
-      h: 86
     '3':
+      h: 82
+      w: 120
       x: 1763
       y: 889
-      w: 120
-      h: 82
     '4':
+      h: 93
+      w: 145
       x: 1955
       y: 893
-      w: 145
-      h: 93
-  page: 3
-- paper_id: S3_Q4
-  qualtrics_id: Q4.1_4
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 3
+  paper_id: S3_Q4
+  qualtrics_id: Q4.1_4
   regions:
     '1':
+      h: 97
+      w: 147
       x: 1254
       y: 1006
-      w: 147
-      h: 97
     '2':
+      h: 90
+      w: 133
       x: 1527
       y: 1002
-      w: 133
-      h: 90
     '3':
+      h: 86
+      w: 128
       x: 1759
       y: 1002
-      w: 128
-      h: 86
     '4':
+      h: 90
+      w: 120
       x: 1963
       y: 998
-      w: 120
-      h: 90
-  page: 3
-- paper_id: S3_Q5
-  qualtrics_id: Q4.1_5
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 3
+  paper_id: S3_Q5
+  qualtrics_id: Q4.1_5
   regions:
     '1':
+      h: 86
+      w: 124
       x: 1263
       y: 1127
-      w: 124
-      h: 86
     '2':
+      h: 90
+      w: 126
       x: 1527
       y: 1111
-      w: 126
-      h: 90
     '3':
+      h: 94
+      w: 128
       x: 1755
       y: 1111
-      w: 128
-      h: 94
     '4':
+      h: 94
+      w: 124
       x: 1970
       y: 1115
-      w: 124
-      h: 94
-  page: 3
-- paper_id: S4_Q1
-  qualtrics_id: Q5.2_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q1
+  qualtrics_id: Q5.2_1
   regions:
     '1':
+      h: 125
+      w: 149
       x: 1128
       y: 678
-      w: 149
-      h: 125
     '2':
+      h: 109
+      w: 134
       x: 1447
       y: 698
-      w: 134
-      h: 109
     '3':
+      h: 117
+      w: 140
       x: 1703
       y: 671
-      w: 140
-      h: 117
     '4':
+      h: 121
+      w: 134
       x: 1941
       y: 678
-      w: 134
-      h: 121
-  page: 4
-- paper_id: S4_Q2
-  qualtrics_id: Q5.2_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q2
+  qualtrics_id: Q5.2_2
   regions:
     '1':
+      h: 97
+      w: 128
       x: 1155
       y: 862
-      w: 128
-      h: 97
     '2':
+      h: 105
+      w: 129
       x: 1440
       y: 854
-      w: 129
-      h: 105
     '3':
+      h: 97
+      w: 143
       x: 1703
       y: 850
-      w: 143
-      h: 97
     '4':
+      h: 93
+      w: 114
       x: 1957
       y: 866
-      w: 114
-      h: 93
-  page: 4
-- paper_id: S4_Q3
-  qualtrics_id: Q5.2_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q3
+  qualtrics_id: Q5.2_3
   regions:
     '1':
+      h: 78
+      w: 114
       x: 1157
       y: 1006
-      w: 114
-      h: 78
     '2':
+      h: 70
+      w: 120
       x: 1440
       y: 1022
-      w: 120
-      h: 70
     '3':
+      h: 66
+      w: 130
       x: 1707
       y: 1010
-      w: 130
-      h: 66
     '4':
+      h: 82
+      w: 116
       x: 1959
       y: 1014
-      w: 116
-      h: 82
-  page: 4
-- paper_id: S4_Q4
-  qualtrics_id: Q5.3_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q4
+  qualtrics_id: Q5.3_1
   regions:
     '1':
+      h: 78
+      w: 116
       x: 1161
       y: 1252
-      w: 116
-      h: 78
     '2':
+      h: 94
+      w: 120
       x: 1457
       y: 1255
-      w: 120
-      h: 94
     '3':
+      h: 85
+      w: 113
       x: 1724
       y: 1248
-      w: 113
-      h: 85
     '4':
+      h: 89
+      w: 132
       x: 1953
       y: 1244
-      w: 132
-      h: 89
-  page: 4
-- paper_id: S4_Q5
-  qualtrics_id: Q5.3_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q5
+  qualtrics_id: Q5.3_2
   regions:
     '1':
+      h: 78
+      w: 118
       x: 1157
       y: 1353
-      w: 118
-      h: 78
     '2':
+      h: 89
+      w: 101
       x: 1457
       y: 1361
-      w: 101
-      h: 89
     '3':
+      h: 90
+      w: 109
       x: 1730
       y: 1353
-      w: 109
-      h: 90
     '4':
+      h: 94
+      w: 110
       x: 1957
       y: 1349
-      w: 110
-      h: 94
-  page: 4
-- paper_id: S4_Q6
-  qualtrics_id: Q5.3_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q6
+  qualtrics_id: Q5.3_3
   regions:
     '1':
+      h: 90
+      w: 122
       x: 1166
       y: 1462
-      w: 122
-      h: 90
     '2':
+      h: 82
+      w: 108
       x: 1463
       y: 1470
-      w: 108
-      h: 82
     '3':
+      h: 82
+      w: 101
       x: 1732
       y: 1466
-      w: 101
-      h: 82
     '4':
+      h: 93
+      w: 113
       x: 1972
       y: 1470
-      w: 113
-      h: 93
-  page: 4
-- paper_id: S4_Q7
-  qualtrics_id: Q5.4_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q7
+  qualtrics_id: Q5.4_1
   regions:
     '1':
+      h: 109
+      w: 120
       x: 1159
       y: 1700
-      w: 120
-      h: 109
     '2':
+      h: 105
+      w: 120
       x: 1455
       y: 1696
-      w: 120
-      h: 105
     '3':
+      h: 109
+      w: 120
       x: 1717
       y: 1696
-      w: 120
-      h: 109
     '4':
+      h: 113
+      w: 126
       x: 1955
       y: 1700
-      w: 126
-      h: 113
-  page: 4
-- paper_id: S4_Q8
-  qualtrics_id: Q5.4_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q8
+  qualtrics_id: Q5.4_2
   regions:
     '1':
+      h: 93
+      w: 109
       x: 1168
       y: 1860
-      w: 109
-      h: 93
     '2':
+      h: 86
+      w: 114
       x: 1459
       y: 1860
-      w: 114
-      h: 86
     '3':
+      h: 90
+      w: 109
       x: 1724
       y: 1856
-      w: 109
-      h: 90
     '4':
+      h: 93
+      w: 102
       x: 1961
       y: 1856
-      w: 102
-      h: 93
-  page: 4
-- paper_id: S4_Q9
-  qualtrics_id: Q5.4_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q9
+  qualtrics_id: Q5.4_3
   regions:
     '1':
+      h: 74
+      w: 101
       x: 1164
       y: 1981
-      w: 101
-      h: 74
     '2':
+      h: 86
+      w: 99
       x: 1463
       y: 1969
-      w: 99
-      h: 86
     '3':
+      h: 82
+      w: 103
       x: 1724
       y: 1973
-      w: 103
-      h: 82
     '4':
+      h: 82
+      w: 97
       x: 1972
       y: 1973
-      w: 97
-      h: 82
-  page: 4
-- paper_id: S4_Q10
-  qualtrics_id: Q5.4_4
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q10
+  qualtrics_id: Q5.4_4
   regions:
     '1':
+      h: 97
+      w: 135
       x: 1161
       y: 2082
-      w: 135
-      h: 97
     '2':
+      h: 82
+      w: 103
       x: 1459
       y: 2086
-      w: 103
-      h: 82
     '3':
+      h: 90
+      w: 124
       x: 1707
       y: 2074
-      w: 124
-      h: 90
     '4':
+      h: 94
+      w: 108
       x: 1963
       y: 2074
-      w: 108
-      h: 94
-  page: 4
-- paper_id: S4_Q11
-  qualtrics_id: Q5.4_5
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 4
+  paper_id: S4_Q11
+  qualtrics_id: Q5.4_5
   regions:
     '1':
+      h: 98
+      w: 126
       x: 1155
       y: 2187
-      w: 126
-      h: 98
     '2':
+      h: 98
+      w: 104
       x: 1463
       y: 2191
-      w: 104
-      h: 98
     '3':
+      h: 98
+      w: 103
       x: 1732
       y: 2187
-      w: 103
-      h: 98
     '4':
+      h: 82
+      w: 106
       x: 1961
       y: 2199
-      w: 106
-      h: 82
-  page: 4
-- paper_id: S5_Q1
-  qualtrics_id: Q6.2_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q1
+  qualtrics_id: Q6.2_1
   regions:
     '1':
+      h: 121
+      w: 149
       x: 1240
       y: 799
-      w: 149
-      h: 121
     '2':
+      h: 129
+      w: 161
       x: 1486
       y: 799
-      w: 161
-      h: 129
     '3':
+      h: 117
+      w: 159
       x: 1713
       y: 795
-      w: 159
-      h: 117
     '4':
+      h: 97
+      w: 140
       x: 1951
       y: 827
-      w: 140
-      h: 97
-  page: 5
-- paper_id: S5_Q2
-  qualtrics_id: Q6.2_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q2
+  qualtrics_id: Q6.2_2
   regions:
     '1':
+      h: 113
+      w: 134
       x: 1267
       y: 955
-      w: 134
-      h: 113
     '2':
+      h: 109
+      w: 130
       x: 1513
       y: 971
-      w: 130
-      h: 109
     '3':
+      h: 109
+      w: 145
       x: 1711
       y: 955
-      w: 145
-      h: 109
     '4':
+      h: 97
+      w: 97
       x: 1982
       y: 979
-      w: 97
-      h: 97
-  page: 5
-- paper_id: S5_Q3
-  qualtrics_id: Q6.2_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q3
+  qualtrics_id: Q6.2_3
   regions:
     '1':
+      h: 82
+      w: 103
       x: 1275
       y: 1099
-      w: 103
-      h: 82
     '2':
+      h: 78
+      w: 91
       x: 1529
       y: 1103
-      w: 91
-      h: 78
     '3':
+      h: 86
+      w: 124
       x: 1753
       y: 1119
-      w: 124
-      h: 86
     '4':
+      h: 90
+      w: 117
       x: 1974
       y: 1119
-      w: 117
-      h: 90
-  page: 5
-- paper_id: S5_Q4
-  qualtrics_id: Q6.3_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q4
+  qualtrics_id: Q6.3_1
   regions:
     '1':
+      h: 78
+      w: 114
       x: 1275
       y: 1306
-      w: 114
-      h: 78
     '2':
+      h: 86
+      w: 121
       x: 1505
       y: 1302
-      w: 121
-      h: 86
     '3':
+      h: 82
+      w: 97
       x: 1761
       y: 1298
-      w: 97
-      h: 82
     '4':
+      h: 86
+      w: 143
       x: 1953
       y: 1306
-      w: 143
-      h: 86
-  page: 5
-- paper_id: S5_Q5
-  qualtrics_id: Q6.3_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q5
+  qualtrics_id: Q6.3_2
   regions:
     '1':
+      h: 82
+      w: 124
       x: 1269
       y: 1423
-      w: 124
-      h: 82
     '2':
+      h: 78
+      w: 102
       x: 1527
       y: 1419
-      w: 102
-      h: 78
     '3':
+      h: 70
+      w: 122
       x: 1750
       y: 1415
-      w: 122
-      h: 70
     '4':
+      h: 78
+      w: 112
       x: 1982
       y: 1415
-      w: 112
-      h: 78
-  page: 5
-- paper_id: S5_Q6
-  qualtrics_id: Q6.3_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q6
+  qualtrics_id: Q6.3_3
   regions:
     '1':
+      h: 78
+      w: 128
       x: 1279
       y: 1556
-      w: 128
-      h: 78
     '2':
+      h: 86
+      w: 110
       x: 1521
       y: 1544
-      w: 110
-      h: 86
     '3':
+      h: 78
+      w: 136
       x: 1736
       y: 1540
-      w: 136
-      h: 78
     '4':
+      h: 86
+      w: 102
       x: 1992
       y: 1544
-      w: 102
-      h: 86
-  page: 5
-- paper_id: S5_Q7
-  qualtrics_id: Q6.4_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q7
+  qualtrics_id: Q6.4_1
   regions:
     '1':
+      h: 97
+      w: 132
       x: 1269
       y: 1774
-      w: 132
-      h: 97
     '2':
+      h: 117
+      w: 105
       x: 1521
       y: 1747
-      w: 105
-      h: 117
     '3':
+      h: 94
+      w: 130
       x: 1732
       y: 1754
-      w: 130
-      h: 94
     '4':
+      h: 117
+      w: 114
       x: 1982
       y: 1754
-      w: 114
-      h: 117
-  page: 5
-- paper_id: S5_Q8
-  qualtrics_id: Q6.4_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q8
+  qualtrics_id: Q6.4_2
   regions:
     '1':
+      h: 82
+      w: 144
       x: 1263
       y: 1910
-      w: 144
-      h: 82
     '2':
+      h: 90
+      w: 124
       x: 1513
       y: 1895
-      w: 124
-      h: 90
     '3':
+      h: 97
+      w: 106
       x: 1748
       y: 1895
-      w: 106
-      h: 97
     '4':
+      h: 93
+      w: 93
       x: 1992
       y: 1903
-      w: 93
-      h: 93
-  page: 5
-- paper_id: S5_Q9
-  qualtrics_id: Q6.4_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q9
+  qualtrics_id: Q6.4_3
   regions:
     '1':
+      h: 78
+      w: 124
       x: 1275
       y: 2024
-      w: 124
-      h: 78
     '2':
+      h: 93
+      w: 100
       x: 1529
       y: 2020
-      w: 100
-      h: 93
     '3':
+      h: 85
+      w: 106
       x: 1773
       y: 2020
-      w: 106
-      h: 85
     '4':
+      h: 67
+      w: 107
       x: 1974
       y: 2027
-      w: 107
-      h: 67
-  page: 5
-- paper_id: S5_Q10
-  qualtrics_id: Q6.4_4
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q10
+  qualtrics_id: Q6.4_4
   regions:
     '1':
+      h: 94
+      w: 120
       x: 1285
       y: 2117
-      w: 120
-      h: 94
     '2':
+      h: 86
+      w: 118
       x: 1529
       y: 2140
-      w: 118
-      h: 86
     '3':
+      h: 97
+      w: 128
       x: 1738
       y: 2121
-      w: 128
-      h: 97
     '4':
+      h: 94
+      w: 113
       x: 1978
       y: 2121
-      w: 113
-      h: 94
-  page: 5
-- paper_id: S5_Q11
-  qualtrics_id: Q6.4_5
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 5
+  paper_id: S5_Q11
+  qualtrics_id: Q6.4_5
   regions:
     '1':
+      h: 86
+      w: 112
       x: 1277
       y: 2242
-      w: 112
-      h: 86
     '2':
+      h: 78
+      w: 99
       x: 1527
       y: 2250
-      w: 99
-      h: 78
     '3':
+      h: 74
+      w: 126
       x: 1738
       y: 2246
-      w: 126
-      h: 74
     '4':
+      h: 86
+      w: 105
       x: 1972
       y: 2226
-      w: 105
-      h: 86
-  page: 5
-- paper_id: S6_Q1
-  qualtrics_id: Q7.1_1
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 6
+  paper_id: S6_Q1
+  qualtrics_id: Q7.1_1
   regions:
     '1':
+      h: 98
+      w: 99
       x: 1195
       y: 1298
-      w: 99
-      h: 98
     '2':
+      h: 94
+      w: 116
       x: 1434
       y: 1310
-      w: 116
-      h: 94
     '3':
+      h: 90
+      w: 108
       x: 1688
       y: 1306
-      w: 108
-      h: 90
     '4':
+      h: 98
+      w: 112
       x: 1934
       y: 1298
-      w: 112
-      h: 98
-  page: 6
-- paper_id: S6_Q2
-  qualtrics_id: Q7.1_2
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 6
+  paper_id: S6_Q2
+  qualtrics_id: Q7.1_2
   regions:
     '1':
+      h: 82
+      w: 135
       x: 1190
       y: 1423
-      w: 135
-      h: 82
     '2':
+      h: 82
+      w: 106
       x: 1436
       y: 1411
-      w: 106
-      h: 82
     '3':
+      h: 82
+      w: 122
       x: 1688
       y: 1419
-      w: 122
-      h: 82
     '4':
+      h: 78
+      w: 111
       x: 1943
       y: 1431
-      w: 111
-      h: 78
-  page: 6
-- paper_id: S6_Q3
-  qualtrics_id: Q7.1_3
-  label: ''
-  type: likert
-  mark_type: circled_number
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
-  required: true
+  type: likert
+- label: ''
+  mark_type: circled_number
+  page: 6
+  paper_id: S6_Q3
+  qualtrics_id: Q7.1_3
   regions:
     '1':
+      h: 93
+      w: 95
       x: 1205
       y: 1521
-      w: 95
-      h: 93
     '2':
+      h: 86
+      w: 103
       x: 1445
       y: 1528
-      w: 103
-      h: 86
     '3':
+      h: 70
+      w: 109
       x: 1693
       y: 1532
-      w: 109
-      h: 70
     '4':
+      h: 82
+      w: 111
       x: 1947
       y: 1528
-      w: 111
-      h: 82
-  page: 6
-- paper_id: S7_tenure_Q1
-  qualtrics_id: Q8.3
-  label: ''
-  type: categorical
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
   mark_type: circled_bubble
+  page: 7
+  paper_id: S7_tenure_Q1
+  qualtrics_id: Q8.3
+  regions:
+    '1':
+      h: 74
+      w: 87
+      x: 1316
+      y: 2390
+    '2':
+      h: 43
+      w: 91
+      x: 1325
+      y: 2464
+    '3':
+      h: 70
+      w: 74
+      x: 1331
+      y: 2519
+    '4':
+      h: 54
+      w: 122
+      x: 1670
+      y: 2398
+    '5':
+      h: 47
+      w: 91
+      x: 1668
+      y: 2464
+    '6':
+      h: 66
+      w: 97
+      x: 1662
+      y: 2519
+  required: true
   scale:
   - 1
   - 2
@@ -1600,78 +1033,844 @@ fields:
   - 4
   - 5
   - 6
-  required: true
+  type: categorical
+- label: ''
+  mark_type: circled_bubble
+  page: 7
+  paper_id: S7_area_Q1
+  qualtrics_id: Q8.2
   regions:
     '1':
-      x: 1316
-      y: 2390
-      w: 87
-      h: 74
+      h: 63
+      w: 95
+      x: 415
+      y: 2456
     '2':
-      x: 1325
-      y: 2464
-      w: 91
-      h: 43
+      h: 31
+      w: 98
+      x: 415
+      y: 2523
     '3':
-      x: 1331
-      y: 2519
-      w: 74
-      h: 70
+      h: 62
+      w: 100
+      x: 413
+      y: 2550
     '4':
-      x: 1670
-      y: 2398
-      w: 122
       h: 54
+      w: 120
+      x: 643
+      y: 2449
     '5':
-      x: 1668
-      y: 2464
-      w: 91
-      h: 47
-    '6':
-      x: 1662
+      h: 74
+      w: 122
+      x: 632
       y: 2519
-      w: 97
-      h: 66
-  page: 7
-- paper_id: S7_area_Q1
-  qualtrics_id: Q8.2
-  label: ''
-  type: categorical
-  mark_type: circled_bubble
+  required: true
   scale:
   - 1
   - 2
   - 3
   - 4
   - 5
+  type: categorical
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q1
+  qualtrics_id: Q2.1_1
+  regions:
+    '1':
+      h: 120
+      w: 169
+      x: 1358
+      y: 632
+    '2':
+      h: 94
+      w: 142
+      x: 1600
+      y: 643
+    '3':
+      h: 117
+      w: 118
+      x: 1821
+      y: 628
+    '4':
+      h: 94
+      w: 118
+      x: 2009
+      y: 647
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q2
+  qualtrics_id: Q2.1_2
+  regions:
+    '1':
+      h: 102
+      w: 157
+      x: 1360
+      y: 764
+    '2':
+      h: 94
+      w: 136
+      x: 1604
+      y: 760
+    '3':
+      h: 97
+      w: 128
+      x: 1829
+      y: 772
+    '4':
+      h: 106
+      w: 120
+      x: 2015
+      y: 760
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q3
+  qualtrics_id: Q2.1_3
+  regions:
+    '1':
+      h: 105
+      w: 149
+      x: 1374
+      y: 901
+    '2':
+      h: 124
+      w: 151
+      x: 1608
+      y: 905
+    '3':
+      h: 105
+      w: 126
+      x: 1829
+      y: 905
+    '4':
+      h: 113
+      w: 130
+      x: 2007
+      y: 905
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q4
+  qualtrics_id: Q2.1_4
+  regions:
+    '1':
+      h: 97
+      w: 139
+      x: 1374
+      y: 1049
+    '2':
+      h: 89
+      w: 145
+      x: 1614
+      y: 1049
+    '3':
+      h: 81
+      w: 120
+      x: 1835
+      y: 1057
+    '4':
+      h: 78
+      w: 118
+      x: 2017
+      y: 1060
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q5
+  qualtrics_id: Q2.2_1
+  regions:
+    '1':
+      h: 94
+      w: 139
+      x: 1374
+      y: 1220
+    '2':
+      h: 102
+      w: 124
+      x: 1620
+      y: 1220
+    '3':
+      h: 86
+      w: 134
+      x: 1821
+      y: 1228
+    '4':
+      h: 82
+      w: 130
+      x: 2013
+      y: 1236
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q6
+  qualtrics_id: Q2.2_2
+  regions:
+    '1':
+      h: 90
+      w: 139
+      x: 1376
+      y: 1341
+    '2':
+      h: 78
+      w: 126
+      x: 1635
+      y: 1357
+    '3':
+      h: 94
+      w: 104
+      x: 1839
+      y: 1337
+    '4':
+      h: 90
+      w: 110
+      x: 2021
+      y: 1349
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q7
+  qualtrics_id: Q2.3_1
+  regions:
+    '1':
+      h: 90
+      w: 124
+      x: 1391
+      y: 1532
+    '2':
+      h: 105
+      w: 155
+      x: 1602
+      y: 1521
+    '3':
+      h: 105
+      w: 122
+      x: 1825
+      y: 1513
+    '4':
+      h: 97
+      w: 124
+      x: 2017
+      y: 1521
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q8
+  qualtrics_id: Q2.3_2
+  regions:
+    '1':
+      h: 105
+      w: 128
+      x: 1381
+      y: 1638
+    '2':
+      h: 98
+      w: 132
+      x: 1612
+      y: 1645
+    '3':
+      h: 86
+      w: 114
+      x: 1825
+      y: 1653
+    '4':
+      h: 94
+      w: 114
+      x: 2017
+      y: 1649
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q9
+  qualtrics_id: Q2.3_3
+  regions:
+    '1':
+      h: 105
+      w: 113
+      x: 1385
+      y: 1766
+    '2':
+      h: 90
+      w: 138
+      x: 1612
+      y: 1770
+    '3':
+      h: 102
+      w: 135
+      x: 1812
+      y: 1762
+    '4':
+      h: 94
+      w: 118
+      x: 2019
+      y: 1770
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S1_Q10
+  qualtrics_id: Q2.3_4
+  regions:
+    '1':
+      h: 101
+      w: 134
+      x: 1381
+      y: 1891
+    '2':
+      h: 90
+      w: 140
+      x: 1608
+      y: 1895
+    '3':
+      h: 82
+      w: 130
+      x: 1817
+      y: 1895
+    '4':
+      h: 109
+      w: 126
+      x: 2023
+      y: 1891
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q1
+  qualtrics_id: Q3.1_1
+  regions:
+    '1':
+      h: 113
+      w: 161
+      x: 1352
+      y: 827
+    '2':
+      h: 117
+      w: 162
+      x: 1593
+      y: 819
+    '3':
+      h: 114
+      w: 148
+      x: 1817
+      y: 830
+    '4':
+      h: 86
+      w: 157
+      x: 2009
+      y: 854
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q2
+  qualtrics_id: Q3.1_2
+  regions:
+    '1':
+      h: 105
+      w: 132
+      x: 1362
+      y: 955
+    '2':
+      h: 101
+      w: 143
+      x: 1614
+      y: 959
+    '3':
+      h: 93
+      w: 107
+      x: 1850
+      y: 971
+    '4':
+      h: 117
+      w: 142
+      x: 2011
+      y: 959
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q3
+  qualtrics_id: Q3.1_3
+  regions:
+    '1':
+      h: 81
+      w: 147
+      x: 1362
+      y: 1096
+    '2':
+      h: 113
+      w: 137
+      x: 1616
+      y: 1088
+    '3':
+      h: 105
+      w: 106
+      x: 1841
+      y: 1084
+    '4':
+      h: 94
+      w: 155
+      x: 2007
+      y: 1103
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q4
+  qualtrics_id: Q3.1_4
+  regions:
+    '1':
+      h: 106
+      w: 151
+      x: 1354
+      y: 1220
+    '2':
+      h: 106
+      w: 147
+      x: 1616
+      y: 1224
+    '3':
+      h: 102
+      w: 134
+      x: 1829
+      y: 1216
+    '4':
+      h: 102
+      w: 149
+      x: 2007
+      y: 1228
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q5
+  qualtrics_id: Q3.1_5
+  regions:
+    '1':
+      h: 102
+      w: 155
+      x: 1354
+      y: 1341
+    '2':
+      h: 89
+      w: 143
+      x: 1618
+      y: 1361
+    '3':
+      h: 105
+      w: 132
+      x: 1829
+      y: 1345
+    '4':
+      h: 101
+      w: 139
+      x: 2019
+      y: 1349
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q6
+  qualtrics_id: Q3.1_6
+  regions:
+    '1':
+      h: 101
+      w: 146
+      x: 1356
+      y: 1478
+    '2':
+      h: 93
+      w: 149
+      x: 1608
+      y: 1482
+    '3':
+      h: 90
+      w: 126
+      x: 1831
+      y: 1489
+    '4':
+      h: 89
+      w: 137
+      x: 2019
+      y: 1482
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q7
+  qualtrics_id: Q3.1_7
+  regions:
+    '1':
+      h: 98
+      w: 130
+      x: 1368
+      y: 1602
+    '2':
+      h: 102
+      w: 147
+      x: 1616
+      y: 1610
+    '3':
+      h: 102
+      w: 138
+      x: 1827
+      y: 1602
+    '4':
+      h: 102
+      w: 133
+      x: 2025
+      y: 1602
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_number
+  paper_id: S2_Q8
+  qualtrics_id: Q3.1_8
+  regions:
+    '1':
+      h: 101
+      w: 128
+      x: 1366
+      y: 1731
+    '2':
+      h: 105
+      w: 139
+      x: 1620
+      y: 1735
+    '3':
+      h: 106
+      w: 124
+      x: 1835
+      y: 1723
+    '4':
+      h: 98
+      w: 129
+      x: 2027
+      y: 1731
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  type: likert
+- label: ''
+  mark_type: circled_bubble
+  page: 8
+  paper_id: S8_gender_Q1
+  qualtrics_id: Q8.5
+  regions:
+    '1':
+      h: 66
+      w: 126
+      x: 1058
+      y: 164
+    '2':
+      h: 55
+      w: 151
+      x: 1046
+      y: 234
+    '3':
+      h: 39
+      w: 147
+      x: 1048
+      y: 289
+    '4':
+      h: 58
+      w: 138
+      x: 1046
+      y: 328
+    '5':
+      h: 62
+      w: 138
+      x: 1050
+      y: 425
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  type: categorical
+- label: ''
+  mark_type: x_mark
+  page: 8
+  paper_id: S8_edu_Q1
+  qualtrics_id: Q8.6
+  regions:
+    '1':
+      h: 66
+      w: 108
+      x: 316
+      y: 620
+    '2':
+      h: 50
+      w: 114
+      x: 315
+      y: 684
+    '3':
+      h: 34
+      w: 110
+      x: 319
+      y: 749
+    '4':
+      h: 43
+      w: 108
+      x: 322
+      y: 796
+    '5':
+      h: 37
+      w: 130
+      x: 316
+      y: 852
+    '6':
+      h: 44
+      w: 127
+      x: 310
+      y: 898
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  type: categorical
+- label: ''
+  mark_type: x_mark
+  page: 8
+  paper_id: S8_hispanic_Q1
+  qualtrics_id: Q8.7
+  regions:
+    '1':
+      h: 50
+      w: 79
+      x: 323
+      y: 1103
+    '2':
+      h: 47
+      w: 84
+      x: 318
+      y: 1162
+  required: true
+  scale:
+  - 1
+  - 2
+  type: categorical
+- label: ''
+  mark_type: x_mark
+  page: 8
+  paper_id: S8_housing_Q1
+  qualtrics_id: Q8.9
+  regions:
+    '1':
+      h: 70
+      w: 99
+      x: 310
+      y: 1536
+    '2':
+      h: 53
+      w: 96
+      x: 306
+      y: 1604
+    '3':
+      h: 50
+      w: 100
+      x: 304
+      y: 1666
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  type: categorical
+- label: ''
+  mark_type: x_mark
+  page: 8
+  paper_id: S8_income_Q1
+  qualtrics_id: Q8.10
+  regions:
+    '1':
+      h: 68
+      w: 95
+      x: 318
+      y: 1930
+    '2':
+      h: 46
+      w: 95
+      x: 318
+      y: 2005
+    '3':
+      h: 43
+      w: 90
+      x: 319
+      y: 2058
+    '4':
+      h: 37
+      w: 102
+      x: 319
+      y: 2104
+    '5':
+      h: 50
+      w: 84
+      x: 320
+      y: 2154
+    '6':
+      h: 56
+      w: 88
+      x: 319
+      y: 2213
+  required: true
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  type: categorical
+- paper_id: S8_race_Q1
+  qualtrics_id: Q8.8
+  label: ''
+  type: multi_select
+  mark_type: x_mark
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  page: 8
   required: true
   regions:
     '1':
-      x: 415
-      y: 2456
-      w: 95
-      h: 63
+      x: 1055
+      y: 1065
+      w: 110
+      h: 30
     '2':
-      x: 415
-      y: 2523
-      w: 98
-      h: 31
+      x: 1055
+      y: 1138
+      w: 110
+      h: 30
     '3':
-      x: 413
-      y: 2550
-      w: 100
-      h: 62
+      x: 1055
+      y: 1185
+      w: 110
+      h: 30
     '4':
-      x: 643
-      y: 2449
-      w: 120
-      h: 54
+      x: 1055
+      y: 1238
+      w: 110
+      h: 30
     '5':
-      x: 632
-      y: 2519
-      w: 122
-      h: 74
-  page: 7
+      x: 1055
+      y: 1284
+      w: 110
+      h: 30
+    '6':
+      x: 1055
+      y: 1333
+      w: 110
+      h: 30
 - paper_id: S8_age_Q1
   qualtrics_id: Q8.4
   label: ''
@@ -1686,268 +1885,50 @@ fields:
   - 6
   - 7
   - 8
+  page: 8
   required: true
   regions:
     '1':
-      x: 349
-      y: 183
-      w: 161
-      h: 74
+      x: 310
+      y: 205
+      w: 80
+      h: 30
     '2':
-      x: 343
+      x: 310
       y: 250
-      w: 103
-      h: 50
+      w: 80
+      h: 30
     '3':
-      x: 349
-      y: 316
-      w: 87
-      h: 35
+      x: 310
+      y: 297
+      w: 80
+      h: 30
     '4':
-      x: 345
-      y: 355
-      w: 126
-      h: 62
-    '5':
-      x: 641
-      y: 199
-      w: 134
-      h: 51
-    '6':
-      x: 643
-      y: 242
-      w: 122
-      h: 62
-    '7':
-      x: 639
-      y: 308
-      w: 117
-      h: 39
-    '8':
-      x: 643
-      y: 351
-      w: 118
-      h: 54
-  page: 8
-- paper_id: S8_gender_Q1
-  qualtrics_id: Q8.5
-  label: ''
-  type: categorical
-  mark_type: circled_bubble
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  required: true
-  regions:
-    '1':
-      x: 1056
-      y: 183
-      w: 118
-      h: 63
-    '2':
-      x: 1048
-      y: 242
-      w: 134
-      h: 43
-    '3':
-      x: 1052
-      y: 285
-      w: 138
-      h: 50
-    '4':
-      x: 1052
+      x: 310
       y: 343
-      w: 132
-      h: 47
+      w: 80
+      h: 30
     '5':
-      x: 1056
-      y: 409
-      w: 122
-      h: 86
-  page: 8
-- paper_id: S8_edu_Q1
-  qualtrics_id: Q8.6
-  label: ''
-  type: categorical
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  required: true
-  regions:
-    '1':
-      x: 318
-      y: 620
-      w: 106
-      h: 74
-    '2':
-      x: 318
-      y: 698
-      w: 102
-      h: 35
-    '3':
-      x: 318
-      y: 737
-      w: 110
-      h: 51
-    '4':
-      x: 320
-      y: 795
-      w: 110
-      h: 39
-    '5':
-      x: 324
-      y: 834
-      w: 96
-      h: 43
+      x: 640
+      y: 210
+      w: 80
+      h: 30
     '6':
-      x: 320
-      y: 893
-      w: 87
-      h: 62
-  page: 8
-- paper_id: S8_hispanic_Q1
-  qualtrics_id: Q8.7
-  label: ''
-  type: categorical
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  required: true
-  regions:
-    '1':
-      x: 312
-      y: 1084
-      w: 87
-      h: 66
-    '2':
-      x: 312
-      y: 1158
-      w: 91
-      h: 86
-  page: 8
-- paper_id: S8_housing_Q1
-  qualtrics_id: Q8.9
-  label: ''
-  type: categorical
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  - 3
-  required: true
-  regions:
-    '1':
-      x: 314
-      y: 1548
-      w: 75
-      h: 58
-    '2':
-      x: 316
-      y: 1599
-      w: 73
-      h: 54
-    '3':
-      x: 320
-      y: 1653
-      w: 73
-      h: 66
-  page: 8
-- paper_id: S8_income_Q1
-  qualtrics_id: Q8.10
-  label: ''
-  type: categorical
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  required: true
-  regions:
-    '1':
-      x: 314
-      y: 1930
-      w: 83
-      h: 74
-    '2':
-      x: 316
-      y: 2012
-      w: 87
-      h: 54
-    '3':
-      x: 322
-      y: 2059
-      w: 75
-      h: 50
-    '4':
-      x: 318
-      y: 2125
-      w: 83
-      h: 23
-    '5':
-      x: 312
-      y: 2148
-      w: 72
-      h: 47
-    '6':
-      x: 296
-      y: 2199
-      w: 93
-      h: 58
-  page: 8
-- paper_id: S8_race_Q1
-  qualtrics_id: Q8.8
-  label: ''
-  type: multi_select
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  required: true
-  regions:
-    '1':
-      x: 1056
-      y: 1064
-      w: 66
-      h: 59
-    '2':
-      x: 1062
-      y: 1127
-      w: 71
-      h: 50
-    '3':
-      x: 1066
-      y: 1189
-      w: 71
-      h: 51
-    '4':
-      x: 1066
-      y: 1244
-      w: 71
-      h: 39
-    '5':
-      x: 1064
-      y: 1294
-      w: 73
-      h: 47
-    '6':
-      x: 1062
-      y: 1345
-      w: 73
-      h: 43
-  page: 8
+      x: 640
+      y: 258
+      w: 80
+      h: 30
+    '7':
+      x: 640
+      y: 323
+      w: 80
+      h: 30
+    '8':
+      x: 640
+      y: 396
+      w: 80
+      h: 30
+qualtrics:
+  template: qualtrics_templates/maize_community_survey_template.xlsx
+survey_id: maize_community_survey
+version: 1

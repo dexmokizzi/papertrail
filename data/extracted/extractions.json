@@ -4,15 +4,15 @@
     "fields": {
       "S1_Q1": {
         "value": "2",
-        "confidence": 0.988,
+        "confidence": 1.0,
         "flag": "",
         "note": ""
       },
       "S1_Q2": {
-        "value": "4",
+        "value": null,
         "confidence": 1.0,
-        "flag": "",
-        "note": ""
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=1.00, 3=0.95"
       },
       "S1_Q3": {
         "value": "3",
@@ -33,10 +33,10 @@
         "note": ""
       },
       "S1_Q6": {
-        "value": null,
+        "value": "4",
         "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 3=0.94"
+        "flag": "",
+        "note": ""
       },
       "S1_Q7": {
         "value": "3",
@@ -64,51 +64,51 @@
       },
       "S2_Q1": {
         "value": "3",
-        "confidence": 1.0,
+        "confidence": 0.841,
         "flag": "",
         "note": ""
       },
       "S2_Q2": {
+        "value": "4",
+        "confidence": 0.908,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q3": {
         "value": null,
         "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 3=0.92"
-      },
-      "S2_Q3": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
+        "note": "Two options scored similarly: 3=1.00, 4=0.95"
       },
       "S2_Q4": {
-        "value": "4",
+        "value": null,
         "confidence": 1.0,
-        "flag": "",
-        "note": ""
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=1.00"
       },
       "S2_Q5": {
         "value": null,
         "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.97"
+        "note": "Two options scored similarly: 3=1.00, 4=1.00"
       },
       "S2_Q6": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S2_Q7": {
         "value": null,
         "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=1.00, 3=0.95"
+        "note": "Two options scored similarly: 3=1.00, 4=0.95"
+      },
+      "S2_Q7": {
+        "value": null,
+        "confidence": 0.972,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.97, 4=0.95"
       },
       "S2_Q8": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
+        "value": null,
+        "confidence": 0.966,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.97, 4=0.95"
       },
       "S3_Q1": {
         "value": "3",
@@ -302,15 +302,9 @@
         "flag": "",
         "note": ""
       },
-      "S8_age_Q1": {
-        "value": "3",
-        "confidence": 0.851,
-        "flag": "",
-        "note": ""
-      },
       "S8_gender_Q1": {
-        "value": "1",
-        "confidence": 1.0,
+        "value": "2",
+        "confidence": 0.954,
         "flag": "",
         "note": ""
       },
@@ -339,8 +333,17 @@
         "note": ""
       },
       "S8_race_Q1": {
-        "value": null,
+        "value": [
+          "5",
+          "6"
+        ],
         "confidence": 0.9,
+        "flag": "",
+        "note": ""
+      },
+      "S8_age_Q1": {
+        "value": "7",
+        "confidence": 0.99,
         "flag": "",
         "note": ""
       }
