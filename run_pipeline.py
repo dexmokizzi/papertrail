@@ -9,6 +9,13 @@ Usage:
     python run_pipeline.py --survey maize_community_survey --dry-run
     python run_pipeline.py --survey maize_community_survey --stage output
 
+Scan folder behaviour:
+    If data/scans/<survey_name>/ exists, scans are read from there.
+    Otherwise scans are read from data/scans/ directly.
+    This allows multiple surveys to be queued simultaneously:
+        data/scans/maize_community_survey/  <- Maize PDFs here
+        data/scans/clear_parent_engagement/ <- CLEAR PDFs here
+
 Stages:
     all        Run the full pipeline (default)
     preprocess Run image preprocessing only
@@ -73,6 +80,17 @@ def main(input_dir, survey, stage, dry_run, operator):
     start_time = time.time()
 
     _print_header(survey, input_dir, stage, dry_run)
+
+    # Resolve input directory — use survey-specific subfolder
+    # if it exists, otherwise fall back to the default scans/
+    # folder. This allows multiple surveys to be queued at once
+    # without mixing their scans together.
+    survey_scan_dir = os.path.join(input_dir, survey)
+    if os.path.isdir(survey_scan_dir):
+        input_dir = survey_scan_dir
+        click.echo(
+            f"  Scan folder:  {input_dir} (survey subfolder)"
+        )
 
     # Clear intermediate folders at the start of a full run so
     # images and data from previous batches are never picked up.
