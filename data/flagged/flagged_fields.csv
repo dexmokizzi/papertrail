@@ -1,0 +1,8 @@
+form_id,field_id,raw_value,confidence,reason,timestamp,corrected_value
+CamScanner 3-25-26 18.46,S1_Q2,,1.0,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159701,
+CamScanner 3-25-26 18.46,S2_Q3,,1.0,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159727,
+CamScanner 3-25-26 18.46,S2_Q4,,1.0,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159730,
+CamScanner 3-25-26 18.46,S2_Q5,,1.0,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159732,
+CamScanner 3-25-26 18.46,S2_Q6,,1.0,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159733,
+CamScanner 3-25-26 18.46,S2_Q7,,0.972,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159769,
+CamScanner 3-25-26 18.46,S2_Q8,,0.966,AMBIGUOUS — two options scored similarly,2026-04-09T11:08:48.159774,
