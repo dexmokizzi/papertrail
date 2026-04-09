@@ -9,6 +9,13 @@ Usage:
     python run_pipeline.py --survey maize_community_survey --dry-run
     python run_pipeline.py --survey maize_community_survey --stage output
 
+Scan folder behaviour:
+    If data/scans/<survey_name>/ exists, scans are read from there.
+    Otherwise scans are read from data/scans/ directly.
+    This allows multiple surveys to be queued simultaneously:
+        data/scans/maize_community_survey/  <- Maize PDFs here
+        data/scans/clear_parent_engagement/ <- CLEAR PDFs here
+
 Stages:
     all        Run the full pipeline (default)
     preprocess Run image preprocessing only
@@ -73,6 +80,17 @@ def main(input_dir, survey, stage, dry_run, operator):
     start_time = time.time()
 
     _print_header(survey, input_dir, stage, dry_run)
+
+    # Resolve input directory — use survey-specific subfolder
+    # if it exists, otherwise fall back to the default scans/
+    # folder. This allows multiple surveys to be queued at once
+    # without mixing their scans together.
+    survey_scan_dir = os.path.join(input_dir, survey)
+    if os.path.isdir(survey_scan_dir):
+        input_dir = survey_scan_dir
+        click.echo(
+            f"  Scan folder:  {input_dir} (survey subfolder)"
+        )
 
     # Clear intermediate folders at the start of a full run so
     # images and data from previous batches are never picked up.
@@ -327,6 +345,19 @@ def main(input_dir, survey, stage, dry_run, operator):
                 batch_date    = date_str,
             )
 
+            # Archive processed scans after successful output.
+            # This prevents the same PDFs being picked up again
+            # on the next run and creating duplicate rows in the
+            # output file. Originals are preserved in archive/
+            # and can always be retrieved if needed.
+            if success:
+                archived = _archive_scans(input_dir)
+                if archived:
+                    click.echo(
+                        f"  Archived {archived} scan(s) "
+                        f"to {input_dir}archive/"
+                    )
+
     # ── Log the run ───────────────────────────────────────────────────────────
     runtime = round(time.time() - start_time, 2)
 
@@ -388,6 +419,49 @@ def main(input_dir, survey, stage, dry_run, operator):
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _archive_scans(input_dir: str) -> int:
+    """Move processed scan files to an archive subfolder.
+
+    After a successful pipeline run, moves all PDFs and images
+    from the scans folder into scans/archive/ so they are not
+    picked up again on the next run. This prevents duplicate
+    rows appearing in the output file across multiple batches.
+
+    Originals are never deleted — they are preserved in archive/
+    and can be retrieved if any batch needs to be reprocessed.
+
+    Args:
+        input_dir: Path to the scans folder.
+
+    Returns:
+        Number of files archived.
+    """
+    supported   = (".pdf", ".jpg", ".jpeg", ".png", ".tiff")
+    archive_dir = os.path.join(input_dir, "archive")
+    os.makedirs(archive_dir, exist_ok=True)
+
+    archived = 0
+    for fname in os.listdir(input_dir):
+        if not fname.lower().endswith(supported):
+            continue
+        src  = os.path.join(input_dir, fname)
+        dest = os.path.join(archive_dir, fname)
+
+        # If a file with the same name already exists in
+        # archive, add a timestamp suffix to avoid overwriting
+        if os.path.exists(dest):
+            base, ext = os.path.splitext(fname)
+            timestamp = str(int(time.time()))
+            dest      = os.path.join(
+                archive_dir, f"{base}_{timestamp}{ext}"
+            )
+
+        shutil.move(src, dest)
+        archived += 1
+
+    return archived
+
 
 def _clean_working_dirs() -> None:
     """Clear all intermediate pipeline folders before a new batch run.
@@ -523,8 +597,6 @@ def _apply_corrections(
                 if fid_form != form_id:
                     continue
                 if fid_field not in fields:
-                    # Field was flagged but not in validated —
-                    # create a placeholder so correction lands
                     fields[fid_field] = {}
                 fields[fid_field]["corrected_value"] = corrected
             else:
