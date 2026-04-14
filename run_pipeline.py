@@ -79,18 +79,17 @@ def main(input_dir, survey, stage, dry_run, operator):
 
     start_time = time.time()
 
-    _print_header(survey, input_dir, stage, dry_run)
-
-    # Resolve input directory — use survey-specific subfolder
-    # if it exists, otherwise fall back to the default scans/
-    # folder. This allows multiple surveys to be queued at once
-    # without mixing their scans together.
+    # Resolve input directory — auto-create and use a
+    # survey-specific subfolder so multiple surveys can be
+    # queued simultaneously without mixing their scans.
+    # Staff drop PDFs into data/scans/<survey_name>/ and
+    # the pipeline picks them up automatically. The folder
+    # is created here so staff never need to create it manually.
     survey_scan_dir = os.path.join(input_dir, survey)
-    if os.path.isdir(survey_scan_dir):
-        input_dir = survey_scan_dir
-        click.echo(
-            f"  Scan folder:  {input_dir} (survey subfolder)"
-        )
+    os.makedirs(survey_scan_dir, exist_ok=True)
+    input_dir = survey_scan_dir
+
+    _print_header(survey, input_dir, stage, dry_run)
 
     # Clear intermediate folders at the start of a full run so
     # images and data from previous batches are never picked up.
