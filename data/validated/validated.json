@@ -1,0 +1,723 @@
+[
+  {
+    "form_id": "CamScanner 4-14-26 10.04",
+    "fields": {
+      "S1_Q1": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.616,
+          "3": 0.95,
+          "4": 0.791
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=0.95, 3=0.95"
+      },
+      "S1_Q2": {
+        "value": "3",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.611,
+          "3": 0.95,
+          "4": 0.75
+        }
+      },
+      "S1_Q3": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.614,
+          "2": 0.95,
+          "3": 0.928,
+          "4": 0.755
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.93"
+      },
+      "S1_Q4": {
+        "value": null,
+        "confidence": 0.907,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.854,
+          "3": 0.669,
+          "4": 0.907
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.91, 2=0.85"
+      },
+      "S1_Q5": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.616,
+          "2": 0.615,
+          "3": 0.95,
+          "4": 0.897
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.95, 4=0.90"
+      },
+      "S1_Q6": {
+        "value": "2",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.617,
+          "2": 0.95,
+          "3": 0.718,
+          "4": 0.678
+        }
+      },
+      "S1_Q7": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.622,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 0.888
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+      },
+      "S1_Q8": {
+        "value": "3",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.619,
+          "2": 0.561,
+          "3": 0.95,
+          "4": 0.864
+        }
+      },
+      "S1_Q9": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.614,
+          "2": 0.95,
+          "3": 0.922,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+      },
+      "S1_Q10": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "flag": "NO_MARK",
+        "note": "No mark detected above threshold"
+      },
+      "S2_Q1": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 1.0
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=1.00, 1=0.95"
+      },
+      "S2_Q2": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.614,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 0.869
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+      },
+      "S2_Q3": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.475,
+          "2": 0.95,
+          "3": 0.843,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+      },
+      "S2_Q4": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 1.0,
+          "2": 0.95,
+          "3": 0.89,
+          "4": 0.898
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 2=0.95"
+      },
+      "S2_Q5": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.95,
+          "3": 0.663,
+          "4": 0.693
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=0.95, 2=0.95"
+      },
+      "S2_Q6": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 0.877
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=0.95, 2=0.95"
+      },
+      "S2_Q7": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.621,
+          "2": 1.0,
+          "3": 0.95,
+          "4": 0.819
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=1.00, 3=0.95"
+      },
+      "S2_Q8": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.95,
+          "3": 0.934,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+      },
+      "S3_Q1": {
+        "value": null,
+        "confidence": 0.984,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.62,
+          "3": 0.95,
+          "4": 0.984
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.98, 1=0.95"
+      },
+      "S3_Q2": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.95,
+          "2": 0.62,
+          "3": 1.0,
+          "4": 0.628
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 1=0.95"
+      },
+      "S3_Q3": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.627,
+          "2": 0.618,
+          "3": 1.0,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=0.95"
+      },
+      "S3_Q4": {
+        "value": "4",
+        "confidence": 0.966,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.626,
+          "2": 0.617,
+          "3": 0.624,
+          "4": 0.966
+        }
+      },
+      "S3_Q5": {
+        "value": "3",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.624,
+          "2": 0.617,
+          "3": 1.0,
+          "4": 0.621
+        }
+      },
+      "S4_Q1": {
+        "value": "4",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.614,
+          "2": 0.614,
+          "3": 0.603,
+          "4": 1.0
+        }
+      },
+      "S4_Q2": {
+        "value": "3",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.596,
+          "2": 0.593,
+          "3": 1.0,
+          "4": 0.637
+        }
+      },
+      "S4_Q3": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.619,
+          "2": 0.621,
+          "3": 1.0,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=0.95"
+      },
+      "S4_Q4": {
+        "value": null,
+        "confidence": 0.984,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.626,
+          "2": 0.984,
+          "3": 0.624,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 4=0.95"
+      },
+      "S4_Q5": {
+        "value": "4",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.626,
+          "2": 0.804,
+          "3": 0.622,
+          "4": 1.0
+        }
+      },
+      "S4_Q6": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.622,
+          "2": 0.924,
+          "3": 0.625,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 2=0.92"
+      },
+      "S4_Q7": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.609,
+          "2": 0.321,
+          "3": 0.934,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 3=0.93"
+      },
+      "S4_Q8": {
+        "value": "2",
+        "confidence": 0.618,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.616,
+          "2": 0.618,
+          "3": 0.617,
+          "4": 0.616
+        }
+      },
+      "S4_Q9": {
+        "value": "4",
+        "confidence": 0.912,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.601,
+          "2": 0.618,
+          "3": 0.618,
+          "4": 0.912
+        }
+      },
+      "S4_Q10": {
+        "value": "3",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.618,
+          "3": 0.95,
+          "4": 0.659
+        }
+      },
+      "S4_Q11": {
+        "value": "3",
+        "confidence": 0.909,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.615,
+          "3": 0.909,
+          "4": 0.618
+        }
+      },
+      "S5_Q1": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.487,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 0.934
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+      },
+      "S5_Q2": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.609,
+          "2": 0.95,
+          "3": 1.0,
+          "4": 0.621
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 2=0.95"
+      },
+      "S5_Q3": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.329,
+          "2": 0.429,
+          "3": 0.884,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 3=0.88"
+      },
+      "S5_Q4": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 1.0,
+          "2": 0.618,
+          "3": 0.618,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 4=0.95"
+      },
+      "S5_Q5": {
+        "value": "4",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.727,
+          "2": 0.397,
+          "3": 0.854,
+          "4": 0.95
+        }
+      },
+      "S5_Q6": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 1.0,
+          "2": 0.612,
+          "3": 0.95,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 3=0.95"
+      },
+      "S5_Q7": {
+        "value": "4",
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.615,
+          "2": 0.819,
+          "3": 0.36,
+          "4": 0.95
+        }
+      },
+      "S5_Q8": {
+        "value": null,
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 1.0,
+          "2": 0.703,
+          "3": 0.615,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 4=0.95"
+      },
+      "S5_Q9": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.895,
+          "2": 0.616,
+          "3": 0.95,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.95, 4=0.95"
+      },
+      "S5_Q10": {
+        "value": null,
+        "confidence": 0.95,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.913,
+          "2": 0.95,
+          "3": 0.95,
+          "4": 0.95
+        },
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+      },
+      "S5_Q11": {
+        "value": "1",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 1.0,
+          "2": 0.619,
+          "3": 0.458,
+          "4": 0.624
+        }
+      },
+      "S6_Q1": {
+        "value": "3",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.657,
+          "2": 0.616,
+          "3": 1.0,
+          "4": 0.615
+        }
+      },
+      "S6_Q2": {
+        "value": "3",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.612,
+          "2": 0.612,
+          "3": 1.0,
+          "4": 0.626
+        }
+      },
+      "S6_Q3": {
+        "value": "3",
+        "confidence": 1.0,
+        "mark_type": "circled_number",
+        "all_scores": {
+          "1": 0.611,
+          "2": 0.749,
+          "3": 1.0,
+          "4": 0.625
+        }
+      },
+      "S7_tenure_Q1": {
+        "value": "5",
+        "confidence": 0.697,
+        "mark_type": "circled_bubble",
+        "all_scores": {
+          "1": 0.428,
+          "2": 0.679,
+          "3": 0.403,
+          "4": 0.623,
+          "5": 0.697,
+          "6": 0.351
+        }
+      },
+      "S7_area_Q1": {
+        "value": "2",
+        "confidence": 0.928,
+        "mark_type": "circled_bubble",
+        "all_scores": {
+          "1": 0.566,
+          "2": 0.928,
+          "3": 0.832,
+          "4": 0.398,
+          "5": 0.296
+        }
+      },
+      "S8_gender_Q1": {
+        "value": "3",
+        "confidence": 0.815,
+        "mark_type": "circled_bubble",
+        "all_scores": {
+          "1": 0.653,
+          "2": 0.73,
+          "3": 0.815,
+          "4": 0.623,
+          "5": 0.484
+        }
+      },
+      "S8_edu_Q1": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "x_mark",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "flag": "NO_MARK",
+        "note": "No mark detected above threshold"
+      },
+      "S8_hispanic_Q1": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "x_mark",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0
+        },
+        "flag": "NO_MARK",
+        "note": "No mark detected above threshold"
+      },
+      "S8_housing_Q1": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "x_mark",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "flag": "NO_MARK",
+        "note": "No mark detected above threshold"
+      },
+      "S8_income_Q1": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "x_mark",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        },
+        "flag": "NO_MARK",
+        "note": "No mark detected above threshold"
+      },
+      "S8_race_Q1": {
+        "value": null,
+        "confidence": 0.0,
+        "mark_type": "x_mark",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.0,
+          "6": 0.0
+        }
+      },
+      "S8_age_Q1": {
+        "value": "7",
+        "confidence": 0.885,
+        "mark_type": "circled_bubble",
+        "all_scores": {
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0,
+          "4": 0.0,
+          "5": 0.592,
+          "6": 0.498,
+          "7": 0.885,
+          "8": 0.0
+        }
+      }
+    },
+    "pages_found": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  }
+]
