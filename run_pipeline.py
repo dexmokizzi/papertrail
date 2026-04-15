@@ -352,9 +352,12 @@ def main(input_dir, survey, stage, dry_run, operator):
             if success:
                 archived = _archive_scans(input_dir)
                 if archived:
+                    archive_path = os.path.join(
+                        input_dir, "archive"
+                    )
                     click.echo(
                         f"  Archived {archived} scan(s) "
-                        f"to {input_dir}archive/"
+                        f"to {archive_path}"
                     )
 
     # ── Log the run ───────────────────────────────────────────────────────────
