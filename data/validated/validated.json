@@ -4,235 +4,261 @@
     "fields": {
       "S1_Q1": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.973,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.95,
-          "2": 0.616,
-          "3": 0.95,
-          "4": 0.791
+          "1": 0.913,
+          "2": 0.973,
+          "3": 0.959,
+          "4": 0.907
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 3=0.95"
+        "path_used": "proximity"
       },
       "S1_Q2": {
-        "value": "3",
-        "confidence": 0.95,
+        "value": null,
+        "confidence": 0.975,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.615,
-          "2": 0.611,
-          "3": 0.95,
-          "4": 0.75
-        }
+          "1": 0.906,
+          "2": 0.975,
+          "3": 0.96,
+          "4": 0.907
+        },
+        "path_used": "proximity"
       },
       "S1_Q3": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.972,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.97",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.614,
-          "2": 0.95,
-          "3": 0.928,
-          "4": 0.755
+          "1": 0.899,
+          "2": 0.972,
+          "3": 0.967,
+          "4": 0.909
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.93"
+        "path_used": "proximity"
       },
       "S1_Q4": {
         "value": null,
-        "confidence": 0.907,
+        "confidence": 0.973,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.97, 2=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.615,
-          "2": 0.854,
-          "3": 0.669,
-          "4": 0.907
+          "1": 0.917,
+          "2": 0.958,
+          "3": 0.973,
+          "4": 0.91
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.91, 2=0.85"
+        "path_used": "proximity"
       },
       "S1_Q5": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.98,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.98, 2=0.94",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.616,
-          "2": 0.615,
-          "3": 0.95,
-          "4": 0.897
+          "1": 0.907,
+          "2": 0.936,
+          "3": 0.98,
+          "4": 0.9
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.95, 4=0.90"
+        "path_used": "proximity"
       },
       "S1_Q6": {
-        "value": "2",
-        "confidence": 0.95,
+        "value": null,
+        "confidence": 0.978,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.617,
-          "2": 0.95,
-          "3": 0.718,
-          "4": 0.678
-        }
+          "1": 0.907,
+          "2": 0.978,
+          "3": 0.962,
+          "4": 0.91
+        },
+        "path_used": "proximity"
       },
       "S1_Q7": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.976,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.622,
-          "2": 0.95,
-          "3": 0.95,
-          "4": 0.888
+          "1": 0.898,
+          "2": 0.976,
+          "3": 0.959,
+          "4": 0.909
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+        "path_used": "proximity"
       },
       "S1_Q8": {
-        "value": "3",
-        "confidence": 0.95,
+        "value": null,
+        "confidence": 0.978,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.619,
-          "2": 0.561,
-          "3": 0.95,
-          "4": 0.864
-        }
+          "1": 0.904,
+          "2": 0.978,
+          "3": 0.959,
+          "4": 0.904
+        },
+        "path_used": "proximity"
       },
       "S1_Q9": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.978,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.614,
-          "2": 0.95,
-          "3": 0.922,
-          "4": 0.95
+          "1": 0.912,
+          "2": 0.978,
+          "3": 0.961,
+          "4": 0.909
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+        "path_used": "proximity"
       },
       "S1_Q10": {
         "value": null,
-        "confidence": 0.0,
+        "confidence": 0.975,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.0,
-          "2": 0.0,
-          "3": 0.0,
-          "4": 0.0
+          "1": 0.908,
+          "2": 0.975,
+          "3": 0.965,
+          "4": 0.903
         },
-        "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "path_used": "proximity"
       },
       "S2_Q1": {
         "value": null,
-        "confidence": 1.0,
+        "confidence": 0.976,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.95,
-          "2": 0.95,
+          "1": 0.912,
+          "2": 0.976,
           "3": 0.95,
-          "4": 1.0
+          "4": 0.917
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 1=0.95"
+        "path_used": "proximity"
       },
       "S2_Q2": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.971,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.614,
-          "2": 0.95,
-          "3": 0.95,
-          "4": 0.869
+          "1": 0.91,
+          "2": 0.971,
+          "3": 0.964,
+          "4": 0.905
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+        "path_used": "proximity"
       },
       "S2_Q3": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.975,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.475,
-          "2": 0.95,
-          "3": 0.843,
-          "4": 0.95
+          "1": 0.908,
+          "2": 0.975,
+          "3": 0.962,
+          "4": 0.915
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+        "path_used": "proximity"
       },
       "S2_Q4": {
         "value": null,
-        "confidence": 1.0,
+        "confidence": 0.975,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 1.0,
-          "2": 0.95,
-          "3": 0.89,
-          "4": 0.898
+          "1": 0.909,
+          "2": 0.975,
+          "3": 0.964,
+          "4": 0.914
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 2=0.95"
+        "path_used": "proximity"
       },
       "S2_Q5": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.976,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.95,
-          "2": 0.95,
-          "3": 0.663,
-          "4": 0.693
+          "1": 0.906,
+          "2": 0.976,
+          "3": 0.954,
+          "4": 0.903
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 2=0.95"
+        "path_used": "proximity"
       },
       "S2_Q6": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.969,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.95,
-          "2": 0.95,
-          "3": 0.95,
-          "4": 0.877
+          "1": 0.908,
+          "2": 0.969,
+          "3": 0.954,
+          "4": 0.907
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 2=0.95"
+        "path_used": "proximity"
       },
       "S2_Q7": {
         "value": null,
-        "confidence": 1.0,
+        "confidence": 0.971,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.621,
-          "2": 1.0,
-          "3": 0.95,
-          "4": 0.819
+          "1": 0.911,
+          "2": 0.971,
+          "3": 0.961,
+          "4": 0.904
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=1.00, 3=0.95"
+        "path_used": "proximity"
       },
       "S2_Q8": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 0.97,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.97, 3=0.97",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.615,
-          "2": 0.95,
-          "3": 0.934,
-          "4": 0.95
+          "1": 0.907,
+          "2": 0.97,
+          "3": 0.966,
+          "4": 0.907
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+        "path_used": "proximity"
       },
       "S3_Q1": {
         "value": null,
         "confidence": 0.984,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.98, 1=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.95,
@@ -240,12 +266,13 @@
           "3": 0.95,
           "4": 0.984
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.98, 1=0.95"
+        "path_used": "bbox"
       },
       "S3_Q2": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 1=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.95,
@@ -253,12 +280,13 @@
           "3": 1.0,
           "4": 0.628
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 1=0.95"
+        "path_used": "bbox"
       },
       "S3_Q3": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.627,
@@ -266,8 +294,7 @@
           "3": 1.0,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
+        "path_used": "bbox"
       },
       "S3_Q4": {
         "value": "4",
@@ -278,7 +305,8 @@
           "2": 0.617,
           "3": 0.624,
           "4": 0.966
-        }
+        },
+        "path_used": "bbox"
       },
       "S3_Q5": {
         "value": "3",
@@ -289,7 +317,8 @@
           "2": 0.617,
           "3": 1.0,
           "4": 0.621
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q1": {
         "value": "4",
@@ -300,7 +329,8 @@
           "2": 0.614,
           "3": 0.603,
           "4": 1.0
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q2": {
         "value": "3",
@@ -311,11 +341,14 @@
           "2": 0.593,
           "3": 1.0,
           "4": 0.637
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q3": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.619,
@@ -323,12 +356,13 @@
           "3": 1.0,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
+        "path_used": "bbox"
       },
       "S4_Q4": {
         "value": null,
         "confidence": 0.984,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.98, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.626,
@@ -336,8 +370,7 @@
           "3": 0.624,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 4=0.95"
+        "path_used": "bbox"
       },
       "S4_Q5": {
         "value": "4",
@@ -348,11 +381,14 @@
           "2": 0.804,
           "3": 0.622,
           "4": 1.0
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q6": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 2=0.92",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.622,
@@ -360,12 +396,13 @@
           "3": 0.625,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.95, 2=0.92"
+        "path_used": "bbox"
       },
       "S4_Q7": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 3=0.93",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.609,
@@ -373,8 +410,7 @@
           "3": 0.934,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.95, 3=0.93"
+        "path_used": "bbox"
       },
       "S4_Q8": {
         "value": "2",
@@ -385,7 +421,8 @@
           "2": 0.618,
           "3": 0.617,
           "4": 0.616
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q9": {
         "value": "4",
@@ -396,7 +433,8 @@
           "2": 0.618,
           "3": 0.618,
           "4": 0.912
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q10": {
         "value": "3",
@@ -407,7 +445,8 @@
           "2": 0.618,
           "3": 0.95,
           "4": 0.659
-        }
+        },
+        "path_used": "bbox"
       },
       "S4_Q11": {
         "value": "3",
@@ -418,11 +457,14 @@
           "2": 0.615,
           "3": 0.909,
           "4": 0.618
-        }
+        },
+        "path_used": "bbox"
       },
       "S5_Q1": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.487,
@@ -430,12 +472,13 @@
           "3": 0.95,
           "4": 0.934
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+        "path_used": "bbox"
       },
       "S5_Q2": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=1.00, 2=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.609,
@@ -443,12 +486,13 @@
           "3": 1.0,
           "4": 0.621
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 2=0.95"
+        "path_used": "bbox"
       },
       "S5_Q3": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 4=0.95, 3=0.88",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.329,
@@ -456,12 +500,13 @@
           "3": 0.884,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.95, 3=0.88"
+        "path_used": "bbox"
       },
       "S5_Q4": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 1.0,
@@ -469,8 +514,7 @@
           "3": 0.618,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 4=0.95"
+        "path_used": "bbox"
       },
       "S5_Q5": {
         "value": "4",
@@ -481,11 +525,14 @@
           "2": 0.397,
           "3": 0.854,
           "4": 0.95
-        }
+        },
+        "path_used": "bbox"
       },
       "S5_Q6": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 1.0,
@@ -493,8 +540,7 @@
           "3": 0.95,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 3=0.95"
+        "path_used": "bbox"
       },
       "S5_Q7": {
         "value": "4",
@@ -505,11 +551,14 @@
           "2": 0.819,
           "3": 0.36,
           "4": 0.95
-        }
+        },
+        "path_used": "bbox"
       },
       "S5_Q8": {
         "value": null,
         "confidence": 1.0,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 1=1.00, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 1.0,
@@ -517,12 +566,13 @@
           "3": 0.615,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 4=0.95"
+        "path_used": "bbox"
       },
       "S5_Q9": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 3=0.95, 4=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.895,
@@ -530,12 +580,13 @@
           "3": 0.95,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.95, 4=0.95"
+        "path_used": "bbox"
       },
       "S5_Q10": {
         "value": null,
         "confidence": 0.95,
+        "flag": "AMBIGUOUS",
+        "note": "Two options scored similarly: 2=0.95, 3=0.95",
         "mark_type": "circled_number",
         "all_scores": {
           "1": 0.913,
@@ -543,8 +594,7 @@
           "3": 0.95,
           "4": 0.95
         },
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+        "path_used": "bbox"
       },
       "S5_Q11": {
         "value": "1",
@@ -555,7 +605,8 @@
           "2": 0.619,
           "3": 0.458,
           "4": 0.624
-        }
+        },
+        "path_used": "bbox"
       },
       "S6_Q1": {
         "value": "3",
@@ -566,7 +617,8 @@
           "2": 0.616,
           "3": 1.0,
           "4": 0.615
-        }
+        },
+        "path_used": "bbox"
       },
       "S6_Q2": {
         "value": "3",
@@ -577,7 +629,8 @@
           "2": 0.612,
           "3": 1.0,
           "4": 0.626
-        }
+        },
+        "path_used": "bbox"
       },
       "S6_Q3": {
         "value": "3",
@@ -588,7 +641,8 @@
           "2": 0.749,
           "3": 1.0,
           "4": 0.625
-        }
+        },
+        "path_used": "bbox"
       },
       "S7_tenure_Q1": {
         "value": "5",
@@ -601,7 +655,8 @@
           "4": 0.623,
           "5": 0.697,
           "6": 0.351
-        }
+        },
+        "path_used": "bbox"
       },
       "S7_area_Q1": {
         "value": "2",
@@ -613,7 +668,8 @@
           "3": 0.832,
           "4": 0.398,
           "5": 0.296
-        }
+        },
+        "path_used": "bbox"
       },
       "S8_gender_Q1": {
         "value": "3",
@@ -625,7 +681,8 @@
           "3": 0.815,
           "4": 0.623,
           "5": 0.484
-        }
+        },
+        "path_used": "bbox"
       },
       "S8_edu_Q1": {
         "value": null,
@@ -640,7 +697,8 @@
           "6": 0.0
         },
         "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "note": "No mark detected above threshold",
+        "path_used": "bbox"
       },
       "S8_hispanic_Q1": {
         "value": null,
@@ -651,7 +709,8 @@
           "2": 0.0
         },
         "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "note": "No mark detected above threshold",
+        "path_used": "bbox"
       },
       "S8_housing_Q1": {
         "value": null,
@@ -663,7 +722,8 @@
           "3": 0.0
         },
         "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "note": "No mark detected above threshold",
+        "path_used": "bbox"
       },
       "S8_income_Q1": {
         "value": null,
@@ -678,7 +738,8 @@
           "6": 0.0
         },
         "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "note": "No mark detected above threshold",
+        "path_used": "bbox"
       },
       "S8_race_Q1": {
         "value": null,
@@ -691,7 +752,8 @@
           "4": 0.0,
           "5": 0.0,
           "6": 0.0
-        }
+        },
+        "path_used": "bbox"
       },
       "S8_age_Q1": {
         "value": "7",
@@ -706,7 +768,8 @@
           "6": 0.498,
           "7": 0.885,
           "8": 0.0
-        }
+        },
+        "path_used": "bbox"
       }
     },
     "pages_found": [
