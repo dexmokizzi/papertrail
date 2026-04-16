@@ -3,254 +3,224 @@
     "form_id": "CamScanner 4-14-26 10.04",
     "fields": {
       "S1_Q1": {
-        "value": null,
-        "confidence": 0.973,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.913,
-          "2": 0.973,
-          "3": 0.959,
-          "4": 0.907
+          "1": 0.62,
+          "2": 0.62,
+          "3": 0.62,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q2": {
-        "value": null,
-        "confidence": 0.975,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.906,
-          "2": 0.975,
-          "3": 0.96,
-          "4": 0.907
+          "1": 0.571,
+          "2": 0.536,
+          "3": 0.619,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q3": {
-        "value": null,
-        "confidence": 0.972,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.97",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.899,
-          "2": 0.972,
-          "3": 0.967,
-          "4": 0.909
+          "1": 0.229,
+          "2": 0.376,
+          "3": 0.382,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q4": {
-        "value": null,
-        "confidence": 0.973,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.97, 2=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.917,
-          "2": 0.958,
-          "3": 0.973,
-          "4": 0.91
+          "1": 0.619,
+          "2": 0.619,
+          "3": 0.619,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q5": {
-        "value": null,
-        "confidence": 0.98,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.98, 2=0.94",
+        "value": "3",
+        "confidence": 0.984,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.907,
-          "2": 0.936,
-          "3": 0.98,
-          "4": 0.9
+          "1": 0.619,
+          "2": 0.619,
+          "3": 0.984,
+          "4": 0.625
         },
         "path_used": "proximity"
       },
       "S1_Q6": {
-        "value": null,
-        "confidence": 0.978,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.907,
-          "2": 0.978,
-          "3": 0.962,
-          "4": 0.91
+          "1": 0.619,
+          "2": 0.612,
+          "3": 0.637,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q7": {
-        "value": null,
-        "confidence": 0.976,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.898,
-          "2": 0.976,
-          "3": 0.959,
-          "4": 0.909
+          "1": 0.586,
+          "2": 0.604,
+          "3": 0.631,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q8": {
-        "value": null,
-        "confidence": 0.978,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.904,
-          "2": 0.978,
-          "3": 0.959,
-          "4": 0.904
+          "1": 0.625,
+          "2": 0.619,
+          "3": 0.477,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q9": {
-        "value": null,
-        "confidence": 0.978,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.912,
-          "2": 0.978,
-          "3": 0.961,
-          "4": 0.909
+          "1": 0.625,
+          "2": 0.488,
+          "3": 0.483,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S1_Q10": {
-        "value": null,
-        "confidence": 0.975,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "3",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.908,
-          "2": 0.975,
-          "3": 0.965,
-          "4": 0.903
+          "1": 0.619,
+          "2": 0.537,
+          "3": 1.0,
+          "4": 0.619
         },
         "path_used": "proximity"
       },
       "S2_Q1": {
-        "value": null,
-        "confidence": 0.976,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.95",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.912,
-          "2": 0.976,
-          "3": 0.95,
-          "4": 0.917
+          "1": 0.625,
+          "2": 0.619,
+          "3": 0.631,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S2_Q2": {
         "value": null,
-        "confidence": 0.971,
+        "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "note": "Two options scored similarly: 4=1.00, 1=0.96",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.91,
-          "2": 0.971,
-          "3": 0.964,
-          "4": 0.905
+          "1": 0.959,
+          "2": 0.625,
+          "3": 0.631,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S2_Q3": {
-        "value": null,
-        "confidence": 0.975,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "2",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.908,
-          "2": 0.975,
-          "3": 0.962,
-          "4": 0.915
+          "1": 0.625,
+          "2": 1.0,
+          "3": 0.631,
+          "4": 0.644
         },
         "path_used": "proximity"
       },
       "S2_Q4": {
-        "value": null,
-        "confidence": 0.975,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "4",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.909,
-          "2": 0.975,
-          "3": 0.964,
-          "4": 0.914
+          "1": 0.625,
+          "2": 0.625,
+          "3": 0.851,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S2_Q5": {
         "value": null,
-        "confidence": 0.976,
+        "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 3=0.95",
+        "note": "Two options scored similarly: 1=1.00, 4=1.00",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.906,
-          "2": 0.976,
-          "3": 0.954,
-          "4": 0.903
+          "1": 1.0,
+          "2": 0.987,
+          "3": 0.619,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S2_Q6": {
         "value": null,
-        "confidence": 0.969,
+        "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.95",
+        "note": "Two options scored similarly: 3=1.00, 4=1.00",
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.908,
-          "2": 0.969,
-          "3": 0.954,
-          "4": 0.907
+          "1": 0.625,
+          "2": 0.625,
+          "3": 1.0,
+          "4": 1.0
         },
         "path_used": "proximity"
       },
       "S2_Q7": {
-        "value": null,
-        "confidence": 0.971,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.96",
+        "value": "1",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.911,
-          "2": 0.971,
-          "3": 0.961,
-          "4": 0.904
+          "1": 1.0,
+          "2": 0.887,
+          "3": 0.632,
+          "4": 0.625
         },
         "path_used": "proximity"
       },
       "S2_Q8": {
-        "value": null,
-        "confidence": 0.97,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.97, 3=0.97",
+        "value": "2",
+        "confidence": 1.0,
         "mark_type": "circled_number",
         "all_scores": {
-          "1": 0.907,
-          "2": 0.97,
-          "3": 0.966,
-          "4": 0.907
+          "1": 0.632,
+          "2": 1.0,
+          "3": 0.625,
+          "4": 0.625
         },
         "path_used": "proximity"
       },
