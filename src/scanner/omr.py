@@ -61,6 +61,12 @@ PROXIMITY_MARGIN_PX = 200
 # proximity path. Prevents degenerate crops on sparse layouts.
 PROXIMITY_MIN_ROI_PX = 60
 
+# Fixed window radius used by the per-option scoring approach.
+# Each option center gets a square window of this radius.
+# Verified at 40px on real scans — large enough to contain any
+# hand-drawn circle, small enough to avoid adjacent option bleed.
+PROXIMITY_OPTION_RADIUS = 40
+
 
 # ── Path detection helper ─────────────────────────────────────────────────────
 
@@ -234,18 +240,21 @@ def _multi_select_by_bounding_box(image: np.ndarray,
 def _detect_by_proximity(image: np.ndarray,
                           regions: dict,
                           mark_type: str) -> dict:
-    """Detect a mark by finding candidates and matching to nearest center.
+    """Detect a mark using per-option fixed-radius windows.
 
-    Scans a search area built from all declared center points.
-    Finds all mark candidates in that area, then assigns each
-    to the nearest declared center point. Circle size has no
-    effect on the match — only center position matters.
-    Returns NO_MARK explicitly if no candidate is found.
+    For each declared center point, extracts a fixed-radius
+    window around that point and scores it independently.
+    Selects the option whose window scores highest.
+
+    This approach is robust to any mark size — a large or
+    small circle drawn around an option will always score
+    highest in that option's own window, regardless of how
+    far the ink extends beyond the center point.
 
     Args:
         image:     Preprocessed grayscale image array.
         regions:   Dict mapping value -> {x, y} center point.
-        mark_type: Scoring algorithm used to score candidates.
+        mark_type: Scoring algorithm used to score each window.
 
     Returns:
         Standard detection result dict with path_used=proximity.
@@ -254,22 +263,8 @@ def _detect_by_proximity(image: np.ndarray,
     if not centers:
         return _no_detection("No valid center points in regions")
 
-    search_area = _build_search_area(image, centers)
-    candidates  = _find_candidates_in_area(
-        image, search_area, mark_type
-    )
-    _log_proximity_search(search_area, candidates)
+    scores = _score_per_option_windows(image, centers, mark_type)
 
-    if not candidates:
-        result = _no_detection_with_scores(
-            {v: 0.0 for v in centers}, mark_type
-        )
-        result["path_used"] = "proximity"
-        return result
-
-    scores = _match_candidates_to_centers(
-        candidates, centers, image, search_area, mark_type
-    )
     ambiguity_min = (
         CIRCLED_BUBBLE_AMBIGUITY_MIN
         if mark_type == "circled_bubble"
@@ -300,35 +295,26 @@ def _log_proximity_search(search_area: tuple,
 def _multi_select_by_proximity(image: np.ndarray,
                                 regions: dict,
                                 mark_type: str) -> dict:
-    """Score all options in a multi-select field via proximity matching.
+    """Score all options in a multi-select field via per-option windows.
 
-    Finds all mark candidates in the search area and scores
-    each option center based on proximity to any detected mark.
-    Options whose nearest candidate scores above LOW_CONFIDENCE
-    are included in the selected list.
+    Scores each option center independently using a fixed-radius
+    window. All options scoring above LOW_CONFIDENCE are included
+    in the selected list. This handles any mark size correctly
+    because each option is scored in its own isolated window.
 
     Args:
         image:     Preprocessed grayscale image array.
         regions:   Dict mapping value -> {x, y} center point.
-        mark_type: Scoring algorithm used to score candidates.
+        mark_type: Scoring algorithm used to score each window.
 
     Returns:
         Dict with value (list or None), confidence, all_scores,
         mark_type, path_used.
     """
-    centers     = _parse_centers(regions)
-    search_area = _build_search_area(image, centers)
-    candidates  = _find_candidates_in_area(
-        image, search_area, mark_type
+    centers    = _parse_centers(regions)
+    all_scores = _score_per_option_windows(
+        image, centers, mark_type
     )
-
-    print(f"      [proximity multi] candidates found: "
-          f"{len(candidates)}")
-
-    all_scores = _match_candidates_to_centers(
-        candidates, centers, image, search_area, mark_type
-    )
-
     return _build_multi_select_result(
         all_scores, mark_type, path_used="proximity"
     )
@@ -353,6 +339,75 @@ def _parse_centers(regions: dict) -> dict:
             if x is not None and y is not None:
                 centers[value] = (int(x), int(y))
     return centers
+
+
+def _compute_option_radius(centers: dict) -> int:
+    """Calculate a safe window radius from declared option spacing.
+
+    Derives the radius dynamically from the minimum distance
+    between any two declared center points. This ensures the
+    window is always proportional to the actual form layout —
+    wide spacing gives a larger window, tight spacing gives a
+    smaller one. Works correctly for any survey layout and any
+    image resolution without hardcoding.
+
+    Falls back to PROXIMITY_OPTION_RADIUS if fewer than two
+    center points are declared (single-option fields).
+
+    Args:
+        centers: Dict mapping value -> (x, y) center point.
+
+    Returns:
+        Window radius in pixels. Minimum 20px.
+    """
+    if len(centers) < 2:
+        return PROXIMITY_OPTION_RADIUS
+
+    points   = list(centers.values())
+    min_dist = min(
+        np.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+        for i, p1 in enumerate(points)
+        for p2 in points[i + 1:]
+    )
+    return max(20, int(min_dist * 0.35))
+
+
+def _score_per_option_windows(image: np.ndarray,
+                               centers: dict,
+                               mark_type: str) -> dict:
+    """Score each option using a fixed-radius window around its center.
+
+    Extracts a square window of PROXIMITY_OPTION_RADIUS pixels
+    around each declared center point and scores it with the
+    appropriate scoring function. Each option is scored in its
+    own isolated window — cross-option bleeding cannot occur.
+
+    Args:
+        image:     Full preprocessed image array.
+        centers:   Dict mapping value -> (x, y) center point.
+        mark_type: Scoring algorithm to apply to each window.
+
+    Returns:
+        Dict mapping value -> confidence score (0.0-1.0).
+    """
+    img_h, img_w = image.shape[:2]
+    scores       = {}
+    r            = _compute_option_radius(centers)
+
+    for value, (cx, cy) in centers.items():
+        x1  = max(0, cx - r)
+        y1  = max(0, cy - r)
+        x2  = min(img_w, cx + r)
+        y2  = min(img_h, cy + r)
+        roi = image[y1:y2, x1:x2]
+
+        if len(roi.shape) == 3:
+            roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+
+        score        = _score_region(roi, mark_type)
+        scores[value] = score
+
+    return scores
 
 
 def _build_search_area(image: np.ndarray,

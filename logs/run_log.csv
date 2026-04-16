@@ -15,3 +15,5 @@ run_timestamp,survey_id,forms_processed,fields_extracted,fields_flagged,flag_rat
 2026-04-05T17:30:52.544244,maize_community_survey,1,57,7,12.28,True,10.87,developer,
 2026-04-09T11:08:49.742474,maize_community_survey,1,57,7,12.28,True,12.07,developer,
 2026-04-14T10:12:31.114788,maize_community_survey,1,57,37,64.91,True,13.23,developer,
+2026-04-15T16:44:53.018537,maize_community_survey,1,57,40,70.18,True,13.22,developer,
+2026-04-15T17:02:21.725661,maize_community_survey,1,57,25,43.86,True,16.11,developer,

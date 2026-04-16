@@ -3,112 +3,112 @@
     "form_id": "CamScanner 4-14-26 10.04",
     "fields": {
       "S1_Q1": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 3=0.95"
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S1_Q2": {
-        "value": "3",
-        "confidence": 0.95,
+        "value": "4",
+        "confidence": 1.0,
         "flag": "",
         "note": ""
       },
       "S1_Q3": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.93"
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S1_Q4": {
-        "value": null,
-        "confidence": 0.907,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.91, 2=0.85"
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S1_Q5": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.95, 4=0.90"
+        "value": "3",
+        "confidence": 0.984,
+        "flag": "",
+        "note": ""
       },
       "S1_Q6": {
-        "value": "2",
-        "confidence": 0.95,
+        "value": "4",
+        "confidence": 1.0,
         "flag": "",
         "note": ""
       },
       "S1_Q7": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S1_Q8": {
-        "value": "3",
-        "confidence": 0.95,
+        "value": "4",
+        "confidence": 1.0,
         "flag": "",
         "note": ""
       },
       "S1_Q9": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S1_Q10": {
-        "value": null,
-        "confidence": 0.0,
-        "flag": "NO_MARK",
-        "note": "No mark detected above threshold"
+        "value": "3",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S2_Q1": {
-        "value": null,
+        "value": "4",
         "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 1=0.95"
+        "flag": "",
+        "note": ""
       },
       "S2_Q2": {
         "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 3=0.95"
-      },
-      "S2_Q3": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
-      },
-      "S2_Q4": {
-        "value": null,
         "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 2=0.95"
+        "note": "Two options scored similarly: 4=1.00, 1=0.96"
+      },
+      "S2_Q3": {
+        "value": "2",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
+      },
+      "S2_Q4": {
+        "value": "4",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S2_Q5": {
         "value": null,
-        "confidence": 0.95,
+        "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 2=0.95"
+        "note": "Two options scored similarly: 1=1.00, 4=1.00"
       },
       "S2_Q6": {
         "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=0.95, 2=0.95"
-      },
-      "S2_Q7": {
-        "value": null,
         "confidence": 1.0,
         "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=1.00, 3=0.95"
+        "note": "Two options scored similarly: 3=1.00, 4=1.00"
+      },
+      "S2_Q7": {
+        "value": "1",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S2_Q8": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.95, 4=0.95"
+        "value": "2",
+        "confidence": 1.0,
+        "flag": "",
+        "note": ""
       },
       "S3_Q1": {
         "value": null,
