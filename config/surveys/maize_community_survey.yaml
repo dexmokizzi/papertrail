@@ -1,142 +1,4 @@
 fields:
-- label: ''
-  mark_type: x_mark
-  page: 8
-  paper_id: S8_hispanic_Q1
-  qualtrics_id: Q8.7
-  regions:
-    '1':
-      h: 50
-      w: 79
-      x: 323
-      y: 1103
-    '2':
-      h: 47
-      w: 84
-      x: 318
-      y: 1162
-  required: true
-  scale:
-  - 1
-  - 2
-  type: categorical
-- label: ''
-  mark_type: x_mark
-  page: 8
-  paper_id: S8_housing_Q1
-  qualtrics_id: Q8.9
-  regions:
-    '1':
-      h: 70
-      w: 99
-      x: 310
-      y: 1536
-    '2':
-      h: 53
-      w: 96
-      x: 306
-      y: 1604
-    '3':
-      h: 50
-      w: 100
-      x: 304
-      y: 1666
-  required: true
-  scale:
-  - 1
-  - 2
-  - 3
-  type: categorical
-- label: ''
-  mark_type: x_mark
-  page: 8
-  paper_id: S8_income_Q1
-  qualtrics_id: Q8.10
-  regions:
-    '1':
-      h: 68
-      w: 95
-      x: 318
-      y: 1930
-    '2':
-      h: 46
-      w: 95
-      x: 318
-      y: 2005
-    '3':
-      h: 43
-      w: 90
-      x: 319
-      y: 2058
-    '4':
-      h: 37
-      w: 102
-      x: 319
-      y: 2104
-    '5':
-      h: 50
-      w: 84
-      x: 320
-      y: 2154
-    '6':
-      h: 56
-      w: 88
-      x: 319
-      y: 2213
-  required: true
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  type: categorical
-- paper_id: S8_race_Q1
-  qualtrics_id: Q8.8
-  label: ''
-  type: multi_select
-  mark_type: x_mark
-  scale:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
-  page: 8
-  required: true
-  regions:
-    '1':
-      x: 1055
-      y: 1065
-      w: 110
-      h: 30
-    '2':
-      x: 1055
-      y: 1138
-      w: 110
-      h: 30
-    '3':
-      x: 1055
-      y: 1185
-      w: 110
-      h: 30
-    '4':
-      x: 1055
-      y: 1238
-      w: 110
-      h: 30
-    '5':
-      x: 1055
-      y: 1284
-      w: 110
-      h: 30
-    '6':
-      x: 1055
-      y: 1333
-      w: 110
-      h: 30
 - paper_id: S1_Q1
   qualtrics_id: Q2.1_1
   label: ''
@@ -1334,6 +1196,110 @@ fields:
     '6':
       x: 399
       y: 885
+- paper_id: S8_hispanic_Q1
+  qualtrics_id: Q8.7
+  label: ''
+  type: categorical
+  mark_type: circled_bubble
+  scale:
+  - 1
+  - 2
+  page: 8
+  required: true
+  regions:
+    '1':
+      x: 397
+      y: 1103
+    '2':
+      x: 399
+      y: 1158
+- paper_id: S8_race_Q1
+  qualtrics_id: Q8.8
+  label: ''
+  type: multi_select
+  mark_type: circled_bubble
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  page: 8
+  required: true
+  regions:
+    '1':
+      x: 1093
+      y: 1072
+    '2':
+      x: 1093
+      y: 1127
+    '3':
+      x: 1095
+      y: 1177
+    '4':
+      x: 1095
+      y: 1228
+    '5':
+      x: 1097
+      y: 1275
+    '6':
+      x: 1091
+      y: 1330
+- paper_id: S8_housing_Q1
+  qualtrics_id: Q8.9
+  label: ''
+  type: categorical
+  mark_type: circled_bubble
+  scale:
+  - 1
+  - 2
+  - 3
+  page: 8
+  required: true
+  regions:
+    '1':
+      x: 395
+      y: 1548
+    '2':
+      x: 395
+      y: 1602
+    '3':
+      x: 395
+      y: 1657
+- paper_id: S8_income_Q1
+  qualtrics_id: Q8.10
+  label: ''
+  type: categorical
+  mark_type: circled_bubble
+  scale:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  page: 8
+  required: true
+  regions:
+    '1':
+      x: 393
+      y: 1942
+    '2':
+      x: 395
+      y: 1996
+    '3':
+      x: 393
+      y: 2047
+    '4':
+      x: 391
+      y: 2094
+    '5':
+      x: 397
+      y: 2148
+    '6':
+      x: 393
+      y: 2195
 qualtrics:
   template: qualtrics_templates/maize_community_survey_template.xlsx
 survey_id: maize_community_survey
