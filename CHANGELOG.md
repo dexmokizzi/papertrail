@@ -5,6 +5,124 @@ One entry per sprint close. Each entry records what was built,
 what changed from the original plan, and one key technical lesson.
 
 ---
+## OMR Robustness Sprint, April 2026
+
+### What Was Built
+
+This sprint addressed the core reliability problem identified during
+multi-respondent testing: the bounding box detection approach produced
+a 64.9% flag rate on a respondent who drew larger-than-average circles.
+The root cause was that tight calibration boxes allowed large circles
+to bleed into adjacent columns, causing both options to score high and
+triggering false AMBIGUOUS flags. The solution is a new proximity-based
+detection path that is robust to any mark size.
+
+#### omr.py — dual detection path architecture
+
+Two detection paths now exist side by side, selected automatically
+from the YAML region format:
+
+Bounding box path: regions contain x, y, w, h keys. Extracts a
+padded ROI around each declared box and scores it. Original behavior,
+unchanged. All existing calibrated surveys continue working without
+modification.
+
+Proximity path: regions contain only x, y keys (center points, no
+width or height). For each option, extracts a fixed-radius window
+around the declared center point and scores it independently. Circle
+size has no effect on detection — a large or small circle drawn
+around an option always scores highest in that option's own window.
+
+The path is determined entirely by YAML format. Mark type never
+determines the path. Both paths reuse the same scoring functions.
+
+#### omr.py — dynamic radius calculation
+
+The proximity window radius is computed dynamically from the minimum
+distance between declared center points using _compute_option_radius().
+At 35% of minimum spacing, the radius automatically scales to any
+image resolution, form density, or option spacing without hardcoded
+values. A 200px spacing produces a 70px window. A 100px spacing
+produces a 35px window. Single-option fields fall back to 40px.
+
+#### calibration_tool.py — center-point mode
+
+A new single-click calibration mode was added alongside the existing
+click-and-drag bounding box mode. When center-point mode is selected,
+staff click once on the center of each answer option. The tool saves
+only x and y — no width or height — which triggers the proximity
+detection path in omr.py. Center-point calibration is faster, more
+forgiving of placement precision, and produces detection that is
+robust to any respondent mark size. Either mode can be used for any
+mark type on any survey layout.
+
+### Multi-Respondent Testing Results
+
+Two respondents tested against the same registered instrument:
+
+Respondent 1 (original calibration scan):
+  Flag rate with bounding box calibration: 12.3%
+  Calibration source: respondent's own scan
+
+Respondent 2 (large circles, different mark style):
+  Flag rate before proximity detection: 64.9%
+  Flag rate after center-point recalibration: 19.3%
+  Improvement: 26 additional fields correctly detected
+
+### Critical Finding: Calibrate on Blank Forms
+
+During multi-respondent testing a critical calibration principle was
+identified: center-point calibration must be performed on a blank
+reference form, not on a completed respondent's scan. When calibrated
+on a respondent's scan, the center points reflect that specific scan's
+pixel positions. Slight differences in phone position, perspective, and
+scale between scan sessions cause the center points to be slightly off
+for other respondents, increasing flag rates.
+
+The correct workflow is to scan one blank copy of the survey form and
+calibrate on that. The printed numbers and bubbles on a blank form are
+at fixed positions that are correct for every respondent. This is
+consistent with the TRD design — templates/survey_forms/ was always
+intended to hold blank reference scans.
+
+Blank form calibration for the registered instrument is pending and
+will be completed when a blank copy is available. All center-point
+calibration performed in this sprint used a completed respondent scan
+as a temporary measure.
+
+### Known Issues Remaining
+
+The circled_bubble detection path has a specific limitation for tightly
+packed options (spacing under 60px). The small printed bubble next to
+each option is itself a circle and scores similarly to the respondent's
+larger circle at the minimum 20px window radius. No radius value
+cleanly separates selected from unselected options in this layout.
+The correct fix is a size-based scorer that distinguishes the
+respondent's larger outer circle from the small printed bubble.
+This is deferred to a future sprint pending more real scan data.
+
+The blank form calibration issue affects all page 8 demographic fields
+in the currently registered instrument. These fields flag consistently
+until blank form recalibration is completed.
+
+### What Changed From Original Plan
+
+The original plan assumed bounding box calibration would be sufficient
+for production use. Multi-respondent testing proved this wrong for
+respondents with non-standard mark sizes. The proximity detection
+architecture was not in the original TRD and emerged entirely from
+real data testing. This confirms the TRD principle that each phase
+closes on real data — lab testing would not have surfaced this problem.
+
+### Key Technical Lesson
+
+Calibration on a respondent's completed scan is a silent reliability
+risk. The system appears to work correctly during single-respondent
+testing but degrades when other respondents have different mark sizes
+or when their scans have slightly different pixel positions. The lesson:
+calibrate on a blank reference form, test on multiple completed scans
+with known answers, and treat flag rate consistency across respondents
+as the acceptance criterion — not just accuracy on one scan.
 
 ## Bug Fixes & Corrections Workflow, April 2026
 
