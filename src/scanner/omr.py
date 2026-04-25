@@ -67,6 +67,27 @@ PROXIMITY_MIN_ROI_PX = 60
 # hand-drawn circle, small enough to avoid adjacent option bleed.
 PROXIMITY_OPTION_RADIUS = 40
 
+# Ink delta scoring threshold — minimum ink difference ratio
+# to count as a mark. Filters out printing noise.
+INK_DELTA_THRESHOLD = 0.01
+
+# Ambiguity gap for ink delta scoring.
+# Ink delta scores naturally cluster closer together than
+# shape-based scores because all options have baseline ink
+# from the printed form. A gap of 0.02 is meaningful in
+# ink delta mode — the winner has 2% more changed pixels.
+INK_DELTA_AMBIGUITY_GAP = 0.01
+
+# Minimum winning score to accept in ink delta mode.
+# Ink delta scores are much smaller than shape scores —
+# the selected option typically scores 0.05-0.16.
+# A minimum of 0.02 ensures at least some real ink
+# is present while accepting all realistic mark styles.
+INK_DELTA_LOW_CONFIDENCE = 0.02
+
+# Module-level blank reference cache keyed by survey_id.
+_blank_reference_cache: dict = {}
+
 
 # ── Path detection helper ─────────────────────────────────────────────────────
 
@@ -96,7 +117,7 @@ def _is_proximity_format(regions: dict) -> bool:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-def detect_mark(image: np.ndarray, field_config: dict) -> dict:
+def detect_mark(image: np.ndarray, field_config: dict, survey_id: str = "") -> dict:
     """Detect which answer option is marked in a field.
 
     Selects detection path from YAML region format:
@@ -121,18 +142,24 @@ def detect_mark(image: np.ndarray, field_config: dict) -> dict:
     """
     mark_type = field_config.get("mark_type", "circled_number")
     regions   = field_config.get("regions", {})
+    blank_img = get_blank_reference(survey_id) if survey_id else None
 
     if not regions:
         return _no_detection("No regions defined in YAML")
 
     if _is_proximity_format(regions):
-        return _detect_by_proximity(image, regions, mark_type)
+        return _detect_by_proximity(
+            image, regions, mark_type, blank_img=blank_img
+        )
     else:
-        return _detect_by_bounding_box(image, regions, mark_type)
+        return _detect_by_bounding_box(
+            image, regions, mark_type, blank_img=blank_img
+        )
 
 
 def detect_multi_select(image: np.ndarray,
-                        field_config: dict) -> dict:
+                        field_config: dict,
+                        survey_id: str = "") -> dict:
     """Detect all marked options in a multi-select field.
 
     Selects detection path from YAML region format, matching
@@ -154,6 +181,7 @@ def detect_multi_select(image: np.ndarray,
     """
     mark_type = field_config.get("mark_type", "x_mark")
     regions   = field_config.get("regions", {})
+    blank_img = get_blank_reference(survey_id) if survey_id else None
 
     if not regions:
         return {
@@ -165,16 +193,22 @@ def detect_multi_select(image: np.ndarray,
         }
 
     if _is_proximity_format(regions):
-        return _multi_select_by_proximity(image, regions, mark_type)
+        return _multi_select_by_proximity(
+            image, regions, mark_type, blank_img=blank_img
+        )
     else:
-        return _multi_select_by_bounding_box(image, regions, mark_type)
+        return _multi_select_by_bounding_box(
+            image, regions, mark_type, blank_img=blank_img
+        )
 
 
 # ── Bounding box path ─────────────────────────────────────────────────────────
 
 def _detect_by_bounding_box(image: np.ndarray,
                              regions: dict,
-                             mark_type: str) -> dict:
+                             mark_type: str,
+                             blank_img: "np.ndarray | None" = None,
+                             ) -> dict:
     """Detect a mark using calibrated bounding box regions.
 
     Extracts a padded ROI around each declared region and
@@ -210,7 +244,9 @@ def _detect_by_bounding_box(image: np.ndarray,
 
 def _multi_select_by_bounding_box(image: np.ndarray,
                                    regions: dict,
-                                   mark_type: str) -> dict:
+                                   mark_type: str,
+                                   blank_img: "np.ndarray | None" = None,
+                                   ) -> dict:
     """Score all options in a multi-select field via bounding boxes.
 
     Args:
@@ -239,7 +275,9 @@ def _multi_select_by_bounding_box(image: np.ndarray,
 
 def _detect_by_proximity(image: np.ndarray,
                           regions: dict,
-                          mark_type: str) -> dict:
+                          mark_type: str,
+                          blank_img: "np.ndarray | None" = None,
+                          ) -> dict:
     """Detect a mark using per-option fixed-radius windows.
 
     For each declared center point, extracts a fixed-radius
@@ -263,15 +301,30 @@ def _detect_by_proximity(image: np.ndarray,
     if not centers:
         return _no_detection("No valid center points in regions")
 
-    scores = _score_per_option_windows(image, centers, mark_type)
-
-    ambiguity_min = (
-        CIRCLED_BUBBLE_AMBIGUITY_MIN
-        if mark_type == "circled_bubble"
-        else AMBIGUITY_MIN_SCORE
+    scores = _score_per_option_windows(
+        image, centers, mark_type, blank_img=blank_img
     )
-    result = _pick_best(scores, mark_type,
-                        ambiguity_min=ambiguity_min)
+
+    if blank_img is not None:
+        # Ink delta mode — scores are small (0.02-0.20) so
+        # shape-based ambiguity_min thresholds don't apply.
+        # Use gap-only ambiguity detection with a small gap.
+        result = _pick_best(
+            scores, mark_type,
+            ambiguity_min=0.0,
+            ambiguity_gap=INK_DELTA_AMBIGUITY_GAP,
+        )
+    else:
+        ambiguity_min = (
+            CIRCLED_BUBBLE_AMBIGUITY_MIN
+            if mark_type == "circled_bubble"
+            else AMBIGUITY_MIN_SCORE
+        )
+        result = _pick_best(
+            scores, mark_type,
+            ambiguity_min=ambiguity_min,
+            ambiguity_gap=AMBIGUITY_GAP,
+        )
     result["path_used"] = "proximity"
     return result
 
@@ -294,7 +347,9 @@ def _log_proximity_search(search_area: tuple,
 
 def _multi_select_by_proximity(image: np.ndarray,
                                 regions: dict,
-                                mark_type: str) -> dict:
+                                mark_type: str,
+                                blank_img: "np.ndarray | None" = None,
+                                ) -> dict:
     """Score all options in a multi-select field via per-option windows.
 
     Scores each option center independently using a fixed-radius
@@ -313,7 +368,7 @@ def _multi_select_by_proximity(image: np.ndarray,
     """
     centers    = _parse_centers(regions)
     all_scores = _score_per_option_windows(
-        image, centers, mark_type
+        image, centers, mark_type, blank_img=blank_img
     )
     return _build_multi_select_result(
         all_scores, mark_type, path_used="proximity"
@@ -374,7 +429,9 @@ def _compute_option_radius(centers: dict) -> int:
 
 def _score_per_option_windows(image: np.ndarray,
                                centers: dict,
-                               mark_type: str) -> dict:
+                               mark_type: str,
+                               blank_img: "np.ndarray | None" = None,
+                               ) -> dict:
     """Score each option using a fixed-radius window around its center.
 
     Extracts a square window of PROXIMITY_OPTION_RADIUS pixels
@@ -404,7 +461,14 @@ def _score_per_option_windows(image: np.ndarray,
         if len(roi.shape) == 3:
             roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 
-        score        = _score_region(roi, mark_type)
+        if blank_img is not None:
+            blank_roi = _extract_blank_roi(
+                blank_img, image, cx, cy, r
+            )
+            score = _score_ink_delta(roi, blank_roi)                 if blank_roi is not None                 else _score_region(roi, mark_type)
+        else:
+            score = _score_region(roi, mark_type)
+
         scores[value] = score
 
     return scores
@@ -780,6 +844,114 @@ def _score_candidate_roi(image: np.ndarray,
 
 # ── Shared scoring dispatcher ─────────────────────────────────────────────────
 
+
+def load_blank_reference(survey_id: str, blank_path: str) -> bool:
+    """Load and cache a blank reference image for ink delta scoring.
+
+    When loaded, all detection for this survey uses ink delta scoring
+    instead of shape-based scoring. Mark-type agnostic — works for
+    any respondent mark style. Falls back transparently if not found.
+
+    Args:
+        survey_id:  Survey identifier matching the YAML survey_id.
+        blank_path: Path to a preprocessed grayscale image of the blank form.
+
+    Returns:
+        True if loaded successfully, False otherwise.
+    """
+    global _blank_reference_cache
+    img = cv2.imread(blank_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        print(f"      [blank_ref] WARNING: could not load {blank_path}")
+        return False
+    _blank_reference_cache[survey_id] = img
+    print(f"      [blank_ref] Loaded blank reference for '{survey_id}' "
+          f"({img.shape[1]}x{img.shape[0]}px)")
+    return True
+
+
+def get_blank_reference(survey_id: str) -> "np.ndarray | None":
+    """Return the cached blank reference image for a survey.
+
+    Args:
+        survey_id: Survey identifier to look up.
+
+    Returns:
+        Grayscale blank reference image, or None if not loaded.
+    """
+    return _blank_reference_cache.get(survey_id)
+
+
+def _score_ink_delta(filled_roi: np.ndarray,
+                     blank_roi:  np.ndarray) -> float:
+    """Score a region by measuring ink added relative to the blank form.
+
+    Mark-type agnostic — any mark adds ink. Resizes both ROIs to the
+    same dimensions, computes absolute pixel difference, and returns
+    the raw ratio of changed pixels. The caller (_pick_best) selects
+    the option with the highest relative score, so absolute magnitude
+    matters less than relative difference between options.
+
+    A threshold of 10 pixels filters pure noise while preserving
+    real ink differences from any mark style.
+
+    Args:
+        filled_roi: Grayscale ROI from the filled respondent scan.
+        blank_roi:  Grayscale ROI from the blank reference scan.
+
+    Returns:
+        Raw ink difference ratio between 0.0 and 1.0.
+        Higher = more ink added relative to blank form.
+    """
+    if filled_roi.size == 0 or blank_roi.size == 0:
+        return 0.0
+    h, w = filled_roi.shape[:2]
+    blank_resized = cv2.resize(
+        blank_roi, (w, h), interpolation=cv2.INTER_LINEAR
+    )
+    diff = cv2.absdiff(filled_roi, blank_resized)
+    # Threshold at 10 to filter pure noise while keeping real marks.
+    # Real ink differences from pencil or pen marks produce values
+    # well above 10. Scan variation noise stays below 10.
+    _, delta_mask = cv2.threshold(diff, 10, 255, cv2.THRESH_BINARY)
+    ink_ratio = np.sum(delta_mask > 0) / max(delta_mask.size, 1)
+    return round(min(1.0, ink_ratio), 3)
+
+
+def _extract_blank_roi(blank_img:  np.ndarray,
+                        filled_img: np.ndarray,
+                        cx:         int,
+                        cy:         int,
+                        radius:     int) -> "np.ndarray | None":
+    """Extract the matching region from the blank reference image.
+
+    Scales coordinates proportionally to account for size differences
+    between blank and filled scans from different scan sessions.
+
+    Args:
+        blank_img:  Full blank reference grayscale image.
+        filled_img: Full filled scan for scale reference.
+        cx:         Center x in filled image coordinates.
+        cy:         Center y in filled image coordinates.
+        radius:     Window radius in filled image coordinates.
+
+    Returns:
+        Cropped blank ROI as numpy array, or None if invalid.
+    """
+    if blank_img is None:
+        return None
+    filled_h, filled_w = filled_img.shape[:2]
+    blank_h,  blank_w  = blank_img.shape[:2]
+    scale_x = blank_w / max(filled_w, 1)
+    scale_y = blank_h / max(filled_h, 1)
+    bx1 = max(0,       int((cx - radius) * scale_x))
+    by1 = max(0,       int((cy - radius) * scale_y))
+    bx2 = min(blank_w, int((cx + radius) * scale_x))
+    by2 = min(blank_h, int((cy + radius) * scale_y))
+    if bx2 <= bx1 or by2 <= by1:
+        return None
+    return blank_img[by1:by2, bx1:bx2]
+
 def _score_region(roi: np.ndarray, mark_type: str) -> float:
     """Dispatch ROI scoring to the correct algorithm.
 
@@ -1134,7 +1306,8 @@ def _extract_roi(image: np.ndarray,
 
 def _pick_best(scores: dict,
                mark_type: str,
-               ambiguity_min: float = AMBIGUITY_MIN_SCORE) -> dict:
+               ambiguity_min: float = AMBIGUITY_MIN_SCORE,
+               ambiguity_gap: float = AMBIGUITY_GAP) -> dict:
     """Select the highest scoring option and build result dict.
 
     Delegates to ambiguity check and no-mark check helpers.
@@ -1145,6 +1318,9 @@ def _pick_best(scores: dict,
         mark_type:     Detection algorithm that produced scores.
         ambiguity_min: Minimum second-option score to trigger
                        ambiguity check.
+        ambiguity_gap: Maximum gap between top two scores before
+                       flagging as ambiguous. Smaller for ink delta
+                       scoring where scores naturally cluster closer.
 
     Returns:
         Standard detection result dict.
@@ -1157,12 +1333,22 @@ def _pick_best(scores: dict,
     )
     best_value, best_score = sorted_scores[0]
 
+    # Use lower confidence threshold for ink delta mode.
+    # Ink delta scores are much smaller than shape scores
+    # but the relative winner is still meaningful.
+    low_conf = (
+        INK_DELTA_LOW_CONFIDENCE
+        if ambiguity_gap == INK_DELTA_AMBIGUITY_GAP
+        else LOW_CONFIDENCE
+    )
+
     if len(sorted_scores) > 1:
         second_value, second_score = sorted_scores[1]
         ambiguous = _check_ambiguity(
             best_score, best_value,
             second_score, second_value,
-            ambiguity_min
+            ambiguity_min,
+            ambiguity_gap=ambiguity_gap,
         )
         if ambiguous:
             ambiguous["mark_type"]  = mark_type
@@ -1170,7 +1356,7 @@ def _pick_best(scores: dict,
                                        for k, v in scores.items()}
             return ambiguous
 
-    if best_score < LOW_CONFIDENCE:
+    if best_score < low_conf:
         return _no_mark_result(scores, mark_type)
 
     return {
@@ -1184,7 +1370,9 @@ def _pick_best(scores: dict,
 
 def _check_ambiguity(best_score: float, best_value: str,
                       second_score: float, second_value: str,
-                      ambiguity_min: float) -> Optional[dict]:
+                      ambiguity_min: float,
+                      ambiguity_gap: float = AMBIGUITY_GAP,
+                      ) -> Optional[dict]:
     """Check whether two top scores indicate ambiguous marking.
 
     Returns a partial result dict if ambiguous, else None.
@@ -1195,13 +1383,14 @@ def _check_ambiguity(best_score: float, best_value: str,
         second_score:  Score of the second-best option.
         second_value:  Value label of the second-best option.
         ambiguity_min: Minimum second score to trigger flag.
+        ambiguity_gap: Maximum gap before flagging as ambiguous.
 
     Returns:
         Partial result dict with flag=AMBIGUOUS, or None.
     """
     if (best_score >= LOW_CONFIDENCE
             and second_score >= ambiguity_min
-            and (best_score - second_score) < AMBIGUITY_GAP):
+            and (best_score - second_score) < ambiguity_gap):
         return {
             "value":      None,
             "confidence": best_score,

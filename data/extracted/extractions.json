@@ -1,366 +1,70 @@
 [
   {
-    "form_id": "CamScanner 3-25-26 18.46",
+    "form_id": "CamScanner 4-24-26 22.42",
     "fields": {
-      "S1_Q1": {
-        "value": "1",
-        "confidence": 0.885,
+      "T_Q1": {
+        "value": "4",
+        "confidence": 0.155,
         "flag": "",
         "note": ""
       },
-      "S1_Q2": {
+      "T_Q2": {
+        "value": "3",
+        "confidence": 0.145,
+        "flag": "",
+        "note": ""
+      },
+      "T_Q3": {
         "value": "2",
-        "confidence": 0.817,
+        "confidence": 0.089,
         "flag": "",
         "note": ""
       },
-      "S1_Q3": {
-        "value": "4",
-        "confidence": 0.769,
-        "flag": "",
-        "note": ""
-      },
-      "S1_Q4": {
+      "T_Q4": {
         "value": "3",
-        "confidence": 0.83,
+        "confidence": 0.074,
         "flag": "",
         "note": ""
       },
-      "S1_Q5": {
+      "T_Q5": {
         "value": "3",
-        "confidence": 0.753,
+        "confidence": 0.054,
         "flag": "",
         "note": ""
       },
-      "S1_Q6": {
+      "T_Q6": {
         "value": "3",
-        "confidence": 1.0,
+        "confidence": 0.093,
         "flag": "",
         "note": ""
       },
-      "S1_Q7": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.95, 4=0.94"
-      },
-      "S1_Q8": {
-        "value": "3",
-        "confidence": 0.99,
-        "flag": "",
-        "note": ""
-      },
-      "S1_Q9": {
-        "value": "3",
-        "confidence": 0.961,
-        "flag": "",
-        "note": ""
-      },
-      "S1_Q10": {
-        "value": null,
-        "confidence": 0.961,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.96, 4=0.95"
-      },
-      "S2_Q1": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 1=1.00, 2=1.00"
-      },
-      "S2_Q2": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
-      },
-      "S2_Q3": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 3=0.95"
-      },
-      "S2_Q4": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 3=0.95"
-      },
-      "S2_Q5": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=1.00, 3=0.95"
-      },
-      "S2_Q6": {
-        "value": "4",
-        "confidence": 0.95,
-        "flag": "",
-        "note": ""
-      },
-      "S2_Q7": {
-        "value": "3",
-        "confidence": 0.861,
-        "flag": "",
-        "note": ""
-      },
-      "S2_Q8": {
-        "value": null,
-        "confidence": 0.947,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.95, 2=0.92"
-      },
-      "S3_Q1": {
-        "value": "3",
-        "confidence": 0.994,
-        "flag": "",
-        "note": ""
-      },
-      "S3_Q2": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S3_Q3": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S3_Q4": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S3_Q5": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q1": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q2": {
-        "value": "3",
-        "confidence": 0.941,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q3": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q4": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q5": {
-        "value": "4",
-        "confidence": 0.904,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q6": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q7": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q8": {
-        "value": null,
-        "confidence": 0.988,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.99, 4=0.95"
-      },
-      "S4_Q9": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S4_Q10": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
-      },
-      "S4_Q11": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S5_Q1": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.95, 3=0.94"
-      },
-      "S5_Q2": {
-        "value": null,
-        "confidence": 0.95,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 4=0.95, 3=0.95"
-      },
-      "S5_Q3": {
-        "value": null,
-        "confidence": 0.962,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.96, 4=0.95"
-      },
-      "S5_Q4": {
-        "value": "4",
-        "confidence": 0.988,
-        "flag": "",
-        "note": ""
-      },
-      "S5_Q5": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
-      },
-      "S5_Q6": {
-        "value": null,
-        "confidence": 1.0,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=1.00, 4=0.95"
-      },
-      "S5_Q7": {
-        "value": null,
-        "confidence": 0.995,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.99, 4=0.95"
-      },
-      "S5_Q8": {
-        "value": null,
-        "confidence": 0.977,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 2=0.98, 4=0.95"
-      },
-      "S5_Q9": {
-        "value": "4",
-        "confidence": 0.98,
-        "flag": "",
-        "note": ""
-      },
-      "S5_Q10": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S5_Q11": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S6_Q1": {
-        "value": "4",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S6_Q2": {
-        "value": "3",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S6_Q3": {
-        "value": null,
-        "confidence": 0.995,
-        "flag": "AMBIGUOUS",
-        "note": "Two options scored similarly: 3=0.99, 4=0.95"
-      },
-      "S7_area_Q1": {
-        "value": "5",
-        "confidence": 1.0,
-        "flag": "",
-        "note": ""
-      },
-      "S7_tenure_Q1": {
+      "T_Q7": {
         "value": "1",
-        "confidence": 0.78,
+        "confidence": 0.097,
         "flag": "",
         "note": ""
       },
-      "S8_age_Q1": {
-        "value": "7",
-        "confidence": 0.74,
-        "flag": "",
-        "note": ""
-      },
-      "S8_gender_Q1": {
+      "T_Q8": {
         "value": "1",
-        "confidence": 0.95,
+        "confidence": 0.079,
         "flag": "",
         "note": ""
       },
-      "S8_edu_Q1": {
+      "T_Q9": {
         "value": "2",
-        "confidence": 0.72,
+        "confidence": 0.099,
         "flag": "",
         "note": ""
       },
-      "S8_hispanic_Q1": {
-        "value": "2",
-        "confidence": 0.753,
-        "flag": "",
-        "note": ""
-      },
-      "S8_race_Q1": {
-        "value": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6"
-        ],
-        "confidence": 0.639,
-        "flag": "",
-        "note": ""
-      },
-      "S8_housing_Q1": {
-        "value": "3",
-        "confidence": 0.724,
-        "flag": "",
-        "note": ""
-      },
-      "S8_income_Q1": {
-        "value": "5",
-        "confidence": 0.746,
+      "T_Q10": {
+        "value": "4",
+        "confidence": 0.146,
         "flag": "",
         "note": ""
       }
     },
     "pages_found": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8
+      1
     ]
   }
 ]

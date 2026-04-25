@@ -122,6 +122,13 @@ def main(input_dir, survey, stage, dry_run, operator):
         .get("template", "")
     )
 
+    # Load blank reference scan if one exists for this survey.
+    # When loaded, all mark detection automatically uses ink delta
+    # scoring — comparing filled scans against the blank form to
+    # find respondent marks regardless of type or size.
+    # Falls back to shape-based scoring transparently if not found.
+    _load_blank_reference(survey, survey_config)
+
     # Track these across stages for logging
     processed_files = []
     extractions     = []
@@ -421,6 +428,97 @@ def main(input_dir, survey, stage, dry_run, operator):
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _load_blank_reference(survey: str,
+                           survey_config: dict) -> None:
+    """Load the blank reference scan for ink delta scoring.
+
+    Reads the blank reference path from the survey YAML config.
+    When found, loads it into the omr module cache so all detection
+    calls for this survey automatically use ink delta scoring —
+    comparing filled scans against the blank form to find marks
+    regardless of type or size.
+
+    If no blank reference is declared in the YAML, the pipeline
+    continues normally with shape-based scoring. Fully backwards
+    compatible with all existing registered surveys.
+
+    To enable ink delta scoring for a survey, add one line to
+    its YAML config:
+        blank_reference: data/scans/<survey>/archive/<blank>.pdf
+
+    Args:
+        survey:        Survey name matching the YAML survey_id.
+        survey_config: Loaded survey YAML config dict.
+    """
+    from src.scanner.omr import load_blank_reference
+
+    blank_path = survey_config.get("blank_reference", "")
+
+    if not blank_path:
+        click.echo(
+            "  Blank reference: not declared in YAML — "
+            "using shape-based scoring"
+        )
+        return
+
+    # The blank reference must go through the same preprocessing
+    # pipeline as filled scans before ink delta comparison works.
+    # Raw PDF conversion produces grey pixels; preprocessing
+    # produces binary black/white. Comparing grey vs white gives
+    # false positives everywhere. We preprocess the blank once
+    # and cache the result as _preprocessed.jpg alongside the PDF.
+    if blank_path.lower().endswith(".pdf"):
+        preprocessed_path = (
+            blank_path.rsplit(".", 1)[0] + "_preprocessed.jpg"
+        )
+        if not os.path.exists(preprocessed_path):
+            try:
+                from src.scanner.preprocess import preprocess_batch
+                import tempfile, shutil
+                tmp_dir = tempfile.mkdtemp()
+                shutil.copy(blank_path, tmp_dir)
+                out_dir = tempfile.mkdtemp()
+                preprocess_batch(
+                    input_dir  = tmp_dir,
+                    output_dir = out_dir,
+                )
+                # Find the output file
+                outputs = [
+                    f for f in os.listdir(out_dir)
+                    if f.endswith(".jpg")
+                ]
+                if outputs:
+                    shutil.copy(
+                        os.path.join(out_dir, outputs[0]),
+                        preprocessed_path
+                    )
+                    click.echo(
+                        "  Blank reference: preprocessed and cached"
+                    )
+                shutil.rmtree(tmp_dir)
+                shutil.rmtree(out_dir)
+            except Exception as e:
+                click.echo(
+                    f"  Blank reference: could not preprocess "
+                    f"({e}) — using shape-based scoring"
+                )
+                return
+        blank_path = preprocessed_path
+
+    if not os.path.exists(blank_path):
+        click.echo(
+            "  Blank reference: file not found — "
+            "using shape-based scoring"
+        )
+        return
+
+    success = load_blank_reference(survey, blank_path)
+    if success:
+        click.echo(
+            "  Blank reference: loaded — using ink delta scoring"
+        )
+
 
 def _archive_scans(input_dir: str) -> int:
     """Move processed scan files to an archive subfolder.
