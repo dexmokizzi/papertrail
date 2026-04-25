@@ -51,6 +51,7 @@ def extract_batch(
     print(f"\n  Found {len(grouped)} respondent(s), "
           f"{sum(len(p) for p in grouped.values())} page(s) total")
 
+    survey_id   = survey_config.get("survey_id", "")
     extractions = []
 
     for form_id, pages in sorted(grouped.items()):
@@ -58,9 +59,10 @@ def extract_batch(
         print(f"  Pages found: {sorted(pages.keys())}")
 
         result = _extract_respondent(
-            form_id  = form_id,
-            pages    = pages,
-            page_map = page_map,
+            form_id   = form_id,
+            pages     = pages,
+            page_map  = page_map,
+            survey_id = survey_id,
         )
 
         extractions.append(result)
@@ -166,9 +168,10 @@ def _build_page_map(fields: list) -> dict:
 # ── Extraction ────────────────────────────────────────────────────────────────
 
 def _extract_respondent(
-    form_id:  str,
-    pages:    dict,
-    page_map: dict,
+    form_id:   str,
+    pages:     dict,
+    page_map:  dict,
+    survey_id: str = "",
 ) -> dict:
     """Extract all fields from one respondent's pages.
 
@@ -176,14 +179,20 @@ def _extract_respondent(
     and runs mark detection on all fields assigned to
     that page number. Combines results into one dict.
 
+    When a blank reference scan has been loaded for the survey
+    via load_blank_reference(), ink delta scoring is used
+    automatically for all fields. Falls back to shape-based
+    scoring transparently when no blank is available.
+
     Fields from missing pages are recorded as null with
     a MISSING_PAGE flag so they appear in flagged_fields.csv
     for human review.
 
     Args:
-        form_id:  Unique identifier for this respondent.
-        pages:    Dict mapping page_num -> image_path.
-        page_map: Dict mapping page_num -> field list.
+        form_id:   Unique identifier for this respondent.
+        pages:     Dict mapping page_num -> image_path.
+        page_map:  Dict mapping page_num -> field list.
+        survey_id: Survey identifier for blank reference lookup.
 
     Returns:
         Extraction dict with form_id, fields, pages_found.
@@ -226,15 +235,21 @@ def _extract_respondent(
                 }
             continue
 
-        # Detect marks on this page
+        # Detect marks on this page.
+        # survey_id enables ink delta scoring when a blank
+        # reference has been loaded for this survey.
         for field in fields_on_page:
-            field_id  = field["paper_id"]
+            field_id   = field["paper_id"]
             field_type = field.get("type", "likert")
 
             if field_type == "multi_select":
-                result = detect_multi_select(image, field)
+                result = detect_multi_select(
+                    image, field, survey_id=survey_id
+                )
             else:
-                result = detect_mark(image, field)
+                result = detect_mark(
+                    image, field, survey_id=survey_id
+                )
 
             all_fields[field_id] = result
 
