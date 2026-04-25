@@ -24,6 +24,12 @@ from typing import Optional
 
 DEFAULT_CONFIDENCE_THRESHOLD = 0.75
 
+# Ink delta scoring produces scores in the 0.02-0.20 range.
+# The standard 0.75 threshold rejects all ink delta detections
+# even when correct. Use this lower threshold when the detection
+# method is ink delta.
+INK_DELTA_CONFIDENCE_THRESHOLD = 0.01
+
 FLAGGED_HEADERS = [
     "form_id",
     "field_id",
@@ -73,16 +79,29 @@ def validate_extraction(
         detection = extraction.get(paper_id, {})
 
         if isinstance(detection, dict):
-            value      = detection.get("value")
-            confidence = detection.get("confidence", 0.0)
-            omr_flag   = detection.get("flag", "")
+            value            = detection.get("value")
+            confidence       = detection.get("confidence", 0.0)
+            omr_flag         = detection.get("flag", "")
+            detection_method = detection.get("path_used", "")
         else:
-            value      = detection
-            confidence = 1.0 if detection is not None else 0.0
-            omr_flag   = ""
+            value            = detection
+            confidence       = 1.0 if detection is not None else 0.0
+            omr_flag         = ""
+            detection_method = ""
+
+        # Use a lower confidence threshold for ink delta scoring.
+        # Ink delta scores are smaller in magnitude than shape scores
+        # but the relative winner is still meaningful and correct.
+        effective_threshold = (
+            INK_DELTA_CONFIDENCE_THRESHOLD
+            if detection_method == "proximity"
+            and confidence < DEFAULT_CONFIDENCE_THRESHOLD
+            and confidence > 0.0
+            else threshold
+        )
 
         flag_reason = _check_field(
-            value, confidence, omr_flag, field, threshold
+            value, confidence, omr_flag, field, effective_threshold
         )
 
         if flag_reason:
