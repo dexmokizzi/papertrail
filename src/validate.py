@@ -89,16 +89,18 @@ def validate_extraction(
             omr_flag         = ""
             detection_method = ""
 
-        # Use a lower confidence threshold for ink delta scoring.
-        # Ink delta scores are smaller in magnitude than shape scores
-        # but the relative winner is still meaningful and correct.
-        effective_threshold = (
-            INK_DELTA_CONFIDENCE_THRESHOLD
-            if detection_method == "proximity"
-            and confidence < DEFAULT_CONFIDENCE_THRESHOLD
-            and confidence > 0.0
-            else threshold
-        )
+        # Centroid scoring produces scores in the 0.5-1.0 range.
+        # Ink delta window scoring produces scores in 0.02-0.20 range.
+        # Both use the proximity path — apply appropriate threshold.
+        if detection_method == "proximity":
+            if confidence >= 0.40:
+                # Centroid scoring — use standard threshold
+                effective_threshold = DEFAULT_CONFIDENCE_THRESHOLD
+            else:
+                # Ink delta window scoring — use lower threshold
+                effective_threshold = INK_DELTA_CONFIDENCE_THRESHOLD
+        else:
+            effective_threshold = threshold
 
         flag_reason = _check_field(
             value, confidence, omr_flag, field, effective_threshold

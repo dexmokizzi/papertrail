@@ -1,0 +1,3 @@
+form_id,field_id,raw_value,confidence,reason,timestamp,corrected_value
+CamScanner 4-25-26 16.25,T_Q5,,0.049,AMBIGUOUS — two options scored similarly,2026-04-25T16:37:50.364751,
+CamScanner 4-25-26 16.25,T_Q10,,0.109,AMBIGUOUS — two options scored similarly,2026-04-25T16:37:50.364817,

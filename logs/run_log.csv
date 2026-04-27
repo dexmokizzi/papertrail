@@ -29,3 +29,5 @@ run_timestamp,survey_id,forms_processed,fields_extracted,fields_flagged,flag_rat
 2026-04-25T15:21:43.490882,papertrail_test_survey,1,10,10,100.0,True,1.82,developer,
 2026-04-25T16:07:54.435390,papertrail_test_survey,1,10,10,100.0,True,1.63,developer,
 2026-04-25T16:20:06.522778,papertrail_test_survey,1,10,0,0.0,True,3.41,developer,
+2026-04-25T16:27:11.837685,papertrail_test_survey,1,10,0,0.0,True,1.48,developer,
+2026-04-25T16:37:50.606980,papertrail_test_survey,1,10,2,20.0,True,1.78,developer,

@@ -85,6 +85,13 @@ INK_DELTA_AMBIGUITY_GAP = 0.01
 # is present while accepting all realistic mark styles.
 INK_DELTA_LOW_CONFIDENCE = 0.02
 
+# Centroid scoring produces scores in the 0.5-1.0 range.
+# Score = second_dist / (winner_dist + second_dist)
+# A score of 0.5 means equidistant (ambiguous).
+# A score of 1.0 means the centroid is exactly on the winner.
+# Use this as the minimum confidence for centroid detections.
+CENTROID_LOW_CONFIDENCE = 0.50
+
 # Module-level blank reference cache keyed by survey_id.
 _blank_reference_cache: dict = {}
 
@@ -301,20 +308,21 @@ def _detect_by_proximity(image: np.ndarray,
     if not centers:
         return _no_detection("No valid center points in regions")
 
-    scores = _score_per_option_windows(
-        image, centers, mark_type, blank_img=blank_img
-    )
-
     if blank_img is not None:
-        # Ink delta mode — scores are small (0.02-0.20) so
-        # shape-based ambiguity_min thresholds don't apply.
-        # Use gap-only ambiguity detection with a small gap.
+        # Centroid-based ink delta scoring — robust to any mark
+        # type, any mark size, any off-center placement.
+        # Finds the center of gravity of added ink and assigns
+        # to the nearest declared option center.
+        scores = _score_by_ink_centroid(image, centers, blank_img)
         result = _pick_best(
             scores, mark_type,
             ambiguity_min=0.0,
-            ambiguity_gap=INK_DELTA_AMBIGUITY_GAP,
+            ambiguity_gap=0.10,
         )
     else:
+        scores = _score_per_option_windows(
+            image, centers, mark_type
+        )
         ambiguity_min = (
             CIRCLED_BUBBLE_AMBIGUITY_MIN
             if mark_type == "circled_bubble"
@@ -425,6 +433,129 @@ def _compute_option_radius(centers: dict) -> int:
         for p2 in points[i + 1:]
     )
     return max(20, int(min_dist * 0.35))
+
+
+def _score_by_ink_centroid(image: np.ndarray,
+                           centers: dict,
+                           blank_img: np.ndarray) -> dict:
+    """Score options by finding the centroid of added ink.
+
+    Computes the ink delta for the entire row area covering
+    all option centers. Finds the centroid — the center of
+    gravity — of all added ink pixels. Assigns the mark to
+    whichever option center is geometrically closest to that
+    centroid.
+
+    This approach is robust to any mark type, any mark size,
+    and any off-center placement because:
+      - It uses the full row area, not fixed-radius windows
+      - The centroid of a circle, X, fill, or checkmark
+        always lands near the intended option center
+      - Off-center marks still produce a centroid closest
+        to the intended option as long as the mark is
+        predominantly in the correct cell
+
+    Works for any survey layout — structured grids,
+    scattered bubbles, checkboxes — because it only
+    requires declared center points, not cell boundaries.
+
+    Args:
+        image:     Full preprocessed filled scan.
+        centers:   Dict mapping value -> (x, y) center point.
+        blank_img: Full preprocessed blank reference scan.
+
+    Returns:
+        Dict mapping value -> score (0.0-1.0).
+        Score reflects proximity of ink centroid to center.
+        All non-winner options score 0.0 when a clear
+        winner is found. Returns equal scores if no ink found.
+    """
+    if not centers or blank_img is None:
+        return {v: 0.0 for v in centers}
+
+    img_h, img_w = image.shape[:2]
+    bh,   bw     = blank_img.shape[:2]
+    scale_x      = bw / max(img_w, 1)
+    scale_y      = bh / max(img_h, 1)
+
+    # Build search area — bounding box of all centers + margin
+    xs      = [c[0] for c in centers.values()]
+    ys      = [c[1] for c in centers.values()]
+    margin  = max(60, _compute_option_radius(centers) * 2)
+
+    fx1 = max(0,      min(xs) - margin)
+    fy1 = max(0,      min(ys) - margin)
+    fx2 = min(img_w,  max(xs) + margin)
+    fy2 = min(img_h,  max(ys) + margin)
+
+    # Extract filled and blank ROIs for the full row area
+    filled_roi = image[fy1:fy2, fx1:fx2]
+
+    bx1 = max(0,  int(fx1 * scale_x))
+    by1 = max(0,  int(fy1 * scale_y))
+    bx2 = min(bw, int(fx2 * scale_x))
+    by2 = min(bh, int(fy2 * scale_y))
+    blank_roi  = blank_img[by1:by2, bx1:bx2]
+
+    if filled_roi.size == 0 or blank_roi.size == 0:
+        return {v: 0.0 for v in centers}
+
+    # Resize blank to match filled dimensions
+    blank_resized = cv2.resize(
+        blank_roi,
+        (filled_roi.shape[1], filled_roi.shape[0]),
+        interpolation=cv2.INTER_LINEAR
+    )
+
+    # Compute ink delta — only pixels where filled has more ink
+    diff = cv2.absdiff(filled_roi, blank_resized)
+    _, ink_mask = cv2.threshold(diff, 10, 255, cv2.THRESH_BINARY)
+
+    total_ink = np.sum(ink_mask > 0)
+    if total_ink == 0:
+        # No ink found anywhere — return equal low scores
+        return {v: 0.0 for v in centers}
+
+    # Find centroid of added ink in full-image coordinates
+    ys_ink, xs_ink = np.where(ink_mask > 0)
+    centroid_x = float(np.mean(xs_ink)) + fx1
+    centroid_y = float(np.mean(ys_ink)) + fy1
+
+    # Compute distance from centroid to each option center
+    distances = {}
+    for value, (cx, cy) in centers.items():
+        dist = np.sqrt(
+            (centroid_x - cx) ** 2 + (centroid_y - cy) ** 2
+        )
+        distances[value] = dist
+
+    # Sort by distance — closest center wins
+    sorted_by_dist = sorted(distances.items(), key=lambda x: x[1])
+    winner_val,  winner_dist  = sorted_by_dist[0]
+    second_val,  second_dist  = sorted_by_dist[1]         if len(sorted_by_dist) > 1 else (None, float("inf"))
+
+    # Build scores dict — winner gets score based on how much
+    # closer it is than second place. Others get 0.
+    # Score = second_dist / (winner_dist + second_dist)
+    # Perfect center: winner_dist=0 → score=1.0
+    # Equal distance: both=same → score=0.5 (ambiguous)
+    total_dist = winner_dist + second_dist
+    if total_dist > 0:
+        winner_score = second_dist / total_dist
+    else:
+        winner_score = 1.0
+
+    scores = {v: 0.0 for v in centers}
+    scores[winner_val] = round(min(1.0, winner_score), 3)
+
+    # Give second place a proportional score so ambiguity
+    # detection can compare them correctly
+    if second_val is not None and total_dist > 0:
+        scores[second_val] = round(
+            winner_dist / total_dist, 3
+        )
+
+    return scores
 
 
 def _score_per_option_windows(image: np.ndarray,
@@ -1349,6 +1480,7 @@ def _pick_best(scores: dict,
             second_score, second_value,
             ambiguity_min,
             ambiguity_gap=ambiguity_gap,
+            min_score=low_conf,
         )
         if ambiguous:
             ambiguous["mark_type"]  = mark_type
@@ -1372,6 +1504,7 @@ def _check_ambiguity(best_score: float, best_value: str,
                       second_score: float, second_value: str,
                       ambiguity_min: float,
                       ambiguity_gap: float = AMBIGUITY_GAP,
+                      min_score: float = LOW_CONFIDENCE,
                       ) -> Optional[dict]:
     """Check whether two top scores indicate ambiguous marking.
 
@@ -1384,11 +1517,13 @@ def _check_ambiguity(best_score: float, best_value: str,
         second_value:  Value label of the second-best option.
         ambiguity_min: Minimum second score to trigger flag.
         ambiguity_gap: Maximum gap before flagging as ambiguous.
+        min_score:     Minimum best score to trigger ambiguity check.
+                       Use INK_DELTA_LOW_CONFIDENCE for ink delta mode.
 
     Returns:
         Partial result dict with flag=AMBIGUOUS, or None.
     """
-    if (best_score >= LOW_CONFIDENCE
+    if (best_score >= min_score
             and second_score >= ambiguity_min
             and (best_score - second_score) < ambiguity_gap):
         return {
