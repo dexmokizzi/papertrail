@@ -297,7 +297,7 @@ st.set_page_config(
 )
 
 st.title("PaperTrail")
-st.caption("From paper surveys to Qualtrics — review and correct flagged fields")
+st.caption("From paper surveys to Qualtrics, review and correct flagged fields")
 
 surveys = list_surveys()
 if not surveys:
