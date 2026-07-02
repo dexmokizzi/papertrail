@@ -297,7 +297,7 @@ st.set_page_config(
 )
 
 st.title("PaperTrail")
-st.caption("From paper surveys to Qualtrics — review and correct flagged fields")
+st.caption("From paper surveys to Qualtrics, review and correct flagged fields")
 
 surveys = list_surveys()
 if not surveys:
@@ -308,7 +308,7 @@ if not surveys:
     st.stop()
 
 survey = st.sidebar.selectbox("Survey", surveys)
-survey_config = load_survey_config(survey)
+survey_config = load_survey_config(survey) 
 field_lookup  = get_field_lookup(survey_config)
 
 tab_upload, tab_review, tab_download = st.tabs(
