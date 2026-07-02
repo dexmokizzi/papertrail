@@ -308,7 +308,7 @@ if not surveys:
     st.stop()
 
 survey = st.sidebar.selectbox("Survey", surveys)
-survey_config = load_survey_config(survey)
+survey_config = load_survey_config(survey) 
 field_lookup  = get_field_lookup(survey_config)
 
 tab_upload, tab_review, tab_download = st.tabs(
